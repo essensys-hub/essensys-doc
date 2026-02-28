@@ -27,7 +27,7 @@ BP_MQX_ETH → AdGuard (LAN :53) → mon.essensys.local → Raspberry Pi (LAN di
 
 ### 1.2 Status Partiel de la Table d'Echange
 
-Le serveur ne connait qu'un **sous-ensemble** de la table d'echange (~600 indices) :
+Le serveur ne connait qu'un **sous-ensemble** de la table d'echange (~784 indices, `Nb_Tbb_Donnees`) :
 
 | Etape | Limitation |
 |-------|------------|
@@ -133,7 +133,7 @@ for (us_i = 0; us_i < Nb_Tbb_Donnees; us_i++) {
 memcpy(Tb_EchangePrecedentEnvoye, Tb_Echange, Nb_Tbb_Donnees);
 ```
 
-**Contrainte memoire** : `Tb_EchangePrecedentEnvoye` = ~600 octets supplementaires en RAM. Faisable car le MCF52259 a de la marge sur les 3000 octets de stack Ethernet.
+**Contrainte memoire** : `Tb_EchangePrecedentEnvoye` = ~784 octets supplementaires en RAM. A valider par mesure de highwater (voir autocritique 9.6).
 
 **Contrainte TCP single-packet** : Si trop de deltas, fractionner en plusieurs cycles de polling (max ~30 indices par trame pour rester dans un seul paquet TCP).
 
@@ -182,7 +182,9 @@ enum enum_CODE_TRAMES {
 };
 ```
 
-**Format de la reponse I2C pour `C_LIRE_ETAT`** :
+> **ATTENTION** : Le format ci-dessous est **incompatible** avec le protocole I2C actuel qui est fixe a 5 octets de reponse (`TxBuf.b[4]`, `sl_fct_write_polled()` lit exactement 5 octets). Voir autocritique 9.2 pour les alternatives viables (multi-transactions ou bitmask compact).
+
+**Format de la reponse I2C pour `C_LIRE_ETAT`** (necessite refonte du protocole) :
 
 ```
 ┌──────────┬──────────┬──────────┬──────────┬──────────┬──────────┬──────────┐
@@ -333,12 +335,14 @@ Le protocole I2C, les commandes et la logique applicative (variateurs, volets, a
 
 ### Nouveaux Indices Proposes
 
+> **ATTENTION** : La table actuelle utilise ~784 indices (`Nb_Tbb_Donnees`). Les plages 600-630 sont **deja occupees** (scenarios, eclairages). Les nouveaux indices doivent etre places apres `Nb_Tbb_Donnees` (784+). Voir autocritique 9.1.
+
 | Plage | Contenu | Description |
 |-------|---------|-------------|
-| 600-609 | Etat reel BA PDV (0x11) | Lampes, volets, variateurs confirmes |
-| 610-619 | Etat reel BA CHB (0x12) | Lampes, volets, variateurs confirmes |
-| 620-629 | Etat reel BA PDE (0x13) | Lampes, volets, variateurs confirmes |
-| 630 | Etat connectivite BA | Bitmask: bit 0=PDV OK, bit 1=CHB OK, bit 2=PDE OK |
+| 784-793 | Etat reel BA PDV (0x11) | Lampes, volets, variateurs confirmes |
+| 794-803 | Etat reel BA CHB (0x12) | Lampes, volets, variateurs confirmes |
+| 804-813 | Etat reel BA PDE (0x13) | Lampes, volets, variateurs confirmes |
+| 814 | Etat connectivite BA | Bitmask: bit 0=PDV OK, bit 1=CHB OK, bit 2=PDE OK |
 
 ### Distinction Action vs. Etat
 
@@ -418,6 +422,125 @@ sequenceDiagram
 | MPLAB X + XC8 | Compilation BA |
 | Acces physique aux 4 cartes | Deploiement firmware |
 | AdGuard configure | Resolution DNS locale |
+
+## 9. Autocritique Technique
+
+Analyse critique de la specification apres confrontation avec le code source reel des 4 firmwares. Plusieurs erreurs et risques ont ete identifies.
+
+### 9.1 ERREUR : Taille de la Table d'Echange
+
+**Spec** : "~600 indices"  
+**Realite** : `Nb_Tbb_Donnees ≈ 784` (enum `Tbb_Donnees_Index` dans `TableEchange.h`, jusqu'a `AdresseMAC_6`).
+
+**Impact** :
+- `Tb_EchangePrecedentEnvoye[]` = 784 octets (pas 600)
+- Les indices proposes 600-630 pour l'etat reel BA sont **deja utilises** par la table actuelle (scenarios, eclairages, etc.)
+- Le delta initial au boot concernerait 784 indices, pas 600
+
+**Correction** : Les nouveaux indices d'etat reel doivent etre places **apres `Nb_Tbb_Donnees`** (784+), ce qui necessite d'agrandir l'enum et les tableaux `Tb_Echange[]`, `Tb_EchangePrecedent[]` et `Tb_Echange_Droits[]`.
+
+### 9.2 ERREUR CRITIQUE : Reponse I2C BA Fixe a 5 Octets
+
+La spec propose une reponse de 9 octets (7 data + 2 CRC) pour `C_LIRE_ETAT`. Or le protocole I2C BA est **fige a 5 octets** :
+
+**Cote BA (slavenode.c)** :
+- `TxBuf` est un `union` de **4 octets** (`unsigned char b[4]`)
+- Le `switch (SensBufIndex)` ne gere que les cas 0-3 (au-dela → dummy `0x55`)
+- Le CRC est calcule sur `TxBuf.b[0..2]` (3 octets) uniquement
+- Format reponse fixe : `[code] [CRC_recu_LSB] [CRC_recu_MSB] [CRC_resp_LSB] [CRC_resp_MSB]`
+
+**Cote BP (ba_i2c.c)** :
+- `sl_fct_write_polled()` demande toujours exactement **5 octets** en lecture : `l_ul_param = 5`
+- Le CRC est verifie sur les 3 premiers octets uniquement
+
+**Consequence** : Le pseudo-code propose dans la spec est **incompatible** avec le protocole I2C existant. Il est impossible d'envoyer lampes + volets + variateurs (7 octets) sans modifier en profondeur :
+1. `TxBuf` (union → buffer de 10+ octets)
+2. La machine d'etats `SensBufIndex` (ajouter des cas 4-8)
+3. Le calcul du CRC (sur plus de 3 octets)
+4. `sl_fct_write_polled()` cote BP (lecture parametrable, pas fixe a 5)
+5. La verification CRC cote BP
+
+**Alternative recommandee** : Utiliser **plusieurs transactions I2C** de 5 octets :
+
+```
+Transaction 1: C_LIRE_ETAT_LAMPES    → reponse 5 octets (code + lampes_LSB + CRC)
+Transaction 2: C_LIRE_ETAT_VOLETS    → reponse 5 octets (code + volets_LSB + CRC)
+Transaction 3: C_LIRE_ETAT_VARIATEUR → reponse 5 octets (code + variateur1 + CRC)
+```
+
+Ou bien : une seule commande `C_LIRE_ETAT` dont le champ `TxBuf.b[1]` renvoie un octet de bitmask compact (8 lampes ON/OFF dans un octet). Mais cela perd l'info des variateurs.
+
+### 9.3 ERREUR : Timing ISR vs Main Loop
+
+La spec propose de remplir `TxBuf` dans le `case C_LIRE_ETAT` du switch de traitement. Or :
+
+- Le switch de traitement (`CmdBuf[0]`) est execute dans la **main loop** (`vd_Traitement_I2C()`, cadence 40 ms)
+- Le remplissage de `TxBuf` pour la reponse I2C se fait dans l'**ISR** (`SSP_Handler()`)
+- Le READ du maitre arrive **immediatement** apres le WRITE, bien avant la main loop
+
+**Consequence** : Les donnees d'etat doivent etre preparees dans `TxBuf` **pendant l'ISR** (dans STATE 2, quand `RXBufferIndex == RXByteCount`), pas dans le switch de la main loop.
+
+**Risque** : Lecture de `us_SortiesRelais` (16 bits) dans l'ISR d'un PIC 8 bits → **lecture non-atomique**. Un changement de relais en cours de lecture pourrait donner une valeur incoherente (LSB d'un etat, MSB d'un autre).
+
+**Mitigation** : Maintenir un buffer `uc_EtatSnapshot[4]` mis a jour atomiquement dans la main loop (par octet), lu dans l'ISR.
+
+### 9.4 RISQUE : Taille des Buffers TCP
+
+**Spec** : "max ~30 indices par trame pour rester dans un seul paquet TCP"  
+**Realite** :
+- `c_EthernetBufferTX` = 1024 octets
+- En-tetes HTTP = ~400 octets
+- Reste pour le JSON = ~600 octets
+- Un indice `{k:xxx,v:"yyy"}` = 16-23 caracteres
+- Capacite reelle = **~30-35 indices** par trame
+
+**Pour le delta de 784 indices** au premier cycle (boot), il faudrait :
+- 784 / 30 = ~26 cycles
+- A 2 secondes par cycle = **~52 secondes** pour la synchronisation initiale
+
+**Alternative** : Augmenter `us_BUFFER_TX` a 2048 ou utiliser le buffer TX2 pour le corps JSON, ce qui permettrait ~80 indices par trame et une synchronisation en ~10 cycles (~20 secondes).
+
+### 9.5 RISQUE : Domaine `.local` Reserve pour mDNS
+
+Le TLD `.local` est reserve par la RFC 6762 pour le Multicast DNS (mDNS/Bonjour/Avahi). Utiliser `mon.essensys.local` avec un DNS unicast (AdGuard) peut provoquer :
+
+- Des conflits avec les resolvers mDNS presents sur le reseau (macOS, Linux avec Avahi, Windows)
+- Des delais de resolution si le systeme interroge mDNS avant le DNS unicast
+- RTCS sur MCF52259 ne supporte probablement pas mDNS, donc pas de conflit cote firmware, mais les clients web (navigateurs) pourraient avoir des problemes
+
+**Alternative** : Utiliser `mon.essensys.lan` (non-reserve) ou un sous-domaine reel `local.essensys.fr` (resolvable en interne via AdGuard).
+
+### 9.6 RISQUE : Memoire RAM pour le 3eme Tableau
+
+**Spec** : "Faisable car le MCF52259 a de la marge sur les 3000 octets de stack Ethernet"  
+**Realite** :
+- `Tb_EchangePrecedentEnvoye[784]` = 784 octets supplementaires
+- La RAM totale est de 64 Ko (SRAM)
+- Stack total des 5 taches = ~9 Ko
+- `Tb_Echange[784]` + `Tb_EchangePrecedent[784]` = 1568 octets existants
+- Buffers Ethernet : `BufferRX` (1500) + `BufferRX2` (1024) + `BufferTX` (1024) + `BufferTX2` (1024) = 4572 octets
+- Un commentaire dans `main.c` indique un overflow de stack Ethernet a 2000, monte a 3000
+
+**Conclusion** : 784 octets supplementaires sont probablement faisables mais **a valider** par mesure de highwater (`_mem_get_highwater()`) avant deploiement. La marge n'est pas dans le stack Ethernet mais dans la RAM globale.
+
+### 9.7 RISQUE : Compatibilite du Nouvel Endpoint
+
+**Spec** : "Le serveur continue de renvoyer la liste `infos` dans `/api/serverinfos`"  
+**Realite** : Si le firmware v2 ignore la liste `infos` et envoie des deltas sur `/api/mystatus`, le backend recevra des indices non-demandes. Le parser actuel du backend Go doit accepter des indices arbitraires sans les rejeter.
+
+**Recommandation** : Utiliser `/api/myfullstatus` (nouvel endpoint) pour les deltas, et continuer a utiliser `/api/mystatus` normalement avec les indices demandes. Les deux coexistent.
+
+### 9.8 Tableau de Synthese
+
+| # | Severite | Point | Action Requise |
+|---|----------|-------|----------------|
+| 9.1 | **Erreur** | Table = 784 indices, pas 600 | Corriger toutes les tailles, revoir les indices proposes |
+| 9.2 | **Critique** | Reponse I2C fixe a 5 octets | Redesigner C_LIRE_ETAT : multi-transactions ou format compact |
+| 9.3 | **Erreur** | TxBuf rempli dans ISR, pas main loop | Preparer les donnees dans l'ISR ou buffer pre-rempli |
+| 9.4 | **Moyen** | 52s pour sync initiale (784/30 × 2s) | Augmenter buffer TX ou envoyer en batch |
+| 9.5 | **Moyen** | `.local` reserve pour mDNS | Utiliser `.lan` ou `local.essensys.fr` |
+| 9.6 | **Faible** | RAM 784 octets supplementaires | Valider par mesure highwater |
+| 9.7 | **Faible** | Compatibilite backend pour deltas | Separer endpoints mystatus / myfullstatus |
 
 ## References Sources
 
