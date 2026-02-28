@@ -5,67 +5,82 @@ Cette section detaille les 14 conteneurs logiciels deployes sur le Raspberry Pi 
 ## Diagramme des Conteneurs
 
 ```mermaid
-C4Container
-    title Architecture des Conteneurs - Essensys (14 services)
+graph TB
+    user["👤 Utilisateur<br/>Navigateur / WhatsApp"]
+    hardware["🔌 BP_MQX_ETH<br/>Materiel Domotique"]
+    ha["🏠 Home Assistant"]
 
-    Person(user, "Utilisateur", "Navigateur / WhatsApp")
-    SystemExt(hardware, "BP_MQX_ETH", "Materiel Domotique")
-    SystemExt(ha, "Home Assistant", "Integration MQTT")
+    subgraph Edge["Zone Edge / Ingress"]
+        traefik["Traefik<br/>WAN HTTPS :443"]
+        nginx["Nginx<br/>LAN HTTP :80"]
+    end
 
-    Container_Boundary(edge, "Zone Edge / Ingress") {
-        Container(traefik, "Traefik", "Reverse Proxy WAN, SSL Let's Encrypt")
-        Container(nginx, "Nginx", "Reverse Proxy LAN, buffer TCP single-packet")
-    }
+    subgraph Apps["Domaine Applicatif"]
+        frontend["Frontend React<br/>Dashboard SPA"]
+        support["Support Portal<br/>React + Go/Chi"]
+        backend["Backend Go<br/>ACL"]
+        mcp["MCP Server<br/>Go / SSE :8083"]
+        controlplane["Control Plane<br/>Go + React :9100"]
+    end
 
-    Container_Boundary(apps, "Domaine Applicatif") {
-        Container(frontend, "Frontend React", "Vite/TypeScript", "Dashboard domotique SPA")
-        Container(support, "Support Portal", "React + Go/Chi", "Site vitrine, admin, documentation")
-        Container(backend, "Backend Go", "Anti-Corruption Layer", "Bridge legacy <-> API REST moderne")
-        Container(mcp, "MCP Server", "Go / SSE", "Model Context Protocol pour agents IA")
-        Container(controlplane, "Control Plane", "Go + React", "Admin, Docker, Redis, Prometheus, Logs")
-    }
+    subgraph AI_Zone["Intelligence Artificielle"]
+        openclaw["OpenClaw<br/>:18789"]
+    end
 
-    Container_Boundary(ai, "Intelligence Artificielle") {
-        Container(openclaw, "OpenClaw", "Node.js", "Assistant IA multi-canal WhatsApp")
-    }
+    subgraph DataLayer["Infrastructure de Donnees"]
+        redis[("Redis<br/>:6379")]
+        mqtt["Mosquitto<br/>MQTT :1883"]
+    end
 
-    Container_Boundary(data, "Infrastructure de Donnees") {
-        ContainerDb(redis, "Redis", "Cache + Pub/Sub", "State store de la table d'echange")
-        Container(mqtt, "Mosquitto", "MQTT Broker", "Bus evenements IoT + Home Assistant")
-    }
+    subgraph DNS_Zone["DNS"]
+        adguard["AdGuard Home<br/>:53 / :3000"]
+    end
 
-    Container_Boundary(dns, "DNS et Filtrage") {
-        Container(adguard, "AdGuard Home", "DNS + Ad Blocking", "Resolveur DNS local et filtrage")
-    }
+    subgraph Mon["Observabilite"]
+        prometheus["Prometheus<br/>:9092"]
+        alertmanager["Alertmanager<br/>:9093"]
+        nodeexporter["Node Exporter"]
+    end
 
-    Container_Boundary(monitoring, "Observabilite") {
-        Container(prometheus, "Prometheus", "TSDB", "Collecte metriques")
-        Container(alertmanager, "Alertmanager", "Routing", "Routage et deduplication alertes")
-        Container(nodeexporter, "Node Exporter", "Agent", "Metriques systeme Raspberry Pi")
-    }
+    user -->|HTTPS WAN| traefik
+    user -->|HTTP LAN| nginx
+    traefik --> frontend
+    nginx --> backend
+    nginx --> controlplane
+    nginx --> openclaw
+    nginx --> prometheus
 
-    Rel(user, traefik, "HTTPS (WAN)", "TCP 443")
-    Rel(user, nginx, "HTTP (LAN)", "TCP 80")
-    Rel(traefik, frontend, "Dashboard")
-    Rel(nginx, backend, "API + buffer single-packet")
-    Rel(nginx, controlplane, "/controle_plane/")
-    Rel(nginx, openclaw, "/openclaw/")
-    Rel(nginx, prometheus, "/prometheus/")
+    backend <-->|Table echange + actions| redis
+    backend <-->|Polling HTTP :80| hardware
+    backend <-->|Publie etats / Recoit cmds| mqtt
+    mcp <--> redis
 
-    Rel(backend, redis, "Table d'echange + actions")
-    Rel(backend, hardware, "Polling HTTP synchrone", "TCP 80 / LAN")
-    Rel(backend, mqtt, "Publie etats, recoit commandes")
-    Rel(mcp, redis, "Lecture/ecriture table d'echange")
+    openclaw <-->|Outils MCP / SSE| mcp
+    alertmanager -->|Webhook /hooks/agent| openclaw
+    openclaw -->|WhatsApp| user
 
-    Rel(openclaw, mcp, "Interroge l'etat du systeme", "SSE")
-    Rel(alertmanager, openclaw, "Webhook alertes", "/hooks/agent")
-    Rel(openclaw, user, "Alertes et interaction", "WhatsApp")
+    mqtt <-->|Discovery + etats| ha
+    controlplane <--> redis
+    controlplane --> prometheus
+    prometheus --> nodeexporter
+    prometheus --> backend
+    prometheus --> alertmanager
 
-    Rel(mqtt, ha, "Discovery + etats")
-    Rel(controlplane, redis, "Admin table d'echange")
-    Rel(controlplane, prometheus, "Proxy metriques")
-    Rel(prometheus, nodeexporter, "Scrape metriques")
-    Rel(prometheus, backend, "Scrape /metrics")
+    classDef app fill:#99ccff,stroke:#0066cc,color:#000
+    classDef data fill:#99ff99,stroke:#009900,color:#000
+    classDef mon fill:#ffcc99,stroke:#cc6600,color:#000
+    classDef ai fill:#cc99ff,stroke:#6600cc,color:#000
+    classDef edge fill:#ffff99,stroke:#999900,color:#000
+    classDef ext fill:#e0e0e0,stroke:#666,color:#000
+    classDef legacy fill:#ff9999,stroke:#cc0000,color:#000
+
+    class frontend,support,backend,mcp,controlplane app
+    class redis,mqtt data
+    class prometheus,alertmanager,nodeexporter mon
+    class openclaw ai
+    class traefik,nginx,adguard edge
+    class user,ha ext
+    class hardware legacy
 ```
 
 ## Description des Services

@@ -25,28 +25,43 @@ C'est le référentiel maître pour la configuration.
 ## Diagramme de Déploiement Cible (Raspberry Pi Local)
 
 ```mermaid
-C4Deployment
-    title Déploiement Type - Nœud Edge (Raspberry Pi)
+graph TB
+    subgraph RPi["Raspberry Pi (Debian / Raspbian)"]
+        subgraph Docker["Docker Engine"]
+            traefik["Traefik<br/>HTTPS :443"]
+            nginx["Nginx<br/>HTTP :80"]
+            backend["Backend Go<br/>ACL :80"]
+            mcp["MCP Server<br/>:8083"]
+            frontend["Frontend React"]
+            controlplane["Control Plane<br/>:9100"]
+            redis[("Redis<br/>:6379")]
+            mqtt["Mosquitto<br/>:1883"]
+            prometheus["Prometheus<br/>:9092"]
+            alertmanager["Alertmanager<br/>:9093"]
+            nodeexporter["Node Exporter"]
+            cadvisor["cAdvisor<br/>:8082"]
+            adguard["AdGuard<br/>:53"]
+            openclaw["OpenClaw<br/>:18789"]
+        end
 
-    Deployment_Node(rpi, "Raspberry Pi (OS: Debian/Raspbian)", "Serveur local ou Box Domotique"){
-        
-        Deployment_Node(docker, "Docker Engine", "Moteur de Conteneurisation"){
-            Container(traefik, "Traefik", "Docker Container")
-            Container(backend, "Go Backend", "Docker Container")
-            Container(frontend, "Dashboard Web", "Docker Container")
-            Container(redis, "Redis", "Docker Container")
-            Container(mqtt, "Mosquitto", "Docker Container")
-        }
+        subgraph Host["Hote Natif"]
+            ansible["Ansible<br/>Provisioning"]
+            systemd["Systemd<br/>mqtt-debug, logrotate"]
+        end
+    end
 
-        Deployment_Node(host, "Hôte Natif", "Processus non dockérisés"){
-            Container(ansible, "Ansible (exécution)", "Applique les modifs")
-            Container(services, "Systemd", "Lanceurs de scripts locaux")
-        }
-    }
+    hardware["🔌 BP_MQX_ETH<br/>Reseau LAN"]
 
-    SystemExt(hardware, "Réseau LAN - Cartes Domotiques")
-    
-    Rel(backend, hardware, "TCP/IP HTTP :80", "LAN")
+    backend <-->|HTTP :80 / LAN| hardware
+    ansible -.->|Configure| Docker
+
+    classDef docker fill:#99ccff,stroke:#0066cc,color:#000
+    classDef host fill:#ffe6cc,stroke:#cc6600,color:#000
+    classDef hw fill:#ff9999,stroke:#cc0000,color:#000
+
+    class traefik,nginx,backend,mcp,frontend,controlplane,redis,mqtt,prometheus,alertmanager,nodeexporter,cadvisor,adguard,openclaw docker
+    class ansible,systemd host
+    class hardware hw
 ```
 
 ## Le Cycle de Vie Typique

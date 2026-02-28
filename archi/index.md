@@ -13,31 +13,37 @@ Fournir une interface de controle moderne, securisee et performante (via des das
 ### Diagramme de Contexte
 
 ```mermaid
-C4Context
-    title Diagramme de Contexte - Essensys (2026)
+graph TB
+    user["👤 Utilisateur Final<br/>Navigateur / Mobile / WhatsApp"]
+    admin["🔧 Administrateur<br/>SSH / HTTPS / Control Plane"]
 
-    Person(user, "Utilisateur Final", "Controle sa domotique via navigateur, mobile ou WhatsApp")
-    Person(admin, "Administrateur", "Maintient et deploie le systeme")
+    essensys["🏠 Ecosysteme Essensys<br/>Chauffage, volets, eclairage,<br/>alarme, securite"]
 
-    System(essensys, "Ecosysteme Essensys", "Gere le chauffage, les volets, l'eclairage, l'alarme et la securite")
+    hardware["🔌 Cartes BP_MQX_ETH<br/>Coldfire MCF52259 / MQX RTOS"]
+    whatsapp["📱 WhatsApp<br/>Notifications via OpenClaw"]
+    homeassistant["🏠 Home Assistant<br/>MQTT Discovery"]
+    linky["⚡ Compteur Linky<br/>Teleinfo UART 1200 bauds"]
+    unifi["📷 UniFi Protect<br/>Cameras IP"]
+    dockerhub["🐳 Docker Hub<br/>Registry images"]
+    github["⚙️ GitHub Actions<br/>CI/CD multi-arch"]
 
-    SystemExt(hardware, "Cartes BP_MQX_ETH", "Controleurs materiels embarques Coldfire MCF52259 / MQX RTOS")
-    SystemExt(whatsapp, "WhatsApp", "Canal de notification et interaction via OpenClaw")
-    SystemExt(homeassistant, "Home Assistant", "Integration domotique tierce via MQTT Discovery")
-    SystemExt(linky, "Compteur Linky", "Teleinfo consommation electrique via UART")
-    SystemExt(unifi, "UniFi Protect", "Cameras de surveillance IP")
-    SystemExt(dockerhub, "Docker Hub", "Registry des images conteneurs")
-    SystemExt(github, "GitHub Actions", "Pipeline CI/CD multi-architecture")
+    user -->|HTTPS / WhatsApp| essensys
+    admin -->|SSH / HTTPS| essensys
+    essensys <-->|Polling HTTP 2s<br/>Port 80 / LAN| hardware
+    essensys <-->|API WhatsApp Web| whatsapp
+    essensys <-->|MQTT| homeassistant
+    hardware <---|UART 1200 bauds| linky
+    essensys -->|HTTPS| unifi
+    github -->|Docker Push ARM64/AMD64| dockerhub
+    admin -->|Git Push| github
 
-    Rel(user, essensys, "Consulte et commande", "HTTPS / WhatsApp")
-    Rel(admin, essensys, "Supervise et deploie", "SSH / HTTPS / Control Plane")
-    Rel(essensys, hardware, "Bridge les commandes via polling HTTP synchrone", "HTTP Port 80 / LAN")
-    Rel(essensys, whatsapp, "Envoie les alertes et recoit les commandes", "API WhatsApp Web")
-    Rel(essensys, homeassistant, "Publie les etats et recoit les commandes", "MQTT")
-    Rel(hardware, linky, "Lit la consommation electrique", "UART 1200 bauds")
-    Rel(essensys, unifi, "Recupere les snapshots cameras", "HTTPS")
-    Rel(github, dockerhub, "Pousse les images ARM64/AMD64", "Docker Push")
-    Rel(admin, github, "Pousse le code source", "Git Push")
+    classDef system fill:#438DD5,stroke:#2E6295,color:#fff
+    classDef external fill:#999,stroke:#666,color:#fff
+    classDef person fill:#08427B,stroke:#052E56,color:#fff
+
+    class essensys system
+    class hardware,whatsapp,homeassistant,linky,unifi,dockerhub,github external
+    class user,admin person
 ```
 
 ## 2. Le Defi Central : le Client Legacy
