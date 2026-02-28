@@ -264,6 +264,19 @@ L'architecture Essensys contourne ces limitations sans toucher au firmware :
 - **MQTT** : Pont vers Home Assistant sans modifier le firmware
 - **MCP + OpenClaw** : Interface IA qui abstrait totalement les indices numeriques
 
+## 6. Documentation Detaillee du Client Legacy
+
+Ce document est une vue d'ensemble. Pour approfondir chaque aspect du firmware, consulter :
+
+| Document | Contenu |
+|----------|---------|
+| **[Securite](legacy-client-security.md)** | Authentification HTTP Basic, chiffrement AES/Rijndael des ordres alarme, stockage secrets EEPROM |
+| **[Build et Toolchain](legacy-client-build.md)** | CodeWarrior, makefile, structure du projet, versions, format S19 |
+| **[Protocoles Internes](legacy-client-protocols.md)** | I2C (boitiers auxiliaires), UART (ecran, TeleInfo/Linky), SPI (EEPROM) |
+| **[Configuration Hardware](legacy-client-config.md)** | Mapping GPIO complet, peripheriques, parametres systeme, sequence d'init |
+| **[Deploiement et OTA](legacy-client-deployment.md)** | Bootloader, mise a jour OTA via S19, flashing JTAG/BDM |
+| **[Diagnostic et Debug](legacy-client-testing.md)** | EspionRS (debug serie), GPIO debug, CRC, surveillance, indicateurs Ethernet |
+
 ## References Sources
 
 - Architecture embarquee : `client-essensys-legacy/docs/embedded-client/architecture.md`

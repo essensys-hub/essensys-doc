@@ -16,6 +16,12 @@ La documentation d'architecture se trouve dans [`archi/`](archi/) et suit le mod
 |----------|-------------|
 | [Vue d'ensemble](archi/index.md) | Contexte C4, defis du client legacy, piliers architecturaux |
 | [Client Embarque BP_MQX_ETH](archi/legacy-client.md) | Hardware Coldfire MCF52259, MQX RTOS, 8 contraintes firmware |
+| ↳ [Securite](archi/legacy-client-security.md) | Auth HTTP Basic, chiffrement AES alarme, secrets EEPROM |
+| ↳ [Build et Toolchain](archi/legacy-client-build.md) | CodeWarrior, makefile, structure projet, format S19 |
+| ↳ [Protocoles Internes](archi/legacy-client-protocols.md) | I2C (BA), UART (ecran, Linky), SPI (EEPROM) |
+| ↳ [Configuration Hardware](archi/legacy-client-config.md) | Mapping GPIO, peripheriques, parametres systeme |
+| ↳ [Deploiement et OTA](archi/legacy-client-deployment.md) | Bootloader, mise a jour OTA, flashing JTAG/BDM |
+| ↳ [Diagnostic et Debug](archi/legacy-client-testing.md) | EspionRS, GPIO debug, CRC, surveillance |
 | [Table d'Echange](archi/exchange-table.md) | Cartographie des ~600 indices, droits d'acces, bitmasks, Flash |
 | [Domaines Fonctionnels](archi/domaines-fonctionnels.md) | Alarme, chauffage, volets, cumulus, securite, fuites, vent, arrosage |
 | [Services (Conteneurs)](archi/containers.md) | Les 14 services Docker, roles et interactions |
@@ -87,6 +93,7 @@ Ce depot documente l'ensemble des projets de l'organisation [essensys-hub](https
 
 1. Lire la [vue d'ensemble de l'architecture](archi/index.md) pour comprendre le contexte
 2. Consulter le [client legacy](archi/legacy-client.md) pour comprendre les contraintes imposees par le materiel
+   - Approfondir avec : [securite](archi/legacy-client-security.md), [build](archi/legacy-client-build.md), [protocoles](archi/legacy-client-protocols.md), [GPIO](archi/legacy-client-config.md), [OTA](archi/legacy-client-deployment.md), [debug](archi/legacy-client-testing.md)
 3. Explorer la [table d'echange](archi/exchange-table.md) pour comprendre le modele de donnees central
 4. Voir le [pattern bridge](archi/bridge-pattern.md) pour comprendre comment le backend moderne s'interface avec le legacy
 5. Parcourir les [diagrammes](archi/diagrams.md) pour une vue visuelle complete

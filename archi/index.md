@@ -89,6 +89,12 @@ Le systeme a ete modularise pour separer les responsabilites :
 | Document | Contenu |
 |----------|---------|
 | **[Le Client Embarque BP_MQX_ETH](legacy-client.md)** | Hardware, RTOS, contraintes techniques, obsolescence |
+| ↳ **[Securite](legacy-client-security.md)** | Authentification HTTP Basic, chiffrement AES des ordres alarme, EEPROM |
+| ↳ **[Build et Toolchain](legacy-client-build.md)** | CodeWarrior, makefile, structure projet, versions, format S19 |
+| ↳ **[Protocoles Internes](legacy-client-protocols.md)** | I2C (BA), UART (ecran, TeleInfo/Linky), SPI (EEPROM) |
+| ↳ **[Configuration Hardware](legacy-client-config.md)** | Mapping GPIO, peripheriques, parametres systeme, sequence init |
+| ↳ **[Deploiement et OTA](legacy-client-deployment.md)** | Bootloader, mise a jour OTA via S19, flashing JTAG/BDM |
+| ↳ **[Diagnostic et Debug](legacy-client-testing.md)** | EspionRS, GPIO debug, CRC, surveillance, indicateurs Ethernet |
 | **[Table d'Echange - Reference Technique](exchange-table.md)** | Cartographie des ~600 indices, droits d'acces, scenarios, bitmasks |
 | **[Domaines Fonctionnels](domaines-fonctionnels.md)** | Alarme, chauffage, volets, cumulus, securite, fuites, vent, arrosage |
 | **[Architecture des Conteneurs (Services)](containers.md)** | Les 14 services deployes, leurs roles et interactions |

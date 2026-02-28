@@ -572,3 +572,125 @@ graph TB
     class queue,direct store
     class poll,exec,ack fw
 ```
+
+---
+
+## 9. Sequence de Boot — Initialisation du Firmware
+
+Sequence d'initialisation complete de la tache Main au demarrage du BP_MQX_ETH.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant BL as Bootloader
+    participant MQX as MQX RTOS
+    participant MAIN as Main_task
+    participant SPI as EEPROM SPI
+    participant HW as Hardware GPIO/ADC/PWM
+    participant ETH as Ethernet_task
+    participant SRV as Serveur Essensys
+
+    Note over BL: Power-on MCF52259
+    BL->>BL: Verifie CRC zone application
+    BL->>BL: APP_CALL() → saut vers __boot
+
+    BL->>MQX: Demarre MQX RTOS
+    MQX->>MQX: Init BSP, I/O subsystem
+    MQX->>MAIN: Cree 5 taches (prio 8, time-slice)
+
+    Note over MAIN: _time_delay(500ms)
+    MAIN->>MAIN: vd_TableEchangeLireEnFlash()
+    MAIN->>MAIN: vd_InitVariablesGlobales()
+    MAIN->>HW: vd_InitHard() — GPIO, ADC, PWM, I/O
+
+    MAIN->>SPI: vd_SpiOpen() — 500 kHz, Mode 0
+    MAIN->>SPI: vd_ReadAdresseMac() — 0xFA, 6 octets
+    SPI-->>MAIN: Adresse MAC
+    MAIN->>SPI: vd_ReadCleServeur() — 0x00, 16 octets
+    SPI-->>MAIN: Cle serveur
+    MAIN->>SPI: vd_ReadCodeAlarme() — 2 octets
+    SPI-->>MAIN: Code alarme
+
+    Note over MAIN: _time_delay(1000ms)
+    MAIN->>HW: Active BP_O_UC_BATT_CTRL
+    MAIN->>HW: Active BP_O_15VSP_ALIM_BA
+    Note over MAIN: _time_delay(100ms) stabilisation
+
+    Note over MAIN: Boucle principale demarre
+    Note over MAIN: Chauffage, alarme, scenarios...
+
+    par Tache Ethernet (parallele)
+        ETH->>ETH: DHCP + DNS resolution
+        ETH->>ETH: cryptage() → c_MatriculeCryptee
+        ETH->>SRV: GET /api/serverinfos
+        SRV-->>ETH: 200 OK + indices a surveiller
+        loop Toutes les 2 secondes
+            ETH->>SRV: POST /api/mystatus
+            SRV-->>ETH: 201 Created
+            ETH->>SRV: GET /api/myactions
+            SRV-->>ETH: 200 OK + actions
+        end
+    end
+```
+
+---
+
+## 10. Securite — Chaine d'Authentification
+
+Flux de generation de la cle d'authentification et chiffrement des ordres alarme.
+
+```mermaid
+graph LR
+    subgraph EEPROM["EEPROM SPI (CS0)"]
+        cle["Cle Serveur<br/>16 octets @ 0x00"]
+        mac["Adresse MAC<br/>6 octets @ 0xFA"]
+        code["Code Alarme<br/>2 octets"]
+    end
+
+    subgraph Auth["Authentification HTTP"]
+        hex["Conversion Hex<br/>16 octets → 32 chars"]
+        md5["Hash MD5<br/>(RFC 1321)"]
+        fmt["Format<br/>16premiers:16derniers"]
+        b64["Encodage Base64"]
+        header["Authorization: Basic<br/>c_MatriculeCryptee[46]"]
+    end
+
+    subgraph AES["Chiffrement Alarme"]
+        iv["IV = 8 premiers octets<br/>du digest MD5"]
+        rijndael["Rijndael-CBC<br/>128 bits / 256 bits cle"]
+        parse["UnParceAES()<br/>separateur ;"]
+    end
+
+    subgraph HTTP["Requetes HTTP"]
+        get["GET /api/serverinfos"]
+        post["POST /api/mystatus"]
+        actions["GET /api/myactions"]
+        done["POST /api/done/{guid}"]
+    end
+
+    cle --> hex
+    hex --> md5
+    md5 --> fmt
+    fmt --> b64
+    b64 --> header
+
+    md5 -.->|8 premiers octets| iv
+    iv --> rijndael
+    parse --> rijndael
+    rijndael --> code
+
+    header --> get
+    header --> post
+    header --> actions
+    header --> done
+
+    classDef eeprom fill:#fff3e6,stroke:#cc6600
+    classDef auth fill:#e6f3ff,stroke:#0066cc
+    classDef crypto fill:#ffe6e6,stroke:#cc0000
+    classDef http fill:#e6ffe6,stroke:#009900
+
+    class cle,mac,code eeprom
+    class hex,md5,fmt,b64,header auth
+    class iv,rijndael,parse crypto
+    class get,post,actions,done http
+```
