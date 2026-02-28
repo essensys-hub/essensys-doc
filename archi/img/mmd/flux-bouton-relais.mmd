@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    participant U as 👤 Utilisateur
+    participant FE as Frontend React
+    participant BE as Backend Go (ACL)
+    participant R as Redis
+    participant FW as BP_MQX_ETH
+    participant BA as Boitier Auxiliaire
+
+    U->>FE: Clic "Allumer Salon"
+    FE->>BE: POST /api/admin/inject<br/>{index: 619, bit: 1}
+    BE->>BE: GenerateCompleteBlock(605-622)<br/>+ MergeActions (OR bitwise)
+    BE->>R: RPUSH essensys:global:actions<br/>{guid, params[590,605..622]}
+
+    Note over FW: Polling toutes les 2 sec
+
+    FW->>BE: GET /api/myactions
+    BE->>R: LPOP essensys:global:actions
+    BE-->>FW: 200 OK<br/>{_de67f:null, actions:[...]}
+
+    FW->>FW: Ecrit indices dans Tb_Echange[]
+    FW->>BA: Transmet ordre via I2C
+    BA->>BA: Active relais physique
+
+    FW->>BE: POST /api/done/{guid}
+    BE-->>FW: 201 Created
+    BE->>R: Supprime action acquittee

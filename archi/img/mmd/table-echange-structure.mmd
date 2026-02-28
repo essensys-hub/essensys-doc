@@ -1,0 +1,48 @@
+graph TB
+    subgraph Table["Tb_Echange[] — ~600 octets (unsigned char)"]
+        v["0-4 : Versions<br/>SoftBP, IHM, Table"]
+        dt["5-9 : Date/Heure"]
+        st["10-12 : Status, Alerte, Info"]
+        ch["13-348 : Planning Chauffage<br/>4 zones × 84 octets"]
+        cm["349-352 : Mode Chauffage Immediat<br/>(mutex inter-taches)"]
+        cu["353 : Cumulus"]
+        va["354-363 : Vacances"]
+        ar["364-406 : Arrosage"]
+        al["407-435 : Alarme"]
+        se["436-443 : Alerte + Securite"]
+        re["444-458 : Reveil (5 zones)"]
+        de["459 : Delestage"]
+        ti["460-493 : Teleinfo ERDF<br/>Puissance, Conso HP/HC"]
+        ec["494-589 : Eclairage + Volets<br/>Variateurs, Lampes, Temps"]
+        sc["590-919 : Scenarios<br/>8 × 41 parametres"]
+        bp["920+ : EtatBP, Cle Distance,<br/>Store, MAC, Ethernet"]
+    end
+
+    subgraph Droits["Droits d'Acces (Tb_Echange_Droits[])"]
+        d1["__ = 0x00 : Aucun acces"]
+        d2["R_ = 0x01 : Lecture seule"]
+        d3["_W = 0x02 : Ecriture seule"]
+        d4["RW = 0x03 : Lecture + Ecriture"]
+        d5["RWS = 0x83 : RW + Sauvegarde Flash"]
+    end
+
+    subgraph Flash["Persistance Flash 0x7E000"]
+        f1["Secteur 4096 octets"]
+        f2["CRC-16 (2 premiers octets)"]
+        f3["Restaure au boot<br/>indices avec flag 0x80"]
+    end
+
+    Table --- Droits
+    Table --- Flash
+
+    classDef version fill:#e6f3ff,stroke:#0066cc
+    classDef heating fill:#ffe6cc,stroke:#cc6600
+    classDef alarm fill:#ffe6e6,stroke:#cc0000
+    classDef scenario fill:#e6ffe6,stroke:#009900
+    classDef teleinfo fill:#f0e6ff,stroke:#6600cc
+
+    class v,dt,st version
+    class ch,cm,cu,va heating
+    class al,se alarm
+    class sc scenario
+    class ti teleinfo

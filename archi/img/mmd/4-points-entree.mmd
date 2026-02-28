@@ -1,0 +1,47 @@
+graph TB
+    subgraph Sources["Sources de Commandes"]
+        web["🌐 Frontend React<br/>POST /api/admin/inject<br/>POST /api/web/actions"]
+        mqtt_src["🏠 Home Assistant<br/>MQTT Command"]
+        mcp_src["🤖 OpenClaw / IA<br/>MCP send_order"]
+        cp_src["⚙️ Control Plane<br/>PUT /api/redis/exchange"]
+    end
+
+    subgraph Pipeline["Pipeline de Traitement"]
+        as["ActionService.AddAction()"]
+        gcb["GenerateCompleteBlock()<br/>590 + 605..622"]
+        ma["MergeActions()<br/>OR bitwise si concurrent"]
+    end
+
+    subgraph Redis["Redis"]
+        queue["essensys:global:actions<br/>(RPUSH / LPOP)"]
+        direct["essensys:client:*:exchange<br/>(HSET direct)"]
+    end
+
+    subgraph Firmware["BP_MQX_ETH"]
+        poll["GET /api/myactions<br/>toutes les 2 sec"]
+        exec["Applique dans Tb_Echange[]"]
+        ack["POST /api/done/{guid}"]
+    end
+
+    web --> as
+    mqtt_src --> as
+    mcp_src --> as
+    cp_src -.->|Bypass ActionService| direct
+
+    as --> gcb
+    gcb --> ma
+    ma --> queue
+
+    queue --> poll
+    poll --> exec
+    exec --> ack
+
+    classDef source fill:#e6ffe6,stroke:#009900
+    classDef pipe fill:#e6f3ff,stroke:#0066cc
+    classDef store fill:#fff3e6,stroke:#cc6600
+    classDef fw fill:#ffe6e6,stroke:#cc0000
+
+    class web,mqtt_src,mcp_src,cp_src source
+    class as,gcb,ma pipe
+    class queue,direct store
+    class poll,exec,ack fw

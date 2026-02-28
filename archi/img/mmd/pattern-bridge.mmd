@@ -1,0 +1,45 @@
+graph LR
+    subgraph Moderne["Clients Modernes"]
+        fe["Frontend React<br/>POST /api/admin/inject"]
+        ha["Home Assistant<br/>MQTT Command"]
+        ai["OpenClaw<br/>MCP send_order"]
+        cp["Control Plane<br/>PUT /api/redis"]
+    end
+
+    subgraph ACL["Backend Go — Anti-Corruption Layer"]
+        norm["JSON Normalizer<br/>Ajoute guillemets<br/>aux cles"]
+        as["ActionService<br/>AddAction()"]
+        block["GenerateCompleteBlock<br/>605-622 + trigger 590"]
+        merge["MergeActions<br/>OR bitwise"]
+        legacy_srv["Legacy HTTP Server<br/>Port 80 / 201 Created<br/>_de67f / single-packet"]
+    end
+
+    subgraph Storage["Stockage"]
+        redis[("Redis<br/>essensys:global:actions")]
+    end
+
+    subgraph Legacy["Firmware BP_MQX_ETH"]
+        fw["Polling GET /api/myactions<br/>toutes les 2 secondes"]
+    end
+
+    fe --> as
+    ha --> as
+    ai --> as
+    cp -.->|Ecriture directe| redis
+
+    as --> block
+    block --> merge
+    merge --> redis
+
+    fw -->|JSON malformes| norm
+    norm --> legacy_srv
+    redis --> legacy_srv
+    legacy_srv -->|200/201 + _de67f<br/>single-packet TCP| fw
+
+    classDef acl fill:#e6f3ff,stroke:#0066cc
+    classDef legacy fill:#ffe6e6,stroke:#cc0000
+    classDef modern fill:#e6ffe6,stroke:#009900
+
+    class norm,as,block,merge,legacy_srv acl
+    class fw legacy
+    class fe,ha,ai,cp modern

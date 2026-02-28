@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    participant FW as BP_MQX_ETH
+    participant BE as Backend Go
+    participant P as Prometheus
+    participant AM as Alertmanager
+    participant OC as OpenClaw
+    participant AI as OpenAI GPT
+    participant WA as 📱 WhatsApp
+
+    FW->>BE: POST /api/mystatus<br/>(alerte bit actif dans table)
+    BE->>BE: Expose metrique<br/>essensys_alert{type="fuite"}=1
+    P->>BE: Scrape /metrics (15s)
+    P->>P: Evalue regle d'alerte<br/>EssensysFuiteDetectee
+    P->>AM: Fire alert (severity=critical)
+    AM->>OC: POST /hooks/agent<br/>Bearer token
+    OC->>AI: Reformule l'alerte<br/>en langage clair
+    AI-->>OC: Message reformule
+    OC->>WA: Envoie notification
+    Note over WA: "⚠️ Alerte fuite<br/>lave-linge detectee.<br/>Verifiez l'arrivee d'eau."

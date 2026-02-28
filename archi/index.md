@@ -84,7 +84,9 @@ Le systeme a ete modularise pour separer les responsabilites :
 |----------|---------|
 | **[Le Client Embarque BP_MQX_ETH](legacy-client.md)** | Hardware, RTOS, contraintes techniques, obsolescence |
 | **[Table d'Echange - Reference Technique](exchange-table.md)** | Cartographie des ~600 indices, droits d'acces, scenarios, bitmasks |
+| **[Domaines Fonctionnels](domaines-fonctionnels.md)** | Alarme, chauffage, volets, cumulus, securite, fuites, vent, arrosage |
 | **[Architecture des Conteneurs (Services)](containers.md)** | Les 14 services deployes, leurs roles et interactions |
 | **[Le Pattern Bridge : du Legacy au Moderne](bridge-pattern.md)** | Comment le backend Go comble l'obsolescence du client |
 | **[Architecture de Deploiement](deployment.md)** | Ansible, Docker Compose, CI/CD, infrastructure |
+| **[Diagrammes d'Architecture](diagrams.md)** | Tous les diagrammes Mermaid + PNG (globale, flux, bridge, deploiement) |
 | **[Autocritique Clean Architecture / DDD](critique_ddd.md)** | Analyse critique, score, recommandations |

@@ -1,0 +1,70 @@
+graph LR
+    subgraph Edge["Ingress"]
+        traefik["Traefik<br/>WAN HTTPS"]
+        nginx["Nginx<br/>LAN HTTP"]
+    end
+
+    subgraph Application["Domaine Applicatif"]
+        frontend["Frontend<br/>React/Vite"]
+        backend["Backend Go<br/>ACL"]
+        mcp["MCP Server<br/>Go/SSE"]
+        cp["Control Plane<br/>Go+React"]
+    end
+
+    subgraph Intelligence["IA"]
+        oc["OpenClaw<br/>Node.js"]
+    end
+
+    subgraph Donnees["Donnees"]
+        redis[("Redis")]
+        mqtt["Mosquitto<br/>MQTT"]
+    end
+
+    subgraph Observabilite["Monitoring"]
+        prom["Prometheus"]
+        am["Alertmanager"]
+        ne["Node Exporter"]
+        ca["cAdvisor"]
+    end
+
+    subgraph DNS_Zone["DNS"]
+        ag["AdGuard"]
+    end
+
+    subgraph Legacy["Hardware"]
+        hw["BP_MQX_ETH<br/>Coldfire"]
+    end
+
+    traefik --> frontend
+    traefik --> cp
+    nginx --> backend
+    nginx --> cp
+    nginx --> oc
+    nginx --> prom
+
+    backend <--> redis
+    backend <--> hw
+    backend <--> mqtt
+    mcp <--> redis
+    oc <--> mcp
+    am --> oc
+    cp <--> redis
+    cp --> prom
+    prom --> ne
+    prom --> ca
+    prom --> am
+
+    classDef legacy fill:#ff9999,stroke:#cc0000
+    classDef app fill:#99ccff,stroke:#0066cc
+    classDef data fill:#99ff99,stroke:#009900
+    classDef mon fill:#ffcc99,stroke:#cc6600
+    classDef ai fill:#cc99ff,stroke:#6600cc
+    classDef edge fill:#ffff99,stroke:#999900
+
+    class hw legacy
+    class frontend,backend,mcp,cp app
+    class redis,mqtt data
+    class prom,am,ne,ca mon
+    class oc ai
+    class traefik,nginx edge
+    class ag edge

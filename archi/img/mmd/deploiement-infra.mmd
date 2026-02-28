@@ -1,0 +1,59 @@
+graph TB
+    subgraph Internet["Internet / WAN"]
+        user["👤 Utilisateurs distants"]
+        dev["🔧 Developpeurs"]
+    end
+
+    subgraph Cloud["Services Cloud"]
+        gh["GitHub<br/>Code Source"]
+        gha["GitHub Actions<br/>CI/CD ARM64/AMD64"]
+        dh["Docker Hub<br/>essensyshub/*"]
+        oai["OpenAI API"]
+    end
+
+    subgraph LAN["Reseau Local 192.168.x.x"]
+        subgraph RPi["Raspberry Pi 4/5"]
+            subgraph Docker["Docker Compose — 14 conteneurs"]
+                c1["Backend :80"]
+                c2["MCP :8083"]
+                c3["Frontend"]
+                c4["Nginx :80"]
+                c5["Traefik :443"]
+                c6["Control Plane :9100"]
+                c7["Redis :6379"]
+                c8["Mosquitto :1883"]
+                c9["Prometheus :9092"]
+                c10["Alertmanager :9093"]
+                c11["Node Exporter"]
+                c12["cAdvisor :8082"]
+                c13["AdGuard :53"]
+                c14["OpenClaw :18789"]
+            end
+            ansible["Ansible<br/>Provisioning"]
+        end
+
+        bp1["BP_MQX_ETH #1<br/>192.168.0.151"]
+        bp2["BP_MQX_ETH #2<br/>(optionnel)"]
+        cameras["UniFi Protect<br/>Cameras IP"]
+        hass["Home Assistant"]
+    end
+
+    user -->|HTTPS| c5
+    dev -->|Git Push| gh
+    gh --> gha
+    gha -->|Docker Push| dh
+    c6 -.->|Docker Pull| dh
+    c14 -->|API| oai
+
+    c1 <-->|HTTP :80 Polling| bp1
+    c1 <-->|HTTP :80 Polling| bp2
+    c8 <-->|MQTT| hass
+    c1 -->|HTTPS| cameras
+
+    classDef rpi fill:#e6f3ff,stroke:#0066cc
+    classDef cloud fill:#f0f0f0,stroke:#999
+    classDef hw fill:#ffe6e6,stroke:#cc0000
+
+    class c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14 rpi
+    class gh,gha,dh,oai cloud
+    class bp1,bp2 hw
