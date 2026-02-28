@@ -58,7 +58,7 @@ Le mecanisme central de communication est une **table d'echange** de 953 octets 
 ```
 Organisation de la table d'echange en memoire (~600 octets).
 ```
-```mermaid
+```text
 subgraph Table["Tb_Echange[] — ~600 octets (unsigned char)"]
 ```
 
@@ -66,19 +66,19 @@ subgraph Table["Tb_Echange[] — ~600 octets (unsigned char)"]
 ```
 Organisation de la table d'echange en memoire (953 octets).
 ```
-```mermaid
+```text
 subgraph Table["Tb_Echange[] — 953 octets (unsigned char)"]
 ```
 
 ### 5. `archi/img/mmd/table-echange-structure.mmd` (ligne 2)
 
 **Actuel** :
-```mermaid
+```text
 subgraph Table["Tb_Echange[] — ~600 octets (unsigned char)"]
 ```
 
 **Corrige** :
-```mermaid
+```text
 subgraph Table["Tb_Echange[] — 953 octets (unsigned char)"]
 ```
 
