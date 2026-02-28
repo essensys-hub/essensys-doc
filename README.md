@@ -89,6 +89,12 @@ Ce depot documente l'ensemble des projets de l'organisation [essensys-hub](https
 
 ![Deploiement Infrastructure](archi/img/deploiement-infra.png)
 
+## Nouvelles Fonctionnalites (Propositions)
+
+| Document | Description |
+|----------|-------------|
+| [Firmware v2 — Local + Status Reel](new_feature/firmware-v2-local-fullstatus.md) | Migration DNS local, status complet table d'echange, retour etat BA |
+
 ## Par ou commencer
 
 1. Lire la [vue d'ensemble de l'architecture](archi/index.md) pour comprendre le contexte
