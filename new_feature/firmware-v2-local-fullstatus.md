@@ -27,7 +27,7 @@ BP_MQX_ETH → AdGuard (LAN :53) → mon.essensys.local → Raspberry Pi (LAN di
 
 ### 1.2 Status Partiel de la Table d'Echange
 
-Le serveur ne connait qu'un **sous-ensemble** de la table d'echange (~784 indices, `Nb_Tbb_Donnees`) :
+Le serveur ne connait qu'un **sous-ensemble** de la table d'echange (953 indices, `Nb_Tbb_Donnees`) :
 
 | Etape | Limitation |
 |-------|------------|
@@ -133,7 +133,7 @@ for (us_i = 0; us_i < Nb_Tbb_Donnees; us_i++) {
 memcpy(Tb_EchangePrecedentEnvoye, Tb_Echange, Nb_Tbb_Donnees);
 ```
 
-**Contrainte memoire** : `Tb_EchangePrecedentEnvoye` = ~784 octets supplementaires en RAM. A valider par mesure de highwater (voir autocritique 9.6).
+**Contrainte memoire** : `Tb_EchangePrecedentEnvoye` = 953 octets supplementaires en RAM. A valider par mesure de highwater (voir autocritique 9.6).
 
 **Contrainte TCP single-packet** : Si trop de deltas, fractionner en plusieurs cycles de polling (max ~30 indices par trame pour rester dans un seul paquet TCP).
 
@@ -335,14 +335,14 @@ Le protocole I2C, les commandes et la logique applicative (variateurs, volets, a
 
 ### Nouveaux Indices Proposes
 
-> **ATTENTION** : La table actuelle utilise ~784 indices (`Nb_Tbb_Donnees`). Les plages 600-630 sont **deja occupees** (scenarios, eclairages). Les nouveaux indices doivent etre places apres `Nb_Tbb_Donnees` (784+). Voir autocritique 9.1.
+> **ATTENTION** : La table actuelle utilise 953 indices (`Nb_Tbb_Donnees`, enum `Tbb_Donnees_Index` dans `TableEchange.h` jusqu'a `AdresseMAC_6`). Les plages 600-630 sont **deja occupees** (scenarios, eclairages). Les nouveaux indices doivent etre places apres `Nb_Tbb_Donnees` (953+). Voir autocritique 9.1.
 
 | Plage | Contenu | Description |
 |-------|---------|-------------|
-| 784-793 | Etat reel BA PDV (0x11) | Lampes, volets, variateurs confirmes |
-| 794-803 | Etat reel BA CHB (0x12) | Lampes, volets, variateurs confirmes |
-| 804-813 | Etat reel BA PDE (0x13) | Lampes, volets, variateurs confirmes |
-| 814 | Etat connectivite BA | Bitmask: bit 0=PDV OK, bit 1=CHB OK, bit 2=PDE OK |
+| 953-962 | Etat reel BA PDV (0x11) | Lampes, volets, variateurs confirmes |
+| 963-972 | Etat reel BA CHB (0x12) | Lampes, volets, variateurs confirmes |
+| 973-982 | Etat reel BA PDE (0x13) | Lampes, volets, variateurs confirmes |
+| 983 | Etat connectivite BA | Bitmask: bit 0=PDV OK, bit 1=CHB OK, bit 2=PDE OK |
 
 ### Distinction Action vs. Etat
 
@@ -379,7 +379,7 @@ sequenceDiagram
     loop Toutes les 2 secondes
         BP->>BA: I2C C_LIRE_ETAT (code 6)
         BA-->>BP: Lampes + Volets + Variateurs (etat reel)
-        BP->>BP: Stocker etat reel dans Tb_Echange[600+]
+        BP->>BP: Stocker etat reel dans Tb_Echange[953+]
 
         BP->>BP: Calculer delta vs precedent envoi
         BP->>BE: POST /api/myfullstatus (delta)
@@ -429,15 +429,15 @@ Analyse critique de la specification apres confrontation avec le code source ree
 
 ### 9.1 ERREUR : Taille de la Table d'Echange
 
-**Spec** : "~600 indices"  
-**Realite** : `Nb_Tbb_Donnees ≈ 784` (enum `Tbb_Donnees_Index` dans `TableEchange.h`, jusqu'a `AdresseMAC_6`).
+**Spec initiale** : "~600 indices"  
+**Realite** : `Nb_Tbb_Donnees = 953` (enum `Tbb_Donnees_Index` dans `TableEchange.h`, jusqu'a `AdresseMAC_6`). Le calcul detaille de l'enum montre 953 indices, pas 600 ni 784.
 
 **Impact** :
-- `Tb_EchangePrecedentEnvoye[]` = 784 octets (pas 600)
+- `Tb_EchangePrecedentEnvoye[]` = 953 octets (pas 600)
 - Les indices proposes 600-630 pour l'etat reel BA sont **deja utilises** par la table actuelle (scenarios, eclairages, etc.)
-- Le delta initial au boot concernerait 784 indices, pas 600
+- Le delta initial au boot concernerait 953 indices, pas 600
 
-**Correction** : Les nouveaux indices d'etat reel doivent etre places **apres `Nb_Tbb_Donnees`** (784+), ce qui necessite d'agrandir l'enum et les tableaux `Tb_Echange[]`, `Tb_EchangePrecedent[]` et `Tb_Echange_Droits[]`.
+**Correction** : Les nouveaux indices d'etat reel doivent etre places **apres `Nb_Tbb_Donnees`** (953+), ce qui necessite d'agrandir l'enum et les tableaux `Tb_Echange[]`, `Tb_EchangePrecedent[]` et `Tb_Echange_Droits[]`.
 
 ### 9.2 ERREUR CRITIQUE : Reponse I2C BA Fixe a 5 Octets
 
@@ -494,9 +494,9 @@ La spec propose de remplir `TxBuf` dans le `case C_LIRE_ETAT` du switch de trait
 - Un indice `{k:xxx,v:"yyy"}` = 16-23 caracteres
 - Capacite reelle = **~30-35 indices** par trame
 
-**Pour le delta de 784 indices** au premier cycle (boot), il faudrait :
-- 784 / 30 = ~26 cycles
-- A 2 secondes par cycle = **~52 secondes** pour la synchronisation initiale
+**Pour le delta de 953 indices** au premier cycle (boot), il faudrait :
+- 953 / 30 = ~32 cycles
+- A 2 secondes par cycle = **~64 secondes** pour la synchronisation initiale
 
 **Alternative** : Augmenter `us_BUFFER_TX` a 2048 ou utiliser le buffer TX2 pour le corps JSON, ce qui permettrait ~80 indices par trame et une synchronisation en ~10 cycles (~20 secondes).
 
@@ -514,14 +514,14 @@ Le TLD `.local` est reserve par la RFC 6762 pour le Multicast DNS (mDNS/Bonjour/
 
 **Spec** : "Faisable car le MCF52259 a de la marge sur les 3000 octets de stack Ethernet"  
 **Realite** :
-- `Tb_EchangePrecedentEnvoye[784]` = 784 octets supplementaires
+- `Tb_EchangePrecedentEnvoye[953]` = 953 octets supplementaires
 - La RAM totale est de 64 Ko (SRAM)
 - Stack total des 5 taches = ~9 Ko
-- `Tb_Echange[784]` + `Tb_EchangePrecedent[784]` = 1568 octets existants
+- `Tb_Echange[953]` + `Tb_EchangePrecedent[953]` = 1906 octets existants
 - Buffers Ethernet : `BufferRX` (1500) + `BufferRX2` (1024) + `BufferTX` (1024) + `BufferTX2` (1024) = 4572 octets
 - Un commentaire dans `main.c` indique un overflow de stack Ethernet a 2000, monte a 3000
 
-**Conclusion** : 784 octets supplementaires sont probablement faisables mais **a valider** par mesure de highwater (`_mem_get_highwater()`) avant deploiement. La marge n'est pas dans le stack Ethernet mais dans la RAM globale.
+**Conclusion** : 953 octets supplementaires sont probablement faisables mais **a valider** par mesure de highwater (`_mem_get_highwater()`) avant deploiement. La marge n'est pas dans le stack Ethernet mais dans la RAM globale.
 
 ### 9.7 RISQUE : Compatibilite du Nouvel Endpoint
 
@@ -534,12 +534,12 @@ Le TLD `.local` est reserve par la RFC 6762 pour le Multicast DNS (mDNS/Bonjour/
 
 | # | Severite | Point | Action Requise |
 |---|----------|-------|----------------|
-| 9.1 | **Erreur** | Table = 784 indices, pas 600 | Corriger toutes les tailles, revoir les indices proposes |
+| 9.1 | **Erreur** | Table = 953 indices, pas 600 | Corriger toutes les tailles, revoir les indices proposes |
 | 9.2 | **Critique** | Reponse I2C fixe a 5 octets | Redesigner C_LIRE_ETAT : multi-transactions ou format compact |
 | 9.3 | **Erreur** | TxBuf rempli dans ISR, pas main loop | Preparer les donnees dans l'ISR ou buffer pre-rempli |
-| 9.4 | **Moyen** | 52s pour sync initiale (784/30 × 2s) | Augmenter buffer TX ou envoyer en batch |
+| 9.4 | **Moyen** | ~64s pour sync initiale (953/30 × 2s) | Augmenter buffer TX ou envoyer en batch |
 | 9.5 | **Moyen** | `.local` reserve pour mDNS | Utiliser `.lan` ou `local.essensys.fr` |
-| 9.6 | **Faible** | RAM 784 octets supplementaires | Valider par mesure highwater |
+| 9.6 | **Faible** | RAM 953 octets supplementaires | Valider par mesure highwater |
 | 9.7 | **Faible** | Compatibilite backend pour deltas | Separer endpoints mystatus / myfullstatus |
 
 ## References Sources
@@ -553,6 +553,6 @@ Le TLD `.local` est reserve par la RFC 6762 pour le Multicast DNS (mDNS/Bonjour/
 | BA CHB (SC942C) | `essensys-board-SC942C/SC942C/Prog/code_ba/source/` |
 | DNS serveur | `mon.essensys.fr` → `www.h` ligne 41 |
 | Host header | `mon.essensys.fr` → `www.c` `c_EnteteTrameHost()` |
-| Table d'echange | `H/TableEchange.h` → `enum Tbb_Donnees_Index` (~600 indices) |
+| Table d'echange | `H/TableEchange.h` → `enum Tbb_Donnees_Index` (953 indices) |
 | Commandes I2C BA | `slavenode.c` → `enum enum_CODE_TRAMES` (codes 1-5) |
 | Protocole HTTP | `Ethernet/www.c` → `sc_DialogueAvecServeur()` |
