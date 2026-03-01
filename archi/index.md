@@ -102,3 +102,8 @@ Le systeme a ete modularise pour separer les responsabilites :
 | **[Architecture de Deploiement](deployment.md)** | Ansible, Docker Compose, CI/CD, infrastructure |
 | **[Diagrammes d'Architecture](diagrams.md)** | Tous les diagrammes Mermaid + PNG (globale, flux, bridge, deploiement) |
 | **[Autocritique Clean Architecture / DDD](critique_ddd.md)** | Analyse critique, score, recommandations |
+| **[Vue d'Ensemble Materiel](hardware-overview.md)** | Architecture physique, 4 cartes, bus I2C, comparatif, protections |
+| ↳ **[SC944D — Boitier Principal](hardware-sc944d.md)** | MCF52259, Ethernet, Flash SPI, TRIACs, GPIO complet, BOM |
+| ↳ **[SC940D — BA Pieces de Vie](hardware-sc940d.md)** | PIC16F946, 17 relais, 3 variateurs, borniers |
+| ↳ **[SC941C — BA Pieces d'Eau](hardware-sc941c.md)** | PIC16F946, 21 relais, 1 variateur, borniers |
+| ↳ **[SC942C — BA Chambres](hardware-sc942c.md)** | PIC16F946, 17 relais, 4 variateurs, BOM complet |

@@ -29,6 +29,11 @@ La documentation d'architecture se trouve dans [`archi/`](archi/) et suit le mod
 | [Deploiement](archi/deployment.md) | Ansible, Docker Compose, CI/CD |
 | [Diagrammes](archi/diagrams.md) | Tous les diagrammes Mermaid + PNG |
 | [Autocritique DDD](archi/critique_ddd.md) | Analyse critique, score, recommandations |
+| [Vue d'Ensemble Materiel](archi/hardware-overview.md) | Architecture physique, 4 cartes, bus I2C, comparatif |
+| ↳ [SC944D — Boitier Principal](archi/hardware-sc944d.md) | MCF52259, Ethernet, Flash SPI, GPIO, BOM |
+| ↳ [SC940D — BA Pieces de Vie](archi/hardware-sc940d.md) | PIC16F946, 17 relais, 3 variateurs |
+| ↳ [SC941C — BA Pieces d'Eau](archi/hardware-sc941c.md) | PIC16F946, 21 relais, 1 variateur |
+| ↳ [SC942C — BA Chambres](archi/hardware-sc942c.md) | PIC16F946, 17 relais, 4 variateurs |
 
 ## Composants Physiques du BP_MQX_ETH
 
