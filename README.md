@@ -95,6 +95,7 @@ Ce depot documente l'ensemble des projets de l'organisation [essensys-hub](https
 |----------|-------------|
 | [Firmware v2 — Local + Status Reel](new_feature/firmware-v2-local-fullstatus.md) | Migration DNS local, status complet table d'echange, retour etat BA |
 | [Integration Home Assistant](new_feature/firmware-ha-integration.md) | Diagnostic HA existant, 4 axes d'amelioration, mapping complet des entites, phasing |
+| [Modernisation HTTP et Discovery](new_feature/firmware-http-modernisation.md) | HTTPS, mDNS/Bonjour, SSDP/UPnP, discovery boxes Internet, keep-alive |
 | [Errata — Table d'Echange](new_feature/errata-table-echange.md) | Corrections a appliquer : taille reelle = 953 indices (pas ~600) |
 
 ## Par ou commencer
