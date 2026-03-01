@@ -22,7 +22,7 @@ La documentation d'architecture se trouve dans [`archi/`](archi/) et suit le mod
 | ↳ [Configuration Hardware](archi/legacy-client-config.md) | Mapping GPIO, peripheriques, parametres systeme |
 | ↳ [Deploiement et OTA](archi/legacy-client-deployment.md) | Bootloader, mise a jour OTA, flashing JTAG/BDM |
 | ↳ [Diagnostic et Debug](archi/legacy-client-testing.md) | EspionRS, GPIO debug, CRC, surveillance |
-| [Table d'Echange](archi/exchange-table.md) | Cartographie des ~600 indices, droits d'acces, bitmasks, Flash |
+| [Table d'Echange](archi/exchange-table.md) | Cartographie des 953 indices, droits d'acces, bitmasks, Flash |
 | [Domaines Fonctionnels](archi/domaines-fonctionnels.md) | Alarme, chauffage, volets, cumulus, securite, fuites, vent, arrosage |
 | [Services (Conteneurs)](archi/containers.md) | Les 14 services Docker, roles et interactions |
 | [Pattern Bridge](archi/bridge-pattern.md) | Anti-Corruption Layer, 4 points d'entree, flux complets |

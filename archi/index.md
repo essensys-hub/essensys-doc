@@ -69,7 +69,7 @@ Pour comprendre comment le serveur comble ces lacunes, voir **[Le Pattern Bridge
 
 ## 3. La Table d'Echange : Coeur du Systeme
 
-Le mecanisme central de communication est une **table d'echange** de ~600 octets en memoire, partagee entre le firmware et le serveur. Chaque indice represente un etat, une configuration ou une commande (lumiere, volet, chauffage, alarme). Cette table est la source de verite unique du systeme.
+Le mecanisme central de communication est une **table d'echange** de 953 octets en memoire, partagee entre le firmware et le serveur. Chaque indice represente un etat, une configuration ou une commande (lumiere, volet, chauffage, alarme). Cette table est la source de verite unique du systeme.
 
 Pour la documentation complete, voir **[Table d'Echange - Reference Technique](exchange-table.md)**.
 
@@ -95,7 +95,7 @@ Le systeme a ete modularise pour separer les responsabilites :
 | ↳ **[Configuration Hardware](legacy-client-config.md)** | Mapping GPIO, peripheriques, parametres systeme, sequence init |
 | ↳ **[Deploiement et OTA](legacy-client-deployment.md)** | Bootloader, mise a jour OTA via S19, flashing JTAG/BDM |
 | ↳ **[Diagnostic et Debug](legacy-client-testing.md)** | EspionRS, GPIO debug, CRC, surveillance, indicateurs Ethernet |
-| **[Table d'Echange - Reference Technique](exchange-table.md)** | Cartographie des ~600 indices, droits d'acces, scenarios, bitmasks |
+| **[Table d'Echange - Reference Technique](exchange-table.md)** | Cartographie des 953 indices, droits d'acces, scenarios, bitmasks |
 | **[Domaines Fonctionnels](domaines-fonctionnels.md)** | Alarme, chauffage, volets, cumulus, securite, fuites, vent, arrosage |
 | **[Architecture des Conteneurs (Services)](containers.md)** | Les 14 services deployes, leurs roles et interactions |
 | **[Le Pattern Bridge : du Legacy au Moderne](bridge-pattern.md)** | Comment le backend Go comble l'obsolescence du client |

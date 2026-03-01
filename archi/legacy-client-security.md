@@ -2,6 +2,8 @@
 
 Ce document decrit les mecanismes de securite implementes dans le firmware legacy : authentification HTTP, chiffrement des ordres d'alarme, et stockage des secrets en EEPROM SPI.
 
+> Retour : [Client Embarque BP_MQX_ETH](legacy-client.md) | Voir aussi : [Build](legacy-client-build.md) | [Protocoles](legacy-client-protocols.md) | [GPIO](legacy-client-config.md) | [OTA](legacy-client-deployment.md) | [Debug](legacy-client-testing.md) | [Hardware SC944D](hardware-sc944d.md)
+
 ## 1. Authentification HTTP (Basic Auth)
 
 Le firmware utilise HTTP Basic Authentication pour s'identifier aupres du serveur.

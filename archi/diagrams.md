@@ -390,13 +390,13 @@ graph LR
 
 ## 6. Table d'Echange — Structure Memoire
 
-Organisation de la table d'echange en memoire (~600 octets).
+Organisation de la table d'echange en memoire (953 octets).
 
 ![Table Echange Structure](img/table-echange-structure.png)
 
 ```mermaid
 graph TB
-    subgraph Table["Tb_Echange[] — ~600 octets (unsigned char)"]
+    subgraph Table["Tb_Echange[] — 953 octets (unsigned char)"]
         v["0-4 : Versions<br/>SoftBP, IHM, Table"]
         dt["5-9 : Date/Heure"]
         st["10-12 : Status, Alerte, Info"]

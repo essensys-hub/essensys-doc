@@ -2,6 +2,8 @@
 
 Ce document decrit le processus de compilation, la toolchain et le flashing du firmware BP_MQX_ETH.
 
+> Retour : [Client Embarque BP_MQX_ETH](legacy-client.md) | Voir aussi : [Securite](legacy-client-security.md) | [Protocoles](legacy-client-protocols.md) | [GPIO](legacy-client-config.md) | [OTA](legacy-client-deployment.md) | [Debug](legacy-client-testing.md) | [Hardware SC944D](hardware-sc944d.md)
+
 ## 1. Toolchain
 
 | Composant | Version / Details |

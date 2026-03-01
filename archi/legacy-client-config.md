@@ -2,6 +2,8 @@
 
 Ce document decrit le mapping GPIO complet, la configuration des peripheriques et les parametres systeme du firmware BP_MQX_ETH.
 
+> Retour : [Client Embarque BP_MQX_ETH](legacy-client.md) | Voir aussi : [Securite](legacy-client-security.md) | [Build](legacy-client-build.md) | [Protocoles](legacy-client-protocols.md) | [OTA](legacy-client-deployment.md) | [Debug](legacy-client-testing.md) | [Hardware SC944D](hardware-sc944d.md) | [Vue d'ensemble materiel](hardware-overview.md)
+
 ## 1. Mapping GPIO Complet
 
 ### Entrees Numeriques (DIN)

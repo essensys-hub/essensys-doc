@@ -1,6 +1,8 @@
 # Protocoles de Communication du Client Legacy
 
-Ce document decrit les protocoles de communication internes du firmware BP_MQX_ETH : I2C avec les boitiers auxiliaires, UART avec l'ecran tactile et le compteur Linky, et SPI avec l'EEPROM.
+Ce document decrit les protocoles de communication internes du firmware BP_MQX_ETH : I2C avec les boitiers auxiliaires, UART avec l'ecran tactile et le compteur Linky, et SPI avec la Flash et l'EEPROM.
+
+> Voir aussi : [Client Embarque BP_MQX_ETH](legacy-client.md) | [Securite](legacy-client-security.md) | [Build](legacy-client-build.md) | [GPIO](legacy-client-config.md) | [OTA](legacy-client-deployment.md) | [Debug](legacy-client-testing.md) | [Hardware SC944D](hardware-sc944d.md) | [Bus I2C inter-cartes](hardware-overview.md)
 
 ## 1. Bus I2C - Boitiers Auxiliaires (BA)
 
@@ -23,25 +25,28 @@ Ce document decrit les protocoles de communication internes du firmware BP_MQX_E
 
 ### Format de Trame I2C
 
-**Emission (BP → BA) :**
+**Emission (BP → BA) — 6 octets :**
 ```
-┌──────────┬──────────┬──────────┐
-│ Octet 0  │ Octet 1  │ Octet 2  │
-│ Code     │ CRC LSB  │ CRC MSB  │
-│ trame    │          │          │
-└──────────┴──────────┴──────────┘
+┌──────────┬──────────┬──────────┬──────────┬──────────┬──────────┐
+│ Octet 0  │ Octet 1  │ Octet 2  │ Octet 3  │ Octet 4  │ Octet 5  │
+│ Code     │ Donnee 1 │ Donnee 2 │ Donnee 3 │ CRC-16   │ CRC-16   │
+│ commande │          │          │          │ LSB      │ MSB      │
+└──────────┴──────────┴──────────┴──────────┴──────────┴──────────┘
 ```
 
-**Reponse (BA → BP) :**
+Le CRC-16 est calcule sur les 4 premiers octets (code + 3 donnees).
+
+**Reponse (BA → BP) — 5 octets :**
 ```
 ┌──────────┬──────────┬──────────┬──────────┬──────────┐
 │ Octet 0  │ Octet 1  │ Octet 2  │ Octet 3  │ Octet 4  │
-│ Code     │ Reponse  │ CRC      │ CRC      │ CRC      │
-│ trame    │          │ retour   │ trame    │ trame    │
+│ Code     │ CRC recu │ CRC recu │ CRC resp │ CRC resp │
+│ reponse  │ LSB      │ MSB      │ LSB      │ MSB      │
 └──────────┴──────────┴──────────┴──────────┴──────────┘
 ```
 
-- CRC : Calcule sur les 3 premiers octets de la reponse
+- Le BA retourne le CRC de la commande recue (verification) et le CRC de sa reponse
+- `TxBuf` cote BA est un `union` de 4 octets : au-dela de l'index 3, le BA renvoie `0x55` (dummy)
 - Tempo inter-transaction : 100 ms
 
 ### Gestion des Erreurs I2C
@@ -157,7 +162,7 @@ TeleInf_PAPP_MSB  // Octet haut
 // Valeur reelle = MSB × 256 + LSB
 ```
 
-## 4. SPI EEPROM
+## 4. SPI (EEPROM + Flash)
 
 ### Configuration
 
@@ -169,10 +174,10 @@ TeleInf_PAPP_MSB  // Octet haut
 
 ### Chip Selects
 
-| CS | Broche | EEPROM | Contenu |
-|----|--------|--------|---------|
-| CS0 | QS3 | EEPROM Adresse MAC | MAC (6 octets), cle serveur (16 octets), code alarme (2 octets) |
-| CS2 | QS5 | EEPROM Soft | Firmware OTA (zone nouveau programme) |
+| CS | Broche | Composant | Contenu |
+|----|--------|-----------|---------|
+| CS0 | QS3 | 25AA02E48T (EEPROM 2 Kbit) | MAC (6 octets @ 0xFA), cle serveur (16 octets @ 0x00), code alarme (2 octets) |
+| CS2 | QS5 | SST25VF016B (Flash SPI 2 Mbit) | Firmware OTA (zone nouveau programme) |
 
 ### Commandes
 

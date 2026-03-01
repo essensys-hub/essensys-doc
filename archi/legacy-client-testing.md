@@ -2,6 +2,8 @@
 
 Ce document decrit les outils de diagnostic et de test embarques dans le firmware BP_MQX_ETH.
 
+> Retour : [Client Embarque BP_MQX_ETH](legacy-client.md) | Voir aussi : [Securite](legacy-client-security.md) | [Build](legacy-client-build.md) | [Protocoles](legacy-client-protocols.md) | [GPIO](legacy-client-config.md) | [OTA](legacy-client-deployment.md) | [Hardware SC944D](hardware-sc944d.md)
+
 ## 1. EspionRS — Systeme de Debug Serie
 
 EspionRS est un systeme de debug interactif accessible via le port UART 2 (serie). Il permet d'observer en temps reel l'etat interne du firmware, les erreurs de communication et les compteurs de performance.

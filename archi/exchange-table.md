@@ -18,7 +18,7 @@ const unsigned char Tb_Echange_Droits[Nb_Tbb_Donnees];
 ```
 
 - Chaque indice contient **1 octet** (0-255)
-- La taille totale est definie par l'enum `Nb_Tbb_Donnees` (~600 indices)
+- La taille totale est definie par l'enum `Nb_Tbb_Donnees` (953 indices)
 - Les valeurs superieures a 255 utilisent des paires LSB/MSB
 
 ## 2. Droits d'Acces
@@ -142,7 +142,7 @@ Exemples :
 |--------|-----------|--------|---------|
 | 353 | `Cumulus_Mode` | RWS | 0=Autonome (ON), 1=Gestion HC, 2=OFF |
 
-### 3.7 Vacances (indices 354-363)
+### 3.7 Vacances (indices 354-362)
 
 | Indice | Mnemonique | Description |
 |--------|-----------|-------------|
@@ -155,6 +155,8 @@ Exemples :
 | 360 | `VacanceFin_zn_Force` | Consigne chauffage zone nuit au retour |
 | 361 | `VacanceFin_zsb1_Force` | Consigne SDB 1 au retour |
 | 362 | `VacanceFin_zsb2_Force` | Consigne SDB 2 au retour |
+
+> **Note** : La section Vacances se termine a l'indice 362 (`VacanceFin_zsb2_Force`). L'indice 363 est le premier indice de la section Arrosage (`Arrose_Mode`).
 
 ### 3.8 Arrosage (indices 363-406)
 

@@ -2,6 +2,8 @@
 
 Ce document decrit les specifications techniques, les limitations et l'obsolescence du controleur domotique materiel BP_MQX_ETH. Ces contraintes sont la raison d'etre de toute l'architecture logicielle Essensys.
 
+> **Documentation hardware** : Pour les schemas electroniques, BOM et PCB detailles, voir [Vue d'ensemble materiel](hardware-overview.md) et [SC944D — Boitier Principal](hardware-sc944d.md).
+
 ## 1. Hardware : Freescale Coldfire MCF52259
 
 ### Specifications
@@ -15,7 +17,7 @@ Ce document decrit les specifications techniques, les limitations et l'obsolesce
 | Ethernet | MAC integre, stack RTCS |
 | Bus I2C | Communication avec 3 boitiers auxiliaires |
 | UART x3 | Ecran tactile, Teleinfo Linky, Debug (EspionRS) |
-| SPI | EEPROM externe (adresse MAC, cle serveur, code alarme) |
+| SPI | EEPROM (MAC, cle serveur) + Flash SPI (OTA) |
 | ADC | Detection fuites d'eau |
 | PWM | Pilotage fil pilote chauffage |
 | GPIO | Entrees/sorties numeriques (detecteurs, sirenes, relais) |

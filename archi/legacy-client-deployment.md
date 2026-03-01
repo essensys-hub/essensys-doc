@@ -2,6 +2,8 @@
 
 Ce document decrit les mecanismes de deploiement, mise a jour OTA et bootloader du firmware BP_MQX_ETH.
 
+> Retour : [Client Embarque BP_MQX_ETH](legacy-client.md) | Voir aussi : [Securite](legacy-client-security.md) | [Build](legacy-client-build.md) | [Protocoles](legacy-client-protocols.md) | [GPIO](legacy-client-config.md) | [Debug](legacy-client-testing.md) | [Hardware SC944D](hardware-sc944d.md)
+
 ## 1. Architecture Memoire Flash
 
 Le MCF52259 dispose de 512 Ko de flash interne organisee en zones :
@@ -23,7 +25,8 @@ Le MCF52259 dispose de 512 Ko de flash interne organisee en zones :
 │                             │ FLASH_APP_SOFT_END
 ├────────────────────────────┤
 │     Zone nouveau programme  │ Pour mise a jour OTA
-│     (EEPROM SPI externe)   │
+│     (Flash SPI externe     │ SST25VF016B, 2 Mbit
+│      via CS2)              │
 └────────────────────────────┘
 ```
 

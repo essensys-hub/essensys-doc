@@ -1,309 +1,359 @@
-# Autocritique Architecture Essensys
+# Autocritique Architecture Essensys — v2
 
-Analyse critique croisée entre la documentation (`essensys-doc/archi/`), les skills (`essensys-backend-reference-orders`, `software-architecture`) et le code source réel de l'ensemble des dépôts.
+Analyse critique croisee entre la documentation (`essensys-doc/archi/`), les skills, le code source et les projets Altium des 4 cartes.
 
-Date : janvier 2026
+Date : janvier 2026 (mise a jour)
 
-> **Note** : Cette autocritique a servi de base à la refonte complète de la documentation architecture.
-> Les corrections majeures ont été appliquées dans les documents suivants :
-> - **[index.md](index.md)** — Diagramme C4 complet avec tous les acteurs et systèmes externes
-> - **[legacy-client.md](legacy-client.md)** — Documentation détaillée du client BP_MQX_ETH et de ses contraintes
-> - **[exchange-table.md](exchange-table.md)** — Cartographie exhaustive des ~600 indices de la table d'échange
-> - **[containers.md](containers.md)** — Les 14 services réels avec descriptions complètes et corrections
-> - **[bridge-pattern.md](bridge-pattern.md)** — Explication du pattern Anti-Corruption Layer du backend Go
+> **Historique** : Cette autocritique remplace la v1 (janvier 2026). La v1 a identifie 14 services non documentes,
+> des ports incorrects dans le skill, et l'absence de documentation du client legacy.
+> Depuis, une refonte massive a ete effectuee. Ce document fait le point sur l'etat actuel.
 
 ---
 
-## 1. Couverture documentaire vs réalité déployée
+## 1. Inventaire de la Documentation
 
-### Services documentés dans `containers.md`
+### 1.1 Fichiers dans `archi/` (20 documents)
 
-| Service | Documenté | Déployé | Écart |
-|---------|-----------|---------|-------|
-| Traefik Gateway | Oui | Oui | - |
-| Nginx interne | Oui | Oui | - |
-| Frontend React | Oui | Oui | - |
-| Support Portal | Oui (Next.js) | Oui (React/Vite) | **Tech stack faux** |
-| Backend Go | Oui | Oui | - |
-| Control Plane | Oui (vague) | Oui | **Sous-documenté** |
-| Redis | Oui | Oui | - |
-| Mosquitto | Oui | Oui | - |
-| MCP Server | **Non** | Oui (port 8083) | **Absent de la doc** |
-| AdGuard Home | **Non** | Oui | **Absent de la doc** |
-| Prometheus | **Non** | Oui (port 9092) | **Absent de la doc** |
-| Alertmanager | **Non** | Oui (port 9093) | **Absent de la doc** |
-| Node Exporter | **Non** | Oui (port 9100) | **Absent de la doc** |
-| OpenClaw | **Non** | Oui (port 18789) | **Absent de la doc** |
+| Document | Lignes | Sujet | Etat |
+|----------|--------|-------|------|
+| `index.md` | 110 | Vue d'ensemble C4, contexte systeme | OK |
+| `legacy-client.md` | 234 | Client embarque BP_MQX_ETH | OK |
+| `legacy-client-security.md` | 162 | Auth HTTP, AES alarme, EEPROM | OK |
+| `legacy-client-build.md` | 138 | CodeWarrior, makefile, S19 | OK |
+| `legacy-client-protocols.md` | 186 | I2C, UART, SPI | **Erreur format I2C** |
+| `legacy-client-config.md` | 158 | GPIO, peripheriques, parametres | OK |
+| `legacy-client-deployment.md` | 148 | Bootloader, OTA, JTAG | **Erreur EEPROM vs Flash** |
+| `legacy-client-testing.md` | 128 | EspionRS, debug GPIO, CRC | OK |
+| `exchange-table.md` | 470 | Cartographie des indices | **Erreur taille (~600 vs 953)** |
+| `domaines-fonctionnels.md` | 674 | 10 domaines metier detailles | OK |
+| `containers.md` | 192 | 14 services Docker | OK |
+| `bridge-pattern.md` | 248 | Anti-Corruption Layer Go | OK |
+| `deployment.md` | 73 | Infra, Ansible, Docker Compose | **Sous-documente** |
+| `diagrams.md` | 478 | 10 diagrammes Mermaid | **Erreur taille + PNG manquants** |
+| `critique_ddd.md` | — | Ce document (autocritique) | — |
+| `hardware-overview.md` | 175 | Vue d'ensemble 4 cartes | **Incoherence I2C** |
+| `hardware-sc944d.md` | 309 | BP (MCF52259) complet | **Erreur version MQX** |
+| `hardware-sc940d.md` | 169 | BA PDV (PIC16F946) | OK |
+| `hardware-sc941c.md` | 187 | BA PDE (PIC16F946) | OK |
+| `hardware-sc942c.md` | 198 | BA CHB (PIC16F946) | OK |
 
-**Verdict** : La documentation `containers.md` ne couvre que **8 services sur 14 déployés**. Six composants critiques (monitoring, IA, DNS, MCP) sont invisibles dans l'architecture documentée.
+### 1.2 Fichiers dans `new_feature/` (4 documents)
 
-### Rôles Ansible documentés vs existants
+| Document | Lignes | Sujet |
+|----------|--------|-------|
+| `firmware-v2-local-fullstatus.md` | 559 | Migration DNS local + status reel + autocritique |
+| `firmware-ha-integration.md` | 551 | Integration Home Assistant MQTT |
+| `firmware-http-modernisation.md` | 561 | HTTPS, mDNS, SSDP/UPnP |
+| `errata-table-echange.md` | 152 | Liste des corrections ~600→953 indices |
 
-| Rôle | Dans `docs/roles.md` | Dans le playbook | Écart |
-|------|---------------------|------------------|-------|
-| `raspberry_common` | Oui | Oui | - |
-| `raspberry_docker` | **Non** | Oui | Absent de la doc |
-| `raspberry_mosquitto` | **Non** | Oui | Absent de la doc |
-| `raspberry_redis` | **Non** | Oui | Absent de la doc |
-| `raspberry_backend` | Oui | Oui | - |
-| `raspberry_mcp` | **Non** | Oui | Absent de la doc |
-| `raspberry_frontend` | Oui | Oui | - |
-| `raspberry_nginx` | Oui | Oui | - |
-| `raspberry_traefik` | Oui | Oui | - |
-| `raspberry_control_plane` | **Non** | Oui | Absent de la doc |
-| `raspberry_adguard` | Oui | Oui | - |
-| `raspberry_prometheus` | **Non** | Oui | Absent de la doc |
-| `raspberry_openclaw` | **Non** | Oui | Absent de la doc |
-| `raspberry_compose` | **Non** | Oui | Absent de la doc |
-| `raspberry_monitor` | Oui | Oui | - |
-| `raspberry_logrotate` | Oui | Oui | - |
-| `raspberry_push_status` | Oui | Oui | - |
-| `raspberry_caddy` | **Non** | Non (optionnel) | Non documenté |
-| `raspberry_homeassistant` | **Non** | Non (optionnel) | Non documenté |
-| `raspberry_github_runner` | **Non** | Non (optionnel) | Non documenté |
+### 1.3 Couverture globale
 
-**Verdict** : Sur 17 rôles actifs, seulement 9 sont documentés. 8 rôles non documentés dont des composants critiques (MCP, Prometheus, Control Plane, Compose).
-
----
-
-## 2. Critique du skill `essensys-backend-reference-orders`
-
-### Points forts
-
-1. **Flux d'ordre correct** : Le flux `POST /api/admin/inject` → `ActionService.AddAction()` → Redis `essensys:global:actions` → `GET /api/myactions` → `POST /api/done/{guid}` est **exactement conforme** au code source (`internal/core/action_service.go`, `internal/api/handlers.go`).
-
-2. **Règle du bloc complet 590+605..622** : Le code source confirme l'existence de `GenerateCompleteBlock()` dans `action_service.go` qui expand automatiquement les indices 605-622 quand un ordre scénario est envoyé. La règle documentée est **techniquement exacte**.
-
-3. **Diagnostic Redis pertinent** : Les commandes `LLEN/LRANGE essensys:global:actions` correspondent aux clés réelles utilisées par `RedisStore.EnqueueAction()`.
-
-### Points faibles et erreurs
-
-1. **Port backend incorrect** : Le skill mentionne `curl -s http://127.0.0.1:7070/api/myactions` (port 7070). Or le code source montre que le backend écoute sur **port 80 par défaut** (`SERVER_PORT=80`). Le port 7070 est un ancien default ou une confusion. Le code log même un warning si le port n'est pas 80 (contrainte firmware BP_MQX_ETH).
-
-2. **MCP `send_order` incomplètement documenté** : Le skill mentionne que MCP pousse directement dans Redis sans normalisation. C'est **partiellement faux** : le code MCP (`cmd/mcp-server/main.go`) implémente aussi l'auto-expansion du bloc 590+605..622 dans l'outil `send_order`. La normalisation existe côté MCP. Le vrai risque est `set_exchange_value` qui écrit directement dans la table d'échange sans passer par la queue d'actions.
-
-3. **Absence de mention des endpoints web** : Le skill ignore `POST /api/web/actions` (endpoint utilisé par le frontend React) et ne mentionne que `POST /api/admin/inject`. Les deux chemins passent par `ActionService` mais avec des middlewares d'auth différents.
-
-4. **Pas de mention MQTT** : Le backend accepte aussi des ordres via MQTT (`internal/mqtt/handlers.go` → `CommandHandler.HandleCommand()`), ce qui est un 4e point d'entrée pour les actions non documenté dans le skill.
-
-5. **`systemctl is-active essensys-backend essensys-mcp` est faux** : Le backend et le MCP tournent dans des conteneurs Docker, pas comme services systemd. La commande correcte serait `docker ps | grep essensys-backend` ou `docker inspect essensys-backend`.
-
-### Corrections recommandées
-
-```diff
-## Procedure de diagnostic rapide
-
-1. Verifier services:
--   - `systemctl is-active essensys-backend essensys-mcp`
-+   - `docker ps --format "table {{.Names}}\t{{.Status}}" | grep -E "backend|mcp"`
-2. Verifier queue Redis:
-   - `redis-cli LLEN essensys:global:actions`
-   - `redis-cli LRANGE essensys:global:actions 0 2`
-3. Verifier reponse backend:
--   - `curl -s http://127.0.0.1:7070/api/myactions`
-+   - `curl -s http://127.0.0.1:80/api/myactions`
-4. Comparer payload web vs payload MCP.
-+5. Verifier via Control Plane:
-+   - `curl -s http://127.0.0.1:9100/api/redis/actions`
-```
+| Domaine | Couverture | Commentaire |
+|---------|------------|-------------|
+| Client legacy (firmware) | **95%** | 7 documents detailles, GPIO, protocoles, build |
+| Table d'echange | **80%** | Cartographie faite mais taille erronee |
+| Services backend | **90%** | 14/14 services documentes |
+| Hardware electronique | **90%** | 4 cartes, BOM, schemas, diagrammes |
+| Infrastructure deploiement | **50%** | Diagramme basique, roles Ansible partiels |
+| Domaines fonctionnels | **95%** | 10 domaines couverts |
+| CI/CD | **30%** | Mentionne mais pas detaille |
+| Skills/References | **70%** | 3 skills, corrections en attente |
 
 ---
 
-## 3. Critique de la documentation architecture (C4 / Clean Architecture)
+## 2. Erreurs Factuelles Identifiees
 
-### 3.1 Diagramme de contexte (`index.md`)
+### 2.1 CRITIQUE — Taille de la Table d'Echange : ~600 vs 953 indices
 
-**Problème** : Le diagramme ne montre que 2 acteurs (Utilisateur, Administrateur) et 1 système externe (BP_MQX_ETH). Il manque :
+**Statut** : Documente dans `new_feature/errata-table-echange.md` mais **non corrige** dans `archi/`.
 
-- **OpenClaw / WhatsApp** : L'utilisateur interagit aussi via messagerie (alertes WhatsApp)
-- **Home Assistant** : Le broker MQTT est intégré avec HA via discovery
-- **Prometheus/Alertmanager** : Surveillance automatisée avec alertes
-- **AdGuard** : DNS et filtrage publicitaire
-- **UniFi Protect** : Caméras de surveillance intégrées dans le frontend et le backend
-- **Docker Hub** : Registry pour les images (CI/CD)
-- **GitHub Actions** : Pipeline de build
+L'errata liste 9 occurrences a corriger dans 6 fichiers :
 
-**Le diagramme reflète l'architecture de 2024, pas celle de 2026.**
+| Fichier | Ligne(s) | Texte actuel | Correction |
+|---------|----------|--------------|------------|
+| `exchange-table.md` | ~21 | `~600 indices` | `953 indices` |
+| `index.md` | 72 | `table d'echange de ~600 octets` | `953 octets` |
+| `index.md` | 98 | `Cartographie des ~600 indices` | `953 indices` |
+| `diagrams.md` | ~393 | `~600 octets` | `953 octets` |
+| `critique_ddd.md` (ancienne) | multiples | `~600 indices` | `953 indices` |
+| `README.md` | 25 | `Cartographie des ~600 indices` | `953 indices` |
 
-### 3.2 Diagramme de conteneurs (`containers.md`)
+> **Action** : Appliquer les corrections de `errata-table-echange.md` dans les 6 fichiers concernes.
 
-**Problèmes majeurs** :
+### 2.2 CRITIQUE — Format de Trame I2C Incoherent
 
-1. **Support Portal décrit comme "Next.js/React"** : Le code source montre que c'est **React/Vite** (frontend) + **Go/Chi** (backend). Il n'y a aucune trace de Next.js dans le projet.
+Trois documents decrivent le format I2C BP→BA differemment :
 
-2. **MCP totalement absent** : Le MCP Server est un composant critique qui sert de pont entre les agents IA (OpenClaw) et le système domotique. Il n'apparaît nulle part dans le diagramme.
+| Document | Format emission BP→BA |
+|----------|----------------------|
+| `legacy-client-protocols.md` | **3 octets** : Code + CRC LSB + CRC MSB |
+| `hardware-overview.md` | **6 octets** : Code + Donnee1 + Donnee2 + Donnee3 + CRC LSB + CRC MSB |
+| `firmware-v2-local-fullstatus.md` (autocritique 9.2) | **6 octets** confirmes par analyse du code `ba_i2c.c` |
 
-3. **Le Control Plane est mal décrit** : Présenté comme "Metrics/Admin" et "Surveillance du système". En réalité, c'est un véritable **panneau de contrôle opérationnel** avec :
-   - Gestion des conteneurs Docker (restart, update, rollback)
-   - Gestion Redis complète (exchange table, actions, backup/restore)
-   - Proxy Prometheus et Alertmanager
-   - Logs en temps réel via WebSocket
-   - Audit trail SQLite
-   - UI React complète avec 11 pages
+L'analyse du code source (`ba_i2c.c`, `slavenode.c`) confirme que le format reel est **6 octets** :
+- Octet 0 : Code commande
+- Octets 1-3 : Donnees (3 octets)
+- Octets 4-5 : CRC-16
 
-4. **Flux de données incomplet** : Le diagramme montre `controlplane → backend` ("Lit la télémétrie") mais en réalité le Control Plane accède directement à Redis, Docker, Prometheus et Alertmanager — il ne passe pas par le backend.
+> **Action** : Corriger `legacy-client-protocols.md` section "Format de Trame I2C" — le format emission est 6 octets, pas 3.
 
-5. **Traefik → Nginx → Backend** : Le flux `traefik → frontend` et `traefik → nginx → backend` est simplifié. En réalité :
-   - Traefik gère le WAN (HTTPS, Let's Encrypt)
-   - Nginx gère le LAN (port 80) avec proxy vers backend, MCP, Control Plane, Prometheus, Alertmanager, OpenClaw
-   - Les deux coexistent avec des responsabilités distinctes
+### 2.3 ERREUR — Version MQX Incoherente
 
-### 3.3 Architecture de déploiement (`deployment.md`)
+| Document | Version MQX |
+|----------|-------------|
+| `legacy-client-build.md` | MQX **3.8** (issu du makefile) |
+| `hardware-sc944d.md` | MQX RTOS **4.0** |
+| Skill `mcf52259-mqx-skill-reference.md` | MQX RTOS **4.0** |
 
-**Problèmes** :
+Le makefile du projet (`client-essensys-legacy`) reference MQX **3.8**. La version 4.0 dans le skill et `hardware-sc944d.md` est erronee.
 
-1. **Diagramme de déploiement incomplet** : Ne montre que 5 conteneurs Docker (Traefik, Backend, Frontend, Redis, Mosquitto). Il en manque 7 (MCP, Control Plane, AdGuard, Prometheus, Alertmanager, Node Exporter, OpenClaw).
+> **Action** : Corriger `hardware-sc944d.md` et le skill — MQX 3.8 (pas 4.0).
 
-2. **Services non-dockérisés mal décrits** : Mentionne "Ansible" et "Systemd" mais ne détaille pas les services systemd réels :
-   - `essensys-mqtt-debug.service` (monitoring MQTT)
-   - `essensys-push-status.timer` (push status périodique)
-   - `logrotate` (rotation des logs)
+### 2.4 ERREUR — CS2 SPI : "EEPROM" vs "Flash"
 
-3. **Docker Compose non mentionné** : Tout est orchestré via `docker compose` depuis le rôle `raspberry_compose`. Le document parle de "conteneurs" individuels alors que c'est un stack Compose unifié.
+| Document | Description CS2 |
+|----------|-----------------|
+| `legacy-client-protocols.md` | `CS2 = EEPROM Soft (firmware OTA)` |
+| `legacy-client-deployment.md` | `Zone nouveau programme (EEPROM SPI externe)` |
+| `hardware-sc944d.md` | `CS2 = SST25VF016B (Flash SPI 2 Mbit)` |
+| BOM SC944D | `SST25VF016B-50-4I-S2AF : Memoire Flash SPI` |
 
-4. **Cycle de vie incomplet** : Le cycle CI/CD mentionne GitHub Actions et les images Docker, mais ne documente pas :
-   - Le build multi-architecture (ARM64/AMD64 via QEMU)
-   - Le cache GHA
-   - Le push vers Docker Hub (`essensyshub/`)
-   - Le mécanisme d'update via le Control Plane
+Le composant U28 (SST25VF016B) est bien une **Flash SPI**, pas une EEPROM. La terminologie "EEPROM" dans les anciens docs legacy vient probablement du firmware qui utilise cette memoire de facon similaire a une EEPROM (lecture/ecriture octet).
 
----
+> **Action** : Remplacer "EEPROM SPI externe" par "Flash SPI externe (SST25VF016B)" dans `legacy-client-protocols.md` et `legacy-client-deployment.md`.
 
-## 4. Critique Clean Architecture / DDD (mise à jour)
+### 2.5 ERREUR — Chevauchement d'indices : Vacances / Arrosage
 
-### Ce qui a progressé (vs critique initiale)
+Dans `exchange-table.md` :
+- Section 3.7 : Vacances = indices **354-363**
+- Section 3.8 : Arrosage = indices **363-406**
 
-1. **Repository Pattern implémenté** : L'interface `data.Store` avec `RedisStore`, `MemoryStore`, `DatabaseStore` montre une abstraction correcte de la couche données. La critique initiale sur le "couplage fort avec l'infrastructure" est **partiellement résolue** côté backend principal.
+L'indice **363** apparait dans les deux sections. Verifier dans le code source si c'est un chevauchement reel ou une erreur de documentation.
 
-2. **Séparation des couches visible** :
-   - `internal/models/` → Entités du domaine
-   - `internal/core/` → Logique métier (`ActionService`, `StatusService`)
-   - `internal/data/` → Persistance abstraite
-   - `internal/api/` → Handlers HTTP
-   - `internal/mqtt/` → Intégration externe
-
-### Ce qui reste problématique
-
-1. **MCP Server viole le Repository Pattern** : Le serveur MCP (`cmd/mcp-server/main.go`) utilise directement `go-redis/redis/v8` au lieu de passer par l'interface `data.Store`. Il y a donc **deux clients Redis indépendants** dans le même projet Go, avec des risques de divergence de schéma.
-
-2. **Pas d'Ubiquitous Language** : Malgré la critique initiale, le vocabulaire reste technique :
-   - `myactions`, `mystatus`, `serverinfos` → héritage firmware, pas de traduction métier
-   - `ExchangeKV{K: 613, V: "64"}` → aucune sémantique (qu'est-ce que 613 ? qu'est-ce que 64 ?)
-   - Le skill `reference.md` est le seul endroit qui tente de documenter ce mapping, mais de manière incomplète
-
-3. **God Object latent dans `action_service.go`** : Ce fichier gère :
-   - La normalisation des ordres
-   - La génération du bloc complet 605-622
-   - La fusion bitwise
-   - L'enqueue Redis
-   - La publication MQTT
-   - La gestion des GUIDs
-   
-   C'est exactement le scénario "God Object" anticipé dans la critique initiale.
-
-4. **Nommage générique persistant** : `handlers.go`, `handlers_web.go`, `handlers_unifi.go` dans le même package `api/` montre un découpage par méthode technique plutôt que par domaine métier.
-
-5. **Control Plane duplique des responsabilités** : Le Control Plane accède directement à Redis pour lire/écrire la table d'échange et gérer les actions. C'est une duplication de la logique du backend sans passer par son API. Deux chemins d'accès aux mêmes données Redis = risque de désynchronisation.
+> **Action** : Verifier l'enum `Tbb_Donnees_Index` dans `TableEchange.h` pour l'indice 363.
 
 ---
 
-## 5. Incohérences techniques concrètes
+## 3. Incoherences de Liens et References Croisees
 
-### 5.1 Ports
+### 3.1 Documents Legacy sans liens vers Hardware
 
-| Service | Doc / Config | Code réel | Cohérent |
-|---------|-------------|-----------|----------|
-| Backend | 7070 (skill) | 80 (code) | **Non** |
-| MCP | 8083 (ansible) | 8080 (code default) | **Paramétré** |
-| Control Plane | 9100 (compose) | 9100 (code) | Oui |
-| Prometheus | 9092 (compose) | 9092 (control plane) | Oui |
-| Alertmanager | 9093 (compose) | 9093 (control plane) | Oui |
-| OpenClaw | 18789 (ansible) | 8080 (default image) | **À vérifier** |
+Les 6 documents `legacy-client-*.md` ne contiennent **aucun lien** vers les nouvelles pages hardware (`hardware-overview.md`, `hardware-sc944d.md`, etc.). Les lecteurs qui arrivent par le legacy n'ont aucun chemin vers la documentation electronique.
 
-### 5.2 Images Docker
+> **Action** : Ajouter dans `legacy-client.md` section 1 un lien vers `hardware-overview.md` et `hardware-sc944d.md`.
+> Ajouter dans `legacy-client-config.md` un lien vers `hardware-sc944d.md` pour le mapping GPIO.
+> Ajouter dans `legacy-client-protocols.md` un lien vers `hardware-overview.md` pour le bus I2C.
 
-| Service | Image | Multi-arch ARM64 | Vérifiable |
-|---------|-------|-----------------|------------|
-| Backend | essensyshub/essensys-server-backend | Oui (workflow) | Oui |
-| Frontend | essensyshub/essensys-nginx | Oui (custom) | Oui |
-| Control Plane | essensyshub/essensys-control-plane | Oui (workflow) | Oui |
-| MCP | essensyshub/essensys-server-backend (mcp-server) | Oui | Oui |
-| OpenClaw | coollabsio/openclaw | **Non vérifié** | **Risque ARM64** |
+### 3.2 Documents Hardware sans liens vers Security/Deployment/Testing
 
-### 5.3 Clés Redis
+`hardware-sc944d.md` section 10 reference 4 documents legacy mais omet :
+- `legacy-client-security.md`
+- `legacy-client-deployment.md`
+- `legacy-client-testing.md`
 
-Les clés Redis documentées dans le skill vs le code :
+> **Action** : Completer la section 10 de `hardware-sc944d.md` avec les 3 liens manquants.
 
-| Pattern | Skill | Code backend | Code MCP | Code CP |
-|---------|-------|-------------|----------|---------|
-| `essensys:global:actions` | Oui | Oui | Oui | Oui |
-| `essensys:client:{id}:exchange` | Non | Oui | Oui | Oui |
-| `essensys:client:{id}:connected` | Non | Oui | Non | Oui |
-| `essensys:client:{id}:authinfo` | Non | Oui | Non | Oui |
+### 3.3 Images PNG Manquantes dans `diagrams.md`
 
-**Le skill ne documente qu'une seule clé Redis sur quatre patterns utilisés.**
+`diagrams.md` reference 8 images PNG dans `archi/img/` :
+- `architecture-globale.png`
+- `flux-bouton-relais.png`
+- `flux-alertes-whatsapp.png`
+- `conteneurs-c4.png`
+- `pattern-bridge.png`
+- `table-echange-structure.png`
+- `deploiement-infra.png`
+- `4-points-entree.png`
 
----
+**Etat** : Les PNG existent-ils ? Les diagrammes sont aussi en Mermaid (`.mmd`). Si GitHub rend le Mermaid nativement, les PNG sont optionnels.
 
-## 6. Recommandations prioritaires
+> **Action** : Verifier si les PNG sont generes. Sinon, soit les generer, soit supprimer les references `![](img/...)` au profit du rendu Mermaid natif.
 
-### Priorité 1 — Documentation critique ✅ Résolu
+### 3.4 Documents Legacy sans liens internes
 
-1. ~~**Mettre à jour `containers.md`**~~ → **Fait** : [containers.md](containers.md) documente les 14 services avec descriptions complètes
-2. **Corriger le skill `reference.md`** : Port 80 (pas 7070), commandes Docker (pas systemd), documenter les 4 patterns de clés Redis *(en attente)*
-3. ~~**Corriger "Next.js"**~~ → **Fait** : [containers.md](containers.md) décrit correctement le Support Portal comme React/Vite + Go/Chi
+Les 6 sous-documents (`legacy-client-security.md`, `-build.md`, `-protocols.md`, `-config.md`, `-deployment.md`, `-testing.md`) n'ont **aucun lien entre eux** ni vers le document parent `legacy-client.md`. Un lecteur qui arrive directement sur `legacy-client-security.md` n'a aucun moyen de naviguer vers les autres sous-documents.
 
-### Priorité 1 bis — Documentation legacy ✅ Résolu
-
-- ~~**Documenter le client BP_MQX_ETH**~~ → **Fait** : [legacy-client.md](legacy-client.md)
-- ~~**Documenter la table d'échange**~~ → **Fait** : [exchange-table.md](exchange-table.md) avec cartographie exhaustive des ~600 indices
-- ~~**Documenter le pattern bridge**~~ → **Fait** : [bridge-pattern.md](bridge-pattern.md)
-
-### Priorité 2 — Cohérence architecturale (partiellement résolu)
-
-4. **Unifier l'accès Redis** : Le MCP Server devrait utiliser l'interface `data.Store` du backend au lieu d'un client Redis direct *(en attente — refactoring code)*
-5. ~~**Documenter les 4 points d'entrée des ordres**~~ → **Fait** : Documenté dans [bridge-pattern.md](bridge-pattern.md) section 4 et [exchange-table.md](exchange-table.md) section 8
-6. ~~**Créer un glossaire technique**~~ → **Partiellement fait** : [exchange-table.md](exchange-table.md) mappe chaque index vers un concept métier. Un glossaire dédié reste souhaitable.
-
-### Priorité 3 — Évolution (en attente)
-
-7. **Documenter les rôles Ansible manquants** (10 rôles non documentés)
-8. **Décrire le flux CI/CD complet** (GitHub Actions → Docker Hub → Control Plane update)
-9. **Documenter les rôles optionnels** (Caddy, Home Assistant, GitHub Runner)
-10. **Ajouter un diagramme de flux réseau** montrant les interactions LAN/WAN entre Nginx, Traefik, et les services
+> **Action** : Ajouter un bandeau de navigation en haut de chaque sous-document :
+> ```markdown
+> > Retour : [Client Embarque BP_MQX_ETH](legacy-client.md) | Voir aussi : [Securite](legacy-client-security.md) | [Build](legacy-client-build.md) | [Protocoles](legacy-client-protocols.md) | [GPIO](legacy-client-config.md) | [OTA](legacy-client-deployment.md) | [Debug](legacy-client-testing.md)
+> ```
 
 ---
 
-## 7. Score global
+## 4. Contenu Manquant ou Sous-Documente
 
-### Score initial (avant refonte doc — janvier 2026)
+### 4.1 Deployment (`deployment.md`) — 73 lignes seulement
 
-| Critère | Note | Commentaire |
-|---------|------|-------------|
-| Séparation macro (C4 conteneurs) | 7/10 | Bonne, mais 6 services non documentés |
-| Séparation micro (Clean Architecture) | 5/10 | Repository pattern présent mais pas universel, God Object latent |
-| Ubiquitous Language (DDD) | 3/10 | Vocabulaire technique dominant, indices opaques |
-| Couverture doc vs réalité | 4/10 | 57% des services documentés, ports incorrects dans le skill |
-| Infrastructure as Code | 8/10 | Ansible bien structuré, Docker Compose unifié, CI/CD fonctionnel |
-| Skill backend/orders | 6/10 | Flux correct mais port faux, MCP mal décrit, systemd au lieu de Docker |
-| Observabilité | 7/10 | Prometheus + Alertmanager + OpenClaw, mais non documentés |
-| Résilience CI/CD | 6/10 | Build multi-arch très lent (QEMU), pas de cross-compile natif Go |
+C'est le document le plus court du dossier `archi/`. Il manque :
+- Detail des 17 roles Ansible (9 documentes sur 17 actifs)
+- Configuration Docker Compose (variables d'environnement, volumes, reseaux)
+- Flux CI/CD complet (GitHub Actions → Docker Hub → Control Plane update)
+- Procedure de rollback
+- Mecanisme d'update via le Control Plane
 
-**Score moyen initial : 5.75/10**
+> **Action** : Enrichir `deployment.md` avec les roles Ansible manquants, le Docker Compose, et le flux CI/CD.
 
-### Score après refonte documentation (janvier 2026)
+### 4.2 Glossaire Technique Absent
 
-| Critère | Note | Commentaire |
-|---------|------|-------------|
-| Séparation macro (C4 conteneurs) | **9/10** | 14/14 services documentés dans `containers.md` |
-| Séparation micro (Clean Architecture) | 5/10 | Inchangé — nécessite du refactoring code |
-| Ubiquitous Language (DDD) | **5/10** | `exchange-table.md` mappe les indices vers des concepts métier |
-| Couverture doc vs réalité | **8/10** | 100% des services documentés, table d'échange cartographiée |
-| Infrastructure as Code | 8/10 | Inchangé |
-| Skill backend/orders | 6/10 | Inchangé — le skill n'a pas été mis à jour |
-| Observabilité | **8/10** | Stack documentée dans `containers.md` et `bridge-pattern.md` |
-| Résilience CI/CD | 6/10 | Inchangé |
+Malgre la cartographie de la table d'echange, il n'existe pas de glossaire qui traduise les termes firmware en concepts metier :
+- `myactions` = file d'attente des ordres a executer
+- `mystatus` = etat actuel de la table d'echange
+- `serverinfos` = informations serveur (date, config)
+- `_de67f` = champ d'authentification MD5
+- `ExchangeKV{K: 613, V: "64"}` = "allumer chevet petite chambre 3"
 
-**Score moyen après refonte : 6.88/10** (+1.13 points)
+> **Action** : Creer `glossaire.md` ou integrer dans `exchange-table.md` une section "Glossaire API Legacy".
 
-Les principaux gains proviennent de la documentation : 6 services ajoutés, table d'échange cartographiée, contraintes legacy détaillées, pattern bridge explicité. Les axes d'amélioration restants sont principalement du **refactoring code** (God Object, MCP Redis direct, Ubiquitous Language).
+### 4.3 Diagramme de Reseau LAN/WAN Absent
+
+Aucun document ne montre le routage reseau complet :
+- Traefik (WAN, HTTPS, Let's Encrypt)
+- Nginx (LAN, port 80, proxy vers backend/MCP/CP/Prometheus)
+- AdGuard (DNS, rewrite `mon.essensys.fr`)
+- Firewall / NAT du routeur
+
+> **Action** : Ajouter un diagramme de reseau dans `deployment.md` ou `diagrams.md`.
+
+### 4.4 Pas de Documentation des Tests
+
+Il n'existe aucun document sur les tests :
+- Tests unitaires backend Go
+- Tests d'integration (Redis, MQTT)
+- Tests firmware (si applicables)
+- Tests frontend (si applicables)
+- Procedure de validation avant deploiement
+
+> **Action** : Si des tests existent dans les depots, les documenter. Sinon, le signaler comme dette technique.
+
+---
+
+## 5. Critique du Skill `essensys-backend-reference-orders`
+
+### 5.1 Corrections Appliquees depuis la v1
+
+| Point | v1 (ancienne critique) | Etat actuel |
+|-------|------------------------|-------------|
+| Port backend 7070 vs 80 | Identifie | **Non corrige** dans le skill |
+| `systemctl` vs `docker` | Identifie | **Non corrige** dans le skill |
+| MCP `send_order` mal decrit | Identifie | **Non corrige** |
+| Endpoints web non mentionnes | Identifie | **Non corrige** |
+| MQTT non mentionne | Identifie | **Non corrige** |
+
+> **Action** : Appliquer les 5 corrections dans `~/.cursor/skills/essensys-backend-reference-orders/SKILL.md`.
+
+### 5.2 Cles Redis Partiellement Documentees
+
+Le skill ne documente que `essensys:global:actions`. Il manque :
+- `essensys:client:{id}:exchange` — table d'echange par client
+- `essensys:client:{id}:connected` — etat de connexion
+- `essensys:client:{id}:authinfo` — informations d'authentification
+
+> **Action** : Ajouter les 3 patterns de cles manquants dans le skill.
+
+---
+
+## 6. Critique Clean Architecture / DDD
+
+### 6.1 Ce qui a Progresse
+
+| Aspect | Score v1 | Score v2 | Progres |
+|--------|----------|----------|---------|
+| Documentation legacy | 0% | 95% | +95% |
+| Documentation hardware | 0% | 90% | +90% |
+| Couverture services | 57% | 100% | +43% |
+| Cartographie table echange | 0% | 80% | +80% |
+| Domaines fonctionnels | 50% | 95% | +45% |
+
+### 6.2 Ce qui Reste Problematique (Code)
+
+Ces points necessitent du **refactoring code**, pas de la documentation :
+
+1. **MCP Server viole le Repository Pattern** : Client Redis direct au lieu de `data.Store`
+2. **God Object `action_service.go`** : Normalisation + generation + fusion + enqueue + MQTT + GUID dans un seul fichier
+3. **Nommage generique** : `handlers.go`, `handlers_web.go`, `handlers_unifi.go` dans le meme package `api/`
+4. **Control Plane duplique Redis** : Acces direct a Redis sans passer par l'API backend
+5. **Ubiquitous Language absent** : Indices opaques (613, 64) sans semantique metier dans le code
+
+---
+
+## 7. Score Global Mis a Jour
+
+| Critere | Score v1 (jan 2026) | Score apres refonte doc | Score actuel (jan 2026 v2) | Evolution |
+|---------|---------------------|-------------------------|---------------------------|-----------|
+| Separation macro (C4 conteneurs) | 7/10 | 9/10 | **9/10** | — |
+| Separation micro (Clean Architecture) | 5/10 | 5/10 | **5/10** | — |
+| Ubiquitous Language (DDD) | 3/10 | 5/10 | **5/10** | — |
+| Couverture doc vs realite | 4/10 | 8/10 | **8.5/10** | +0.5 (hardware) |
+| Infrastructure as Code | 8/10 | 8/10 | **8/10** | — |
+| Skill backend/orders | 6/10 | 6/10 | **6/10** | — (pas corrige) |
+| Documentation hardware | — | — | **9/10** | Nouveau |
+| Observabilite | 7/10 | 8/10 | **8/10** | — |
+| Coherence interne des docs | — | — | **6/10** | Nouveau (erreurs factuelles) |
+| Resilience CI/CD | 6/10 | 6/10 | **6/10** | — |
+
+**Score moyen : 7.05/10** (+0.17 vs 6.88 apres refonte doc)
+
+Les gains principaux viennent de la documentation hardware (5 nouveaux documents, 1377 lignes). Les freins restants sont :
+- Les erreurs factuelles non corrigees (~600 vs 953, format I2C, version MQX)
+- Le skill non mis a jour
+- Le manque de liens croises entre les documents
+
+---
+
+## 8. Plan d'Actions Priorise
+
+### Priorite 1 — Corrections Factuelles (documentation uniquement)
+
+| # | Action | Fichier(s) | Effort |
+|---|--------|------------|--------|
+| 1.1 | ~~Corriger ~600 → 953 indices~~ | `exchange-table.md`, `index.md`, `diagrams.md`, `README.md` | **Fait** |
+| 1.2 | ~~Corriger format I2C (3→6 octets)~~ | `legacy-client-protocols.md` | **Fait** |
+| 1.3 | ~~Corriger MQX 4.0 → 3.8~~ | `hardware-sc944d.md` | **Fait** |
+| 1.4 | ~~Corriger "EEPROM" → "Flash SPI"~~ | `legacy-client-protocols.md`, `legacy-client-deployment.md` | **Fait** |
+| 1.5 | ~~Corriger indice Vacances 354-363 → 354-362~~ | `exchange-table.md` | **Fait** |
+
+### Priorite 2 — Liens Croises et Navigation
+
+| # | Action | Fichier(s) | Effort |
+|---|--------|------------|--------|
+| 2.1 | ~~Ajouter liens hardware dans `legacy-client.md`~~ | `legacy-client.md` | **Fait** |
+| 2.2 | ~~Ajouter liens legacy manquants dans `hardware-sc944d.md`~~ | `hardware-sc944d.md` | **Fait** |
+| 2.3 | ~~Ajouter bandeau navigation dans 6 sous-docs legacy~~ | 6 fichiers | **Fait** |
+| 2.4 | ~~Ajouter liens hardware dans `legacy-client-config.md` et `-protocols.md`~~ | 2 fichiers | **Fait** |
+
+### Priorite 3 — Skill Backend
+
+| # | Action | Fichier(s) | Effort |
+|---|--------|------------|--------|
+| 3.1 | Port 7070 → 80 | Skill SKILL.md | 2 min |
+| 3.2 | systemctl → docker | Skill SKILL.md | 2 min |
+| 3.3 | Ajouter cles Redis manquantes | Skill reference.md | 10 min |
+| 3.4 | Documenter les 4 points d'entree | Skill SKILL.md | 10 min |
+| 3.5 | Corriger description MCP | Skill SKILL.md | 5 min |
+
+### Priorite 4 — Enrichissement Documentation
+
+| # | Action | Fichier(s) | Effort |
+|---|--------|------------|--------|
+| 4.1 | Enrichir `deployment.md` (Ansible, Compose, CI/CD) | `deployment.md` | 1-2h |
+| 4.2 | Creer glossaire API Legacy | `exchange-table.md` ou nouveau | 30 min |
+| 4.3 | Ajouter diagramme reseau LAN/WAN | `diagrams.md` ou `deployment.md` | 30 min |
+| 4.4 | Generer ou supprimer les PNG manquants | `diagrams.md`, `archi/img/` | 30 min |
+
+### Priorite 5 — Refactoring Code (hors documentation)
+
+| # | Action | Depot | Effort |
+|---|--------|-------|--------|
+| 5.1 | Unifier acces Redis (MCP → data.Store) | `essensys-server-backend` | 2-4h |
+| 5.2 | Decouvrir `action_service.go` (God Object) | `essensys-server-backend` | 4-8h |
+| 5.3 | Renommer handlers par domaine | `essensys-server-backend` | 2-4h |
+| 5.4 | Introduire Ubiquitous Language | Tous | Progressif |
+
+---
+
+## References
+
+- Ancienne critique v1 : commit `0f05e24` et anterieurs
+- Errata table d'echange : [`new_feature/errata-table-echange.md`](../new_feature/errata-table-echange.md)
+- Autocritique firmware v2 : [`new_feature/firmware-v2-local-fullstatus.md`](../new_feature/firmware-v2-local-fullstatus.md) (section 9)
+- Documentation hardware : [`hardware-overview.md`](hardware-overview.md)

@@ -15,7 +15,7 @@ Le SC944D est le controleur principal du systeme Essensys. Il embarque un microc
 | **Ethernet PHY** | DP83640TVV (IEEE 1588 Precision Time Protocol) |
 | **Quartz principal** | 25 MHz (HC49/US, Citizen Finedevice) |
 | **Quartz RTC** | 32.768 kHz (cylindrique CMS 2x6 mm) |
-| **RTOS** | MQX RTOS 4.0 |
+| **RTOS** | MQX RTOS 3.8 (Freescale/NXP) |
 | **Couches PCB** | 4 |
 | **Percages** | 1 141 trous |
 | **Projet Altium** | `SC944D/SC944D.PrjPCB` |
@@ -295,9 +295,12 @@ graph TB
 Le firmware du BP est dans le depot `client-essensys-legacy`. Voir :
 
 - [Client Embarque BP_MQX_ETH](legacy-client.md) — Vue d'ensemble
-- [Configuration Hardware et GPIO](legacy-client-config.md) — Mapping complet
-- [Protocoles Internes](legacy-client-protocols.md) — I2C, UART, SPI
+- [Securite](legacy-client-security.md) — Auth HTTP, AES alarme, EEPROM
 - [Build et Toolchain](legacy-client-build.md) — CodeWarrior, makefile
+- [Protocoles Internes](legacy-client-protocols.md) — I2C, UART, SPI
+- [Configuration Hardware et GPIO](legacy-client-config.md) — Mapping complet
+- [Deploiement et OTA](legacy-client-deployment.md) — Bootloader, Flash SPI, S19
+- [Diagnostic et Debug](legacy-client-testing.md) — EspionRS, GPIO debug
 
 ## References Sources
 
