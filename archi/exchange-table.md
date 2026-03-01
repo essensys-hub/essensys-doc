@@ -461,6 +461,31 @@ essensys:global:actions             → Redis List (queue d'ordres)
 | MCP (OpenClaw / IA) | Outil `send_order` | Auto-expansion 605-622 dans le MCP server |
 | Control Plane | `PUT /api/redis/exchange/{clientID}/{index}` | Ecriture directe Redis (pas de bloc complet) |
 
+## 9. Glossaire — Terminologie API Legacy
+
+| Terme | Definition |
+|-------|-----------|
+| **Tb_Echange[]** | Tableau de 953 octets (`unsigned char`) en RAM, structure de donnees centrale partagee entre firmware, ecran et serveur |
+| **Tb_EchangePrecedent[]** | Copie du cycle precedent, permet de detecter les changements d'etat |
+| **Tb_Echange_Droits[]** | Tableau `const` de droits d'acces par indice (R, W, RW, sauvegarde Flash) |
+| **Nb_Tbb_Donnees** | Constante = 953, taille totale de la table d'echange |
+| **Tbb_Donnees_Index** | Enum C definissant le nom symbolique de chaque indice (0-952) |
+| **VALEUR_SAUVEGARDEE** | Flag 0x80 dans les droits, indique que l'indice doit etre persiste en Flash |
+| **Bloc complet** | Ensemble d'indices 590 + 605..622 (19 valeurs) constituant un ordre scenario |
+| **Action** | Objet JSON stocke dans Redis contenant un GUID et des parametres (paires k/v d'indices) |
+| **GUID** | Identifiant unique d'une action, utilise pour l'acquittement (`/api/done/{guid}`) |
+| **Polling** | Interrogation periodique du serveur par le firmware (toutes les ~2 secondes) |
+| **ACL (Anti-Corruption Layer)** | Role du backend Go : traduit les requetes modernes en format compatible firmware legacy |
+| **MergeActions** | Fonction du backend qui combine les actions concurrentes par OR bitwise |
+| **GenerateCompleteBlock** | Fonction qui genere le bloc complet 605-622 a partir d'une commande partielle |
+| **`_de67f`** | Marqueur de fin de reponse HTTP utilise par le firmware pour detecter la completude du paquet TCP |
+| **enumScenario** | Sous-enum de Tbb_Donnees_Index definissant les 18 indices de scenario (605-622) |
+| **vd_Init_Echange()** | Fonction d'initialisation de la table avec les valeurs par defaut au boot |
+| **vd_TableEchangeLireEnFlash()** | Restaure les indices sauvegardes depuis le secteur Flash 0x7E000 |
+| **Fil pilote** | Signal PWM envoye aux radiateurs electriques pour le mode chauffage (4 zones) |
+| **BA (Boitier Auxiliaire)** | Carte esclave PIC16F946 pilotee via I2C, commande les relais et variateurs |
+| **BP (Boitier Principal)** | Carte maitre MCF52259, gere Ethernet, table d'echange, et communique avec les BA |
+
 ## References Sources
 
 - Definition des indices : `client-essensys-legacy/H/TableEchange.h`

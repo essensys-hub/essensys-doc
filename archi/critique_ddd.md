@@ -233,22 +233,15 @@ Il n'existe aucun document sur les tests :
 
 | Point | v1 (ancienne critique) | Etat actuel |
 |-------|------------------------|-------------|
-| Port backend 7070 vs 80 | Identifie | **Non corrige** dans le skill |
-| `systemctl` vs `docker` | Identifie | **Non corrige** dans le skill |
-| MCP `send_order` mal decrit | Identifie | **Non corrige** |
-| Endpoints web non mentionnes | Identifie | **Non corrige** |
-| MQTT non mentionne | Identifie | **Non corrige** |
+| Port backend 7070 vs 80 | Identifie | **Fait** |
+| `systemctl` vs `docker` | Identifie | **Fait** |
+| MCP `send_order` mal decrit | Identifie | **Fait** |
+| Endpoints web non mentionnes | Identifie | **Fait** |
+| MQTT non mentionne | Identifie | **Fait** |
 
-> **Action** : Appliquer les 5 corrections dans `~/.cursor/skills/essensys-backend-reference-orders/SKILL.md`.
+### 5.2 Cles Redis — Documentees
 
-### 5.2 Cles Redis Partiellement Documentees
-
-Le skill ne documente que `essensys:global:actions`. Il manque :
-- `essensys:client:{id}:exchange` — table d'echange par client
-- `essensys:client:{id}:connected` — etat de connexion
-- `essensys:client:{id}:authinfo` — informations d'authentification
-
-> **Action** : Ajouter les 3 patterns de cles manquants dans le skill.
+**Fait** : Les 4 patterns de cles Redis sont maintenant documentes dans le skill SKILL.md et reference.md (`essensys:global:actions`, `essensys:client:{id}:exchange`, `essensys:client:{id}:connected`, `essensys:client:{id}:authinfo`).
 
 ---
 
@@ -285,18 +278,23 @@ Ces points necessitent du **refactoring code**, pas de la documentation :
 | Ubiquitous Language (DDD) | 3/10 | 5/10 | **5/10** | — |
 | Couverture doc vs realite | 4/10 | 8/10 | **8.5/10** | +0.5 (hardware) |
 | Infrastructure as Code | 8/10 | 8/10 | **8/10** | — |
-| Skill backend/orders | 6/10 | 6/10 | **6/10** | — (pas corrige) |
+| Skill backend/orders | 6/10 | 6/10 | **8/10** | +2 (P3 corrige) |
 | Documentation hardware | — | — | **9/10** | Nouveau |
 | Observabilite | 7/10 | 8/10 | **8/10** | — |
 | Coherence interne des docs | — | — | **6/10** | Nouveau (erreurs factuelles) |
-| Resilience CI/CD | 6/10 | 6/10 | **6/10** | — |
+| Resilience CI/CD | 6/10 | 6/10 | **7/10** | +1 (P4 deployment enrichi) |
 
-**Score moyen : 7.05/10** (+0.17 vs 6.88 apres refonte doc)
+**Score moyen : 7.65/10** (+0.6 vs 7.05 apres P1/P2)
 
-Les gains principaux viennent de la documentation hardware (5 nouveaux documents, 1377 lignes). Les freins restants sont :
-- Les erreurs factuelles non corrigees (~600 vs 953, format I2C, version MQX)
-- Le skill non mis a jour
-- Le manque de liens croises entre les documents
+Les gains viennent de :
+- P1/P2 : Toutes les erreurs factuelles corrigees + liens croises ajoutes
+- P3 : Skill backend entierement mis a jour (ports, Docker, Redis, points d'entree)
+- P4 : `deployment.md` enrichi (roles Ansible, Compose, CI/CD), glossaire API, diagramme reseau
+
+Les freins restants sont :
+- Le refactoring code (P5) : God Object, nommage, Redis direct dans MCP
+- L'absence de tests documentes
+- Les PNG non generes (Mermaid est la source de verite)
 
 ---
 
@@ -325,20 +323,20 @@ Les gains principaux viennent de la documentation hardware (5 nouveaux documents
 
 | # | Action | Fichier(s) | Effort |
 |---|--------|------------|--------|
-| 3.1 | Port 7070 → 80 | Skill SKILL.md | 2 min |
-| 3.2 | systemctl → docker | Skill SKILL.md | 2 min |
-| 3.3 | Ajouter cles Redis manquantes | Skill reference.md | 10 min |
-| 3.4 | Documenter les 4 points d'entree | Skill SKILL.md | 10 min |
-| 3.5 | Corriger description MCP | Skill SKILL.md | 5 min |
+| 3.1 | ~~Port 7070 → 80~~ | Skill SKILL.md | **Fait** |
+| 3.2 | ~~systemctl → docker~~ | Skill SKILL.md | **Fait** |
+| 3.3 | ~~Ajouter cles Redis manquantes~~ | Skill reference.md | **Fait** |
+| 3.4 | ~~Documenter les 4 points d'entree~~ | Skill SKILL.md | **Fait** |
+| 3.5 | ~~Corriger description MCP~~ | Skill SKILL.md | **Fait** |
 
 ### Priorite 4 — Enrichissement Documentation
 
 | # | Action | Fichier(s) | Effort |
 |---|--------|------------|--------|
-| 4.1 | Enrichir `deployment.md` (Ansible, Compose, CI/CD) | `deployment.md` | 1-2h |
-| 4.2 | Creer glossaire API Legacy | `exchange-table.md` ou nouveau | 30 min |
-| 4.3 | Ajouter diagramme reseau LAN/WAN | `diagrams.md` ou `deployment.md` | 30 min |
-| 4.4 | Generer ou supprimer les PNG manquants | `diagrams.md`, `archi/img/` | 30 min |
+| 4.1 | ~~Enrichir `deployment.md` (Ansible, Compose, CI/CD)~~ | `deployment.md` | **Fait** |
+| 4.2 | ~~Creer glossaire API Legacy~~ | `exchange-table.md` (section 9) | **Fait** |
+| 4.3 | ~~Ajouter diagramme reseau LAN/WAN~~ | `diagrams.md` (section 11) | **Fait** |
+| 4.4 | ~~Clarifier PNG manquants~~ | `diagrams.md` (note en-tete) | **Fait** |
 
 ### Priorite 5 — Refactoring Code (hors documentation)
 

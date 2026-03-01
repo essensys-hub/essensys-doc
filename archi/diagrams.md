@@ -1,14 +1,14 @@
 # Diagrammes d'Architecture Essensys
 
-Tous les diagrammes sont disponibles en Mermaid (source) et en PNG (rendu).
+Tous les diagrammes sont fournis en Mermaid (source). Ils sont rendus automatiquement sur GitHub et les viewers Markdown compatibles.
+
+> **Note** : Les references `img/*.png` ci-dessous sont des ancres pour de futures exportations PNG. Les diagrammes Mermaid sont la source de verite.
 
 ---
 
 ## 1. Vue d'ensemble — Architecture Globale
 
 Diagramme principal montrant tous les composants, flux et acteurs du systeme.
-
-![Architecture Globale](img/architecture-globale.png)
 
 ```mermaid
 graph TB
@@ -694,3 +694,84 @@ graph LR
     class iv,rijndael,parse crypto
     class get,post,actions,done http
 ```
+
+---
+
+## 11. Reseau — Topologie LAN / WAN
+
+Architecture reseau montrant les deux chemins d'acces (local et distant) et le role du DNS.
+
+```mermaid
+graph TB
+    subgraph WAN["Internet / WAN"]
+        user_ext["👤 Utilisateur Distant"]
+        dns_pub["DNS Public<br/>mon.essensys.fr → IP WAN"]
+        letsencrypt["Let's Encrypt<br/>Certificats TLS"]
+    end
+
+    subgraph Box["Box Internet (SFR/Orange/Free)"]
+        nat["NAT / Port Forwarding<br/>:443 → RPi :443"]
+        dhcp_box["DHCP Range<br/>192.168.x.100-254"]
+    end
+
+    subgraph LAN["Reseau Local 192.168.x.0/24"]
+        subgraph RPi["Raspberry Pi — 192.168.x.10"]
+            adguard_dns["AdGuard Home<br/>DNS :53<br/>Rewrite mon.essensys.fr → 192.168.x.10"]
+            traefik_lan["Traefik<br/>HTTPS :443"]
+            nginx_lan["Nginx<br/>HTTP :80"]
+            backend_lan["Backend Go<br/>:80"]
+        end
+
+        subgraph Firmware["BP_MQX_ETH — 192.168.x.151"]
+            fw_dhcp["DHCP Client"]
+            fw_dns["DNS → AdGuard<br/>mon.essensys.fr → 192.168.x.10"]
+            fw_http["HTTP Client<br/>Port 80 uniquement"]
+        end
+
+        subgraph Clients["Appareils Locaux"]
+            user_local["👤 Utilisateur Local<br/>(PC / Mobile / Tablette)"]
+            hass_local["🏠 Home Assistant"]
+        end
+    end
+
+    user_ext -->|HTTPS :443| dns_pub
+    dns_pub -->|IP WAN| nat
+    nat -->|:443| traefik_lan
+    letsencrypt -.->|ACME Challenge| traefik_lan
+    traefik_lan --> nginx_lan
+
+    user_local -->|DNS Query| adguard_dns
+    adguard_dns -->|192.168.x.10| user_local
+    user_local -->|HTTP/HTTPS<br/>mon.essensys.fr| nginx_lan
+
+    fw_dhcp -->|DHCP Request| dhcp_box
+    dhcp_box -->|IP 192.168.x.151| fw_dhcp
+    fw_dns -->|DNS Query| adguard_dns
+    adguard_dns -->|192.168.x.10| fw_dns
+    fw_http -->|GET/POST :80<br/>Polling 2s| backend_lan
+
+    hass_local <-->|MQTT :1883| RPi
+
+    classDef wan fill:#ffe6e6,stroke:#cc0000,color:#000
+    classDef box fill:#fff3e6,stroke:#cc6600,color:#000
+    classDef rpi fill:#e6f3ff,stroke:#0066cc,color:#000
+    classDef fw fill:#ffe6cc,stroke:#996600,color:#000
+    classDef client fill:#e6ffe6,stroke:#009900,color:#000
+
+    class user_ext,dns_pub,letsencrypt wan
+    class nat,dhcp_box box
+    class adguard_dns,traefik_lan,nginx_lan,backend_lan rpi
+    class fw_dhcp,fw_dns,fw_http fw
+    class user_local,hass_local client
+```
+
+### Flux reseau cles
+
+| Chemin | Protocole | Port | Description |
+|--------|-----------|------|-------------|
+| Utilisateur distant → RPi | HTTPS | 443 | Via NAT box, certificat Let's Encrypt |
+| Utilisateur local → RPi | HTTP/HTTPS | 80/443 | DNS AdGuard rewrite vers IP locale |
+| BP_MQX_ETH → RPi | HTTP | 80 | Polling toutes les 2s, JSON, port non modifiable |
+| Home Assistant → RPi | MQTT | 1883 | Discovery + commandes/etats |
+| RPi → Cameras | HTTPS | 443 | Snapshots UniFi Protect |
+| RPi → OpenAI | HTTPS | 443 | Reformulation alertes (via OpenClaw) |
