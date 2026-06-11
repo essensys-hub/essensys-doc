@@ -230,19 +230,46 @@ Fonction reveil : provoque l'ouverture des volets roulants a l'heure programmee.
 | 477-488 | `TeleInf_HC_*` | Consommation heures creuses (6 paires LSB/MSB) |
 | 489-493 | `TeleInf_Repartition_*` | Repartition en % (chauffage, refroid, eau chaude, prises, autres) |
 
-### 3.14 Eclairage et Volets (indices ~494-532)
+### 3.14 Eclairage et Volets (indices 494-589)
 
-| Plage | Mnemonique | Description |
-|-------|-----------|-------------|
-| ~494-501 | `Variateurs_PDV_Conf` | Config variateurs PDV (8 max par BA) : 0=TOR rampe, 1=gradateur, 2=TOR sans rampe |
-| ~502-509 | `Variateurs_CHB_Conf` | Config variateurs CHB |
-| ~510-517 | `Variateurs_PDE_Conf` | Config variateurs PDE |
-| ~518-533 | `Lampes_PDV_Temps` | Temps extinction lampes PDV (1-255 min, 0=pas d'auto) |
-| ~534-549 | `Lampes_CHB_Temps` | Temps extinction lampes CHB |
-| ~550-565 | `Lampes_PDE_Temps` | Temps extinction lampes PDE |
-| ~566-573 | `Volets_PDV_Temps` | Temps action volets PDV (1-255 sec) |
-| ~574-581 | `Volets_CHB_Temps` | Temps action volets CHB |
-| ~582-589 | `Volets_PDE_Temps` | Temps action volets PDE |
+Indices exacts recalcules depuis l'enum `Tbb_Donnees_Index` (verifies par recoupement avec les indices scenario 617-622 utilises par le backend et Home Assistant).
+
+| Plage | Mnemonique | Droits | Description |
+|-------|-----------|--------|-------------|
+| 494-501 | `Variateurs_PDV_Conf` | RWS | Config variateurs PDV (8 max par BA) : 0=TOR rampe, 1=gradateur, 2=TOR sans rampe |
+| 502-509 | `Variateurs_CHB_Conf` | RWS | Config variateurs CHB |
+| 510-517 | `Variateurs_PDE_Conf` | RWS | Config variateurs PDE |
+| 518-533 | `Lampes_PDV_Temps` | RWS | Temps extinction lampes PDV (1-255 min, 0=pas d'auto) |
+| 534-549 | `Lampes_CHB_Temps` | RWS | Temps extinction lampes CHB |
+| 550-565 | `Lampes_PDE_Temps` | RWS | Temps extinction lampes PDE |
+| 566-573 | `Volets_PDV_Temps` | RWS | Temps action volets PDV (1-255 sec) |
+| 574-581 | `Volets_CHB_Temps` | RWS | Temps action volets CHB |
+| 582-589 | `Volets_PDE_Temps` | RWS | Temps action volets PDE |
+
+#### Temps d'action des volets (indices 566-589)
+
+Chaque volet possede **un seul temps d'action** en secondes (1-255), utilise a la fois pour l'ouverture et la fermeture : c'est la duree de maintien du relais de commande (montee ou descente). La BA alimente le relais, decompte le temps, puis coupe automatiquement la commande (`uc_StopVolet()` dans le firmware BA). Le fin de course du moteur arrete physiquement le volet ; le temps doit donc etre regle legerement au-dessus de la course la plus lente.
+
+Indice par volet (1 octet par volet, 8 reserves par BA) :
+
+| Indice | Volet (BA PDV) | Indice | Volet (BA CHB) | Indice | Volet (BA PDE) |
+|--------|----------------|--------|----------------|--------|----------------|
+| 566 | Salon 1 | 574 | Grande chambre 1 | 582 | Cuisine 1 |
+| 567 | Salon 2 | 575 | Grande chambre 2 | 583 | Cuisine 2 |
+| 568 | Salon 3 | 576 | Petite chambre 1 | 584 | Salle de bain 1 |
+| 569 | Salle a manger 1 | 577 | Petite chambre 2 | 585 | Store terrasse |
+| 570 | Salle a manger 2 | 578 | Petite chambre 3 | 586-589 | non utilises |
+| 571 | Bureau | 579-581 | non utilises | | |
+| 572-573 | non utilises | | | | |
+
+Comportement :
+
+- **Valeur 0** : la BA applique sa valeur par defaut firmware : **120 s** pour un volet (`uc_TEMPS_CDE_VOLET_DEFAUT`), **255 s** pour le store terrasse (`uc_TEMPS_CDE_STORE_DEFAUT`)
+- **Propagation** : le BP surveille ces indices dans `Tb_Echange[]` et pousse tout changement vers les BA via I2C (tache BA, flag `b_TpsAction`)
+- **Persistance** : double — cote BP en Flash (droit `RWS`), cote BA en EEPROM (adresses 0x002A+n), donc conserve apres coupure secteur
+- **Reglage via serveur** : ecriture directe de l'indice, ex. `{"k": 566, "v": "25"}` regle le volet salon 1 a 25 secondes (pas de bloc complet scenario necessaire, ce ne sont pas des indices de commande)
+
+Sources : `H/TableEchange.h` (zone temps d'action), `C/ba.c` (envoi I2C), firmware BA `traitement.c` / `slavenode.c` / `constantes.h`.
 
 ### 3.15 Scenarios (indices 590+)
 
@@ -276,71 +303,73 @@ Puis en fin de table :
 
 ## 4. Zoom : Parametres de Scenario (enumScenario)
 
-Chaque scenario contient 41 parametres definis dans `enumScenario`. La base est 600 pour le Scenario1 (indice 592 dans la table + offset enum).
+Chaque scenario contient 41 parametres definis dans `enumScenario`. La base du Scenario1 est l'indice **592** dans la table.
 
-**Indices absolus = indice du scenario dans la table + position dans l'enum.**
+**Indices absolus = indice de base du scenario dans la table + offset dans l'enum.**
 
-Pour les ordres envoyes par le serveur via `/api/myactions`, les indices sont ceux du scenario 1, soit la plage **600-640**.
+Pour les ordres envoyes par le serveur via `/api/myactions`, les indices sont ceux du scenario 1, soit la plage **592-632**. Ces valeurs sont confirmees par trois sources independantes : l'enum `enumScenario` du firmware, la reference d'indices du backend (`MCP_DEVICE_INDEX_REFERENCE.md`) et la `table_reference.json` de l'integration Home Assistant.
 
-### 4.1 Controle Alarme et Configuration (offset 0-12)
+### 4.1 Controle Alarme et Configuration (offset 0-12, indices 592-604)
 
 | Offset | Indice abs | Mnemonique | Description |
 |--------|-----------|-----------|-------------|
-| 0 | 600 | `Scenario_Confirme_Scenario` | 1=demander confirmation a l'ecran |
-| 1 | 601 | `Scenario_Alarme_ON` | 0=rien, 1=activer alarme, 2=desactiver |
-| 2-12 | 602-612 | `Scenario_AlarmeConfig` | 11 parametres config alarme |
+| 0 | 592 | `Scenario_Confirme_Scenario` | 1=demander confirmation a l'ecran |
+| 1 | 593 | `Scenario_Alarme_ON` | 0=rien, 1=activer alarme, 2=desactiver |
+| 2-12 | 594-604 | `Scenario_AlarmeConfig` | 11 parametres config alarme |
 
-### 4.2 Eteindre Lumieres (offset 13-18, indices 613-618)
+### 4.2 Eteindre Lumieres (offset 13-18, indices 605-610)
 
 Chaque indice est un **bitmask** : chaque bit represente une lampe ou un variateur.
 
 | Indice | Mnemonique | Zone | Mapping des bits |
 |--------|-----------|------|-----------------|
-| **613** | `Eteindre_PDV_LSB` | Pieces de vie (bas) | b0=entree, b1=salon1, b2=salon2, b3=dressing1, b4=dressing2 |
-| **614** | `Eteindre_PDV_MSB` | Pieces de vie (haut) | b5=variateur bureau, b6=variateur salle a manger, b7=variateur salon |
-| **615** | `Eteindre_CHB_LSB` | Chambres (bas) | b0=escalier, b1=gr.chambre1, b2=gr.chambre2, b3=pet.chambre1-1, b4=pet.chambre1-2, b5=pet.chambre2, b6=pet.chambre3 |
-| **616** | `Eteindre_CHB_MSB` | Chambres (haut) | b4=var.pet.chambre3, b5=var.pet.chambre2, b6=var.pet.chambre1, b7=var.gr.chambre |
-| **617** | `Eteindre_PDE_LSB` | Pieces d'eau (bas) | b0=cuisine1, b1=cuisine2, b2=SDB1, b3=SDB2-1, b4=SDB2-2, b5=WC1, b6=WC2, b7=service |
-| **618** | `Eteindre_PDE_MSB` | Pieces d'eau (haut) | b0=degagement1, b1=degagement2, b2=terrasse, b3=annexe1, b4=annexe2, b7=var.SDB1 |
+| **605** | `Eteindre_PDV_LSB` | Pieces de vie (bas) | b0=entree, b1=salon1, b2=salon2, b3=dressing1, b4=dressing2 |
+| **606** | `Eteindre_PDV_MSB` | Pieces de vie (haut) | b5=variateur bureau, b6=variateur salle a manger, b7=variateur salon |
+| **607** | `Eteindre_CHB_LSB` | Chambres (bas) | b0=escalier, b1=gr.chambre1, b2=gr.chambre2, b3=pet.chambre1-1, b4=pet.chambre1-2, b5=pet.chambre2, b6=pet.chambre3 |
+| **608** | `Eteindre_CHB_MSB` | Chambres (haut) | b4=var.pet.chambre3, b5=var.pet.chambre2, b6=var.pet.chambre1, b7=var.gr.chambre |
+| **609** | `Eteindre_PDE_LSB` | Pieces d'eau (bas) | b0=cuisine1, b1=cuisine2, b2=SDB1, b3=SDB2-1, b4=SDB2-2, b5=WC1, b6=WC2, b7=service |
+| **610** | `Eteindre_PDE_MSB` | Pieces d'eau (haut) | b0=degagement1, b1=degagement2, b2=terrasse, b3=annexe1, b4=annexe2, b7=var.SDB1 |
 
-### 4.3 Allumer Lumieres (offset 19-24, indices 619-624)
+### 4.3 Allumer Lumieres (offset 19-24, indices 611-616)
 
 Meme structure que les indices "eteindre" mais pour allumer.
 
 | Indice | Mnemonique | Zone |
 |--------|-----------|------|
-| **619** | `Allumer_PDV_LSB` | Pieces de vie (bas) — meme mapping que 613 |
-| **620** | `Allumer_PDV_MSB` | Pieces de vie (haut) — meme mapping que 614 |
-| **621** | `Allumer_CHB_LSB` | Chambres (bas) — meme mapping que 615 |
-| **622** | `Allumer_CHB_MSB` | Chambres (haut) — meme mapping que 616 |
-| **623** | `Allumer_PDE_LSB` | Pieces d'eau (bas) — meme mapping que 617 |
-| **624** | `Allumer_PDE_MSB` | Pieces d'eau (haut) — meme mapping que 618 |
+| **611** | `Allumer_PDV_LSB` | Pieces de vie (bas) — meme mapping que 605 |
+| **612** | `Allumer_PDV_MSB` | Pieces de vie (haut) — meme mapping que 606 |
+| **613** | `Allumer_CHB_LSB` | Chambres (bas) — meme mapping que 607 |
+| **614** | `Allumer_CHB_MSB` | Chambres (haut) — meme mapping que 608 |
+| **615** | `Allumer_PDE_LSB` | Pieces d'eau (bas) — meme mapping que 609 |
+| **616** | `Allumer_PDE_MSB` | Pieces d'eau (haut) — meme mapping que 610 |
 
-### 4.4 Volets (offset 25-30, indices 625-630)
+### 4.4 Volets (offset 25-30, indices 617-622)
+
+Ces indices declenchent le mouvement. La duree du mouvement est definie par les temps d'action (indices 566-589, voir section 3.14).
 
 | Indice | Mnemonique | Zone | Mapping des bits |
 |--------|-----------|------|-----------------|
-| **625** | `OuvrirVolets_PDV` | Ouvrir PDV | b0-2=salon(3), b3-4=SAM(2), b5=bureau |
-| **626** | `OuvrirVolets_CHB` | Ouvrir CHB | b0-1=gr.chambre(2), b2=pet.ch1, b3=pet.ch2, b4=pet.ch3 |
-| **627** | `OuvrirVolets_PDE` | Ouvrir PDE | b0-1=cuisine(2), b2=SDB1, b3=store terrasse |
-| **628** | `FermerVolets_PDV` | Fermer PDV | meme mapping que 625 |
-| **629** | `FermerVolets_CHB` | Fermer CHB | meme mapping que 626 |
-| **630** | `FermerVolets_PDE` | Fermer PDE | meme mapping que 627 |
+| **617** | `OuvrirVolets_PDV` | Ouvrir PDV | b0-2=salon(3), b3-4=SAM(2), b5=bureau |
+| **618** | `OuvrirVolets_CHB` | Ouvrir CHB | b0-1=gr.chambre(2), b2=pet.ch1, b3=pet.ch2, b4=pet.ch3 |
+| **619** | `OuvrirVolets_PDE` | Ouvrir PDE | b0-1=cuisine(2), b2=SDB1, b3=store terrasse |
+| **620** | `FermerVolets_PDV` | Fermer PDV | meme mapping que 617 |
+| **621** | `FermerVolets_CHB` | Fermer CHB | meme mapping que 618 |
+| **622** | `FermerVolets_PDE` | Fermer PDE | meme mapping que 619 |
 
-### 4.5 Securite, Chauffage, Cumulus, Reveil (offset 31-40)
+### 4.5 Securite, Chauffage, Cumulus, Reveil (offset 31-40, indices 623-632)
 
 | Indice | Mnemonique | Description |
 |--------|-----------|-------------|
-| 631 | `Scenario_Securite` | 0=rien, 1=couper prises, 2=remettre |
-| 632 | `Scenario_Machines` | 0=rien, 1=couper machines a laver, 2=remettre |
-| 633 | `Scenario_Chauf_zj` | Consigne chauffage zone jour (meme encodage que 3.5) |
-| 634 | `Scenario_Chauf_zn` | Consigne chauffage zone nuit |
-| 635 | `Scenario_Chauf_zsb1` | Consigne SDB 1 |
-| 636 | `Scenario_Chauf_zsb2` | Consigne SDB 2 |
-| 637 | `Scenario_Cumulus` | 0=autonome, 1=HC, 2=OFF, 0x40=reprendre, 0x80=continuer |
-| 638 | `Scenario_Reveil_Reglage` | 1=lancer procedure reglage reveils |
-| 639 | `Scenario_Reveil_ON` | 0=rien, 1=armer reveil, 2=desactiver |
-| 640 | `Scenario_Efface` | 1=effacer, 2-6=init predefinies |
+| 623 | `Scenario_Securite` | 0=rien, 1=couper prises, 2=remettre |
+| 624 | `Scenario_Machines` | 0=rien, 1=couper machines a laver, 2=remettre |
+| 625 | `Scenario_Chauf_zj` | Consigne chauffage zone jour (meme encodage que 3.5) |
+| 626 | `Scenario_Chauf_zn` | Consigne chauffage zone nuit |
+| 627 | `Scenario_Chauf_zsb1` | Consigne SDB 1 |
+| 628 | `Scenario_Chauf_zsb2` | Consigne SDB 2 |
+| 629 | `Scenario_Cumulus` | 0=autonome, 1=HC, 2=OFF, 0x40=reprendre, 0x80=continuer |
+| 630 | `Scenario_Reveil_Reglage` | 1=lancer procedure reglage reveils |
+| 631 | `Scenario_Reveil_ON` | 0=rien, 1=armer reveil, 2=desactiver |
+| 632 | `Scenario_Efface` | 1=effacer, 2-6=init predefinies |
 
 ## 5. L'Indice 590 : Trigger Scenario
 
@@ -364,7 +393,7 @@ Le firmware lit les indices scenario comme un **bloc atomique**. L'absence d'un 
 
 ### Exemple : Allumer la Lampe de la Petite Chambre 3
 
-La lampe de la petite chambre 3 est sur l'indice 621 (Allumer_CHB_LSB), bit 6 (valeur 64).
+La lampe de la petite chambre 3 est sur l'indice 613 (Allumer_CHB_LSB), bit 6 (valeur 64).
 
 ```json
 {
@@ -375,12 +404,11 @@ La lampe de la petite chambre 3 est sur l'indice 621 (Allumer_CHB_LSB), bit 6 (v
       {"k": 590, "v": "1"},
       {"k": 605, "v": "0"}, {"k": 606, "v": "0"}, {"k": 607, "v": "0"},
       {"k": 608, "v": "0"}, {"k": 609, "v": "0"}, {"k": 610, "v": "0"},
-      {"k": 611, "v": "0"}, {"k": 612, "v": "0"}, {"k": 613, "v": "0"},
+      {"k": 611, "v": "0"}, {"k": 612, "v": "0"},
+      {"k": 613, "v": "64"},
       {"k": 614, "v": "0"}, {"k": 615, "v": "0"}, {"k": 616, "v": "0"},
       {"k": 617, "v": "0"}, {"k": 618, "v": "0"}, {"k": 619, "v": "0"},
-      {"k": 620, "v": "0"},
-      {"k": 621, "v": "64"},
-      {"k": 622, "v": "0"}
+      {"k": 620, "v": "0"}, {"k": 621, "v": "0"}, {"k": 622, "v": "0"}
     ]
   }]
 }
@@ -391,12 +419,12 @@ La lampe de la petite chambre 3 est sur l'indice 621 (Allumer_CHB_LSB), bit 6 (v
 Quand plusieurs commandes arrivent simultanement, le backend les combine avec un **OR bitwise** :
 
 ```
-Commande 1 : allumer entree (619, bit 0 = 1)
-Commande 2 : allumer salon  (619, bit 1 = 2)
-Resultat    : 619 = 1 | 2 = 3 (les deux s'allument)
+Commande 1 : allumer entree (611, bit 0 = 1)
+Commande 2 : allumer salon  (611, bit 1 = 2)
+Resultat    : 611 = 1 | 2 = 3 (les deux s'allument)
 ```
 
-L'OR ne permet pas d'eteindre. Pour eteindre, utiliser les indices 613-618.
+L'OR ne permet pas d'eteindre. Pour eteindre, utiliser les indices 605-610.
 
 ## 7. Persistance Flash
 
@@ -479,7 +507,7 @@ essensys:global:actions             → Redis List (queue d'ordres)
 | **MergeActions** | Fonction du backend qui combine les actions concurrentes par OR bitwise |
 | **GenerateCompleteBlock** | Fonction qui genere le bloc complet 605-622 a partir d'une commande partielle |
 | **`_de67f`** | Marqueur de fin de reponse HTTP utilise par le firmware pour detecter la completude du paquet TCP |
-| **enumScenario** | Sous-enum de Tbb_Donnees_Index definissant les 18 indices de scenario (605-622) |
+| **enumScenario** | Sous-enum definissant les 41 parametres d'un scenario (base 592 pour le Scenario1, dont le bloc complet 605-622) |
 | **vd_Init_Echange()** | Fonction d'initialisation de la table avec les valeurs par defaut au boot |
 | **vd_TableEchangeLireEnFlash()** | Restaure les indices sauvegardes depuis le secteur Flash 0x7E000 |
 | **Fil pilote** | Signal PWM envoye aux radiateurs electriques pour le mode chauffage (4 zones) |

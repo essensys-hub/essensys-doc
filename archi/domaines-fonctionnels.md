@@ -98,8 +98,8 @@ stateDiagram-v2
 Via scenario (bloc complet 605-622) :
 
 ```json
-{"k": 601, "v": "1"}   // 1=activer alarme, 2=desactiver
-{"k": 602, "v": "..."}  // AlarmeConfig[0..10] (optionnel)
+{"k": 593, "v": "1"}   // 1=activer alarme, 2=desactiver
+{"k": 594, "v": "..."}  // AlarmeConfig[0..10] (optionnel)
 ```
 
 L'activation a distance n'est possible que si `Alarme_AccesADistance == 1`.
@@ -193,10 +193,10 @@ Le delestage coupe progressivement les zones selon 5 niveaux :
 Via scenario (bloc complet) :
 
 ```json
-{"k": 633, "v": "17"}  // Zone jour = force (0x10) + CONFORT (0x01) = 0x11 = 17
-{"k": 634, "v": "18"}  // Zone nuit = force + ECO = 0x12 = 18
-{"k": 635, "v": "0"}   // SDB 1 = automatique + OFF
-{"k": 636, "v": "0"}   // SDB 2 = automatique + OFF
+{"k": 625, "v": "17"}  // Zone jour = force (0x10) + CONFORT (0x01) = 0x11 = 17
+{"k": 626, "v": "18"}  // Zone nuit = force + ECO = 0x12 = 18
+{"k": 627, "v": "0"}   // SDB 1 = automatique + OFF
+{"k": 628, "v": "0"}   // SDB 2 = automatique + OFF
 ```
 
 ### Synchronisation
@@ -233,9 +233,9 @@ Sortie GPIO : `BP_O_PRISE_SECURITE` (broche DD4)
 Via scenario :
 
 ```json
-{"k": 631, "v": "1"}   // Couper les prises securite
-{"k": 631, "v": "2"}   // Remettre les prises securite
-{"k": 631, "v": "0"}   // Ne rien changer
+{"k": 623, "v": "1"}   // Couper les prises securite
+{"k": 623, "v": "2"}   // Remettre les prises securite
+{"k": 623, "v": "0"}   // Ne rien changer
 ```
 
 ---
@@ -285,11 +285,11 @@ Sortie GPIO : `BP_O_CUMULUS` (broche DD5)
 Via scenario :
 
 ```json
-{"k": 637, "v": "0"}    // Autonome (ON)
-{"k": 637, "v": "1"}    // Gestion HC
-{"k": 637, "v": "2"}    // OFF
-{"k": 637, "v": "64"}   // 0x40 = reprendre le dernier mode memorise
-{"k": 637, "v": "128"}  // 0x80 = continuer le mode actuel
+{"k": 629, "v": "0"}    // Autonome (ON)
+{"k": 629, "v": "1"}    // Gestion HC
+{"k": 629, "v": "2"}    // OFF
+{"k": 629, "v": "64"}   // 0x40 = reprendre le dernier mode memorise
+{"k": 629, "v": "128"}  // 0x80 = continuer le mode actuel
 ```
 
 ### Interactions
@@ -318,32 +318,34 @@ Pilotage de 14 volets roulants + 1 store banne repartis sur 3 boitiers auxiliair
 
 | Plage | Mnemonique | Droits | Description |
 |-------|-----------|--------|-------------|
-| ~566-573 | `Volets_PDV_Temps` | RWS | Temps course volets PDV (1-255 sec, defaut 120) |
-| ~574-581 | `Volets_CHB_Temps` | RWS | Temps course volets CHB |
-| ~582-589 | `Volets_PDE_Temps` | RWS | Temps course volets PDE |
+| 566-573 | `Volets_PDV_Temps` | RWS | Temps course volets PDV (1-255 sec, defaut 120) |
+| 574-581 | `Volets_CHB_Temps` | RWS | Temps course volets CHB |
+| 582-589 | `Volets_PDE_Temps` | RWS | Temps course volets PDE |
 | 938 | `Store_VR` | RWS | 0=mode store, 1=mode 15e volet roulant |
+
+Le temps de course est **unique par volet** et sert dans les deux sens (ouverture et fermeture) : c'est la duree de maintien du relais de commande, decompte par la BA avant coupure automatique. Valeur 0 = defaut firmware (120 s pour un volet, 255 s pour le store terrasse). Le reglage est persiste cote BP (Flash) et cote BA (EEPROM). Le detail indice par volet est dans [exchange-table.md, section 3.14](exchange-table.md).
 
 ### Commande depuis le Serveur (bitmask)
 
 Ouvrir :
 
 ```json
-{"k": 625, "v": "63"}   // Ouvrir tous les volets PDV (0x3F = 6 bits)
-{"k": 626, "v": "31"}   // Ouvrir tous les volets CHB (0x1F = 5 bits)
-{"k": 627, "v": "15"}   // Ouvrir tous les volets PDE + store (0x0F = 4 bits)
+{"k": 617, "v": "63"}   // Ouvrir tous les volets PDV (0x3F = 6 bits)
+{"k": 618, "v": "31"}   // Ouvrir tous les volets CHB (0x1F = 5 bits)
+{"k": 619, "v": "15"}   // Ouvrir tous les volets PDE + store (0x0F = 4 bits)
 ```
 
 Fermer :
 
 ```json
-{"k": 628, "v": "63"}   // Fermer tous les volets PDV
-{"k": 629, "v": "31"}   // Fermer tous les volets CHB
-{"k": 630, "v": "15"}   // Fermer tous les volets PDE + store
+{"k": 620, "v": "63"}   // Fermer tous les volets PDV
+{"k": 621, "v": "31"}   // Fermer tous les volets CHB
+{"k": 622, "v": "15"}   // Fermer tous les volets PDE + store
 ```
 
 ### Mapping Bits des Volets
 
-**PDV (indices 625/628)** :
+**PDV (indices 617/620)** :
 
 | Bit | Volet |
 |-----|-------|
@@ -351,7 +353,7 @@ Fermer :
 | b3-b4 | Salle a manger (2 volets) |
 | b5 | Bureau |
 
-**CHB (indices 626/629)** :
+**CHB (indices 618/621)** :
 
 | Bit | Volet |
 |-----|-------|
@@ -360,7 +362,7 @@ Fermer :
 | b3 | Petite chambre 2 |
 | b4 | Petite chambre 3 |
 
-**PDE (indices 627/630)** :
+**PDE (indices 619/622)** :
 
 | Bit | Volet |
 |-----|-------|
@@ -557,7 +559,7 @@ La prise est **coupee** si l'une de ces conditions est vraie :
 
 | Condition | Source |
 |-----------|--------|
-| `uc_MachinesOFF == 1` | Scenario "couper machines" (indice 632 = 1) |
+| `uc_MachinesOFF == 1` | Scenario "couper machines" (indice 624 = 1) |
 | `uc_FuiteLL == TRUE` | Fuite lave-linge detectee (ADC AIN6 >= 2040) |
 | `uc_FuiteLV == TRUE` | Fuite lave-vaisselle detectee (ADC AIN5 >= 2040) |
 
@@ -568,9 +570,9 @@ Sortie GPIO : `BP_O_MACHINE_A_LAVER` (broche DD6)
 Via scenario :
 
 ```json
-{"k": 632, "v": "1"}   // Couper la prise machines
-{"k": 632, "v": "2"}   // Remettre la prise machines
-{"k": 632, "v": "0"}   // Ne rien changer
+{"k": 624, "v": "1"}   // Couper la prise machines
+{"k": 624, "v": "2"}   // Remettre la prise machines
+{"k": 624, "v": "0"}   // Ne rien changer
 ```
 
 ### Particularite

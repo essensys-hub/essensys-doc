@@ -102,6 +102,7 @@ Ce depot documente l'ensemble des projets de l'organisation [essensys-hub](https
 | [Integration Home Assistant](new_feature/firmware-ha-integration.md) | Diagnostic HA existant, 4 axes d'amelioration, mapping complet des entites, phasing |
 | [Modernisation HTTP et Discovery](new_feature/firmware-http-modernisation.md) | HTTPS, mDNS/Bonjour, SSDP/UPnP, discovery boxes Internet, keep-alive |
 | [Errata — Table d'Echange](new_feature/errata-table-echange.md) | Corrections a appliquer : taille reelle = 953 indices (pas ~600) |
+| [Errata — Indices Scenario et Temps Volets](new_feature/errata-scenario-indices.md) | Corrections appliquees : indices scenario base 592 (decalage +8 corrige), detail temps d'action volets (566-589) |
 
 ## Par ou commencer
 
