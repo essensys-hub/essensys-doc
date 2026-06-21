@@ -1,0 +1,8 @@
+site/
+docs/architecture/
+docs/install/gateway-cm5.md
+docs/install/https-local.md
+docs/install/raspberry-pi.md
+docs/install/img/
+docs/new_feature/
+.venv/

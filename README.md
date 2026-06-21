@@ -8,6 +8,22 @@ Documentation technique de l'ecosysteme domotique Essensys : architecture logici
 
 > Diagramme complet avec tous les composants, flux et acteurs. Voir [tous les diagrammes](archi/diagrams.md) pour les vues detaillees.
 
+## Build / Publication (site public OVH)
+
+Site statique **MkDocs Material** — URL cible : `https://docs.essensys.fr`
+
+```bash
+# Depuis le monorepo ESSENSYS (essensys-ansible en sibling)
+bash scripts/prepare-docs.sh
+pip install -r requirements.txt
+mkdocs build --strict
+# Artefact : site/
+```
+
+CI : `.github/workflows/docs-site.yml` — deploy Ansible role `docs_site` (`essensys-ansible/support-site.yml`).
+
+Lecture directe GitHub reste disponible pour contribution ; le brain (`essensys-memory`) indexe les sources.
+
 ## Documentation
 
 La documentation d'architecture se trouve dans [`archi/`](archi/) et suit le modele C4 :
