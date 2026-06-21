@@ -1,7 +1,7 @@
 site_name: Essensys Documentation
 site_description: Documentation publique Essensys — architecture, installation, guides utilisateur
 site_author: Essensys Team
-site_url: https://docs.essensys.fr
+site_url: https://mon.essensys.fr/docs/
 
 repo_name: essensys-hub/essensys-doc
 repo_url: https://github.com/essensys-hub/essensys-doc
