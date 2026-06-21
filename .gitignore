@@ -6,3 +6,5 @@ docs/install/raspberry-pi.md
 docs/install/img/
 docs/new_feature/
 .venv/
+.DS_Store
+**/.DS_Store
