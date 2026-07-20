@@ -1,7 +1,7 @@
 site_name: Essensys Documentation
 site_description: Documentation publique Essensys — architecture, installation, guides utilisateur
 site_author: Essensys Team
-site_url: https://mon.essensys.fr/docs/
+site_url: https://www.essensys.fr/docs/
 
 repo_name: essensys-hub/essensys-doc
 repo_url: https://github.com/essensys-hub/essensys-doc
@@ -56,6 +56,7 @@ markdown_extensions:
 
 plugins:
   - search
+  - glightbox
 
 nav:
   - Accueil: index.md
@@ -71,6 +72,7 @@ nav:
     - Pattern Bridge: architecture/bridge-pattern.md
     - Deploiement: architecture/deployment.md
     - Conteneurs: architecture/containers.md
+    - Inscription Turnstile: architecture/turnstile-registration.md
     - Materiel: architecture/hardware-overview.md
     - Diagrammes: architecture/diagrams.md
     - Client legacy: architecture/legacy-client.md

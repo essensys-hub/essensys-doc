@@ -165,6 +165,13 @@ volumes:
 4.  **Update** : L'administrateur execute le playbook Ansible (ou le script `update.sh` de `essensys-raspberry-install`), ou le Control Plane declenche un `docker pull` automatique.
 5.  **Convergence** : Ansible/Docker detecte la nouvelle image, stoppe l'ancien conteneur, et lance le nouveau proprement en restaurant les volumes de donnees.
 
+## Inscription publique (Cloudflare Turnstile)
+
+L'anti-spam sur `POST /api/auth/register` utilise **Cloudflare Turnstile**.
+Le compte Cloudflare qui détient le widget et les clés de vérification est
+documenté dans [Inscription Turnstile](turnstile-registration.md)
+(`nicolas.rineau@gmail.com`, profil **Verified**).
+
 ## Mise a Jour d'Urgence (Rollback)
 
 ```bash

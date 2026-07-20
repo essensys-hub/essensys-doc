@@ -43,6 +43,7 @@ La documentation d'architecture se trouve dans [`archi/`](archi/) et suit le mod
 | [Services (Conteneurs)](archi/containers.md) | Les 14 services Docker, roles et interactions |
 | [Pattern Bridge](archi/bridge-pattern.md) | Anti-Corruption Layer, 4 points d'entree, flux complets |
 | [Deploiement](archi/deployment.md) | Ansible, Docker Compose, CI/CD |
+| [Inscription Turnstile](archi/turnstile-registration.md) | Anti-spam register ; compte Cloudflare propriétaire (`nicolas.rineau@gmail.com`) |
 | [Diagrammes](archi/diagrams.md) | Tous les diagrammes Mermaid + PNG |
 | [Autocritique DDD](archi/critique_ddd.md) | Analyse critique, score, recommandations |
 | [Vue d'Ensemble Materiel](archi/hardware-overview.md) | Architecture physique, 4 cartes, bus I2C, comparatif |
