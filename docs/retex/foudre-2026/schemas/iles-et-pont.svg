@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 762" width="900" height="762" role="img" aria-labelledby="ip-title ip-desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="ip-title">Quatre îlots reliés par un pont</title>
+  <desc id="ip-desc">Les quatre cartes du coffret domotique (BP SC944D et BA SC942C, SC941C, SC940D) sont des îlots électriques flottants, chacun relié à la maison par ses propres câbles. Le câble du bus forme un pont entre eux. Quand un îlot est porté à un autre niveau électrique, un courant d'équilibrage traverse le pont : d'abord par le fil 0 V, puis, au-delà d'un écart d'environ 6 à 8 volts, aussi par les fils de données SDA et SCL. Le fil +15 V reporte l'écart sur l'alimentation des BA.</desc>
+  <defs>
+    <marker id="ip-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/>
+    </marker>
+    <path id="ip-bolt" d="M14 0 L34 0 L24 24 L38 24 L8 66 L16 34 L2 34 Z"/>
+  </defs>
+  <style>
+    .ip-h1{font-size:26px;font-weight:700;fill:#0F172A}
+    .ip-sub{font-size:15px;fill:#475569}
+    .ip-h2{font-size:16px;font-weight:700;fill:#0F172A}
+    .ip-card{font-size:15px;font-weight:700;fill:#1E3A8A}
+    .ip-cardsub{font-size:13px;fill:#334155}
+    .ip-txt{font-size:13px;fill:#334155}
+    .ip-red{font-size:13px;font-weight:700;fill:#B91C1C}
+    .ip-vio{font-size:13px;font-weight:700;fill:#5B21B6}
+    .ip-note{font-size:13px;fill:#475569;font-style:italic}
+    .ip-wire{font-size:13px;font-weight:700;fill:#0F172A}
+    .ip-pill{font-size:11px;font-weight:700;letter-spacing:.06em}
+  </style>
+
+  <rect x="1" y="1" width="898" height="760" rx="18" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+
+  <text x="40" y="48" class="ip-h1">Quatre îlots reliés par un pont</text>
+  <text x="40" y="76" class="ip-sub">Chaque carte du coffret est un îlot électrique « flottant », relié à la maison par ses propres câbles.</text>
+
+  <!-- ============ Scène 1 : au calme ============ -->
+  <circle cx="52" cy="109" r="11" fill="#0F172A"/>
+  <text x="52" y="114" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">1</text>
+  <text x="72" y="115" class="ip-h2">Au calme : les quatre îlots sont au même niveau</text>
+
+  <!-- câbles vers la maison -->
+  <g stroke="#64748B" stroke-width="2">
+    <line x1="75" y1="186" x2="75" y2="240"/><line x1="110" y1="186" x2="110" y2="240"/><line x1="145" y1="186" x2="145" y2="240"/>
+    <line x1="295" y1="186" x2="295" y2="240"/><line x1="330" y1="186" x2="330" y2="240"/><line x1="365" y1="186" x2="365" y2="240"/>
+    <line x1="515" y1="186" x2="515" y2="240"/><line x1="550" y1="186" x2="550" y2="240"/><line x1="585" y1="186" x2="585" y2="240"/>
+    <line x1="735" y1="186" x2="735" y2="240"/><line x1="770" y1="186" x2="770" y2="240"/><line x1="805" y1="186" x2="805" y2="240"/>
+  </g>
+  <rect x="40" y="240" width="820" height="28" rx="6" fill="#E2E8F0" stroke="#94A3B8"/>
+  <text x="450" y="259" text-anchor="middle" class="ip-txt">câblage de la maison : boutons, sorties 230 V, Ethernet, téléinfo…</text>
+
+  <!-- ponts -->
+  <g fill="none" stroke="#6D28D9" stroke-width="8" stroke-linecap="round">
+    <path d="M195,158 Q230,140 265,158"/>
+    <path d="M415,158 Q450,140 485,158"/>
+    <path d="M635,158 Q670,140 705,158"/>
+  </g>
+  <text x="450" y="204" text-anchor="middle" class="ip-vio">le pont :</text>
+  <text x="450" y="221" text-anchor="middle" class="ip-vio">câble du bus</text>
+
+  <!-- îlots -->
+  <g stroke="#1D4ED8" stroke-width="2" fill="#DBEAFE">
+    <rect x="45" y="130" width="150" height="56" rx="12"/>
+    <rect x="265" y="130" width="150" height="56" rx="12"/>
+    <rect x="485" y="130" width="150" height="56" rx="12"/>
+    <rect x="705" y="130" width="150" height="56" rx="12"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="120" y="153" class="ip-card">BP · SC944D</text><text x="120" y="173" class="ip-cardsub">boîtier principal</text>
+    <text x="340" y="153" class="ip-card">BA · SC942C</text><text x="340" y="173" class="ip-cardsub">boîtier auxiliaire</text>
+    <text x="560" y="153" class="ip-card">BA · SC941C</text><text x="560" y="173" class="ip-cardsub">boîtier auxiliaire</text>
+    <text x="780" y="153" class="ip-card">BA · SC940D</text><text x="780" y="173" class="ip-cardsub">bout de chaîne</text>
+  </g>
+
+  <!-- ============ Scène 2 : pendant le choc ============ -->
+  <circle cx="52" cy="304" r="11" fill="#0F172A"/>
+  <text x="52" y="309" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">2</text>
+  <text x="72" y="310" class="ip-h2">Pendant le choc : un îlot change de niveau, un courant d'équilibrage traverse le pont</text>
+
+  <!-- câbles vers la maison -->
+  <g stroke="#64748B" stroke-width="2">
+    <line x1="75" y1="401" x2="75" y2="515"/><line x1="110" y1="401" x2="110" y2="515"/><line x1="145" y1="401" x2="145" y2="515"/>
+    <line x1="295" y1="461" x2="295" y2="515"/><line x1="330" y1="461" x2="330" y2="515"/><line x1="365" y1="461" x2="365" y2="515"/>
+    <line x1="515" y1="461" x2="515" y2="515"/><line x1="550" y1="461" x2="550" y2="515"/><line x1="585" y1="461" x2="585" y2="515"/>
+    <line x1="735" y1="461" x2="735" y2="515"/><line x1="770" y1="461" x2="770" y2="515"/><line x1="805" y1="461" x2="805" y2="515"/>
+  </g>
+  <rect x="40" y="515" width="820" height="28" rx="6" fill="#E2E8F0" stroke="#94A3B8"/>
+  <text x="450" y="534" text-anchor="middle" class="ip-txt">câblage de la maison</text>
+
+  <!-- entrée de la surtension par les câbles de l'îlot touché -->
+  <use xlink:href="#ip-bolt" transform="translate(16,440)" fill="#FBBF24" stroke="#B45309" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="110" y1="505" x2="110" y2="412" stroke="#DC2626" stroke-width="4" marker-end="url(#ip-arrow)"/>
+  <text x="222" y="474" text-anchor="middle" class="ip-red">la surtension</text>
+  <text x="222" y="490" text-anchor="middle" class="ip-red">entre par</text>
+  <text x="222" y="506" text-anchor="middle" class="ip-red">ses câbles</text>
+
+  <!-- ponts -->
+  <g fill="none" stroke="#6D28D9" stroke-width="8" stroke-linecap="round">
+    <path d="M195,373 C235,373 225,433 265,433"/>
+    <path d="M415,433 Q450,415 485,433"/>
+    <path d="M635,433 Q670,415 705,433"/>
+  </g>
+  <!-- courant d'équilibrage sur les ponts -->
+  <g fill="none" stroke="#DC2626" stroke-width="3.5" marker-end="url(#ip-arrow)">
+    <path d="M203,360 C240,360 228,416 258,419"/>
+    <path d="M422,415 Q450,400 476,412"/>
+    <path d="M642,415 Q670,400 696,412"/>
+  </g>
+  <!-- et ressort par les câbles des autres îlots -->
+  <g stroke="#DC2626" stroke-width="3.5" marker-end="url(#ip-arrow)">
+    <line x1="330" y1="468" x2="330" y2="507"/>
+    <line x1="550" y1="468" x2="550" y2="507"/>
+    <line x1="770" y1="468" x2="770" y2="507"/>
+  </g>
+  <text x="440" y="484" text-anchor="middle" class="ip-red">et ressort par</text>
+  <text x="440" y="500" text-anchor="middle" class="ip-red">leurs câbles</text>
+
+  <!-- îlots -->
+  <rect x="45" y="345" width="150" height="56" rx="12" fill="#FEE2E2" stroke="#DC2626" stroke-width="2.5"/>
+  <g stroke="#1D4ED8" stroke-width="2" fill="#DBEAFE">
+    <rect x="265" y="405" width="150" height="56" rx="12"/>
+    <rect x="485" y="405" width="150" height="56" rx="12"/>
+    <rect x="705" y="405" width="150" height="56" rx="12"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="120" y="368" class="ip-card">Îlot A</text><text x="120" y="388" class="ip-cardsub">touché (exemple)</text>
+    <text x="340" y="428" class="ip-card">Îlot B</text><text x="340" y="448" class="ip-cardsub">une autre carte</text>
+    <text x="560" y="428" class="ip-card">Îlot C</text><text x="560" y="448" class="ip-cardsub">une autre carte</text>
+    <text x="780" y="428" class="ip-card">Îlot D</text><text x="780" y="448" class="ip-cardsub">une autre carte</text>
+  </g>
+  <text x="45" y="337" class="ip-red">▲ son niveau électrique monte</text>
+  <text x="560" y="367" text-anchor="middle" font-size="14" font-weight="700" fill="#B91C1C">→ courant d'équilibrage : d'îlot en îlot, par le pont</text>
+  <text x="560" y="387" text-anchor="middle" class="ip-txt">(son sens dépend de l'îlot touché)</text>
+
+  <!-- loupe sur un pont -->
+  <circle cx="450" cy="430" r="22" fill="none" stroke="#6D28D9" stroke-width="2" stroke-dasharray="5 4"/>
+
+  <text x="40" y="566" class="ip-note"><tspan font-weight="700" font-style="normal">Exemple :</tspan> l'îlot A peut être n'importe laquelle des quatre cartes, BP ou BA. Sur le site, ni l'îlot touché ni la porte d'entrée ne sont établis.</text>
+
+  <!-- ============ Zoom sur le pont ============ -->
+  <rect x="40" y="585" width="820" height="158" rx="12" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="2"/>
+  <circle cx="64" cy="605" r="8" fill="none" stroke="#6D28D9" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="80" y="610" font-size="15" font-weight="700" fill="#5B21B6">Zoom sur le pont : un câble à 4 fils</text>
+  <rect x="470" y="596" width="78" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="509" y="610" text-anchor="middle" class="ip-pill" fill="#1D4ED8">CALCULÉ</text>
+  <text x="558" y="611" class="ip-txt">seuil actuel : ≈ 11 à 20 A d'équilibrage</text>
+
+  <!-- fils -->
+  <text x="60" y="637" class="ip-wire">0 V</text>
+  <line x1="115" y1="632" x2="395" y2="632" stroke="#0F172A" stroke-width="3"/>
+  <line x1="140" y1="632" x2="372" y2="632" stroke="#DC2626" stroke-width="5" marker-end="url(#ip-arrow)"/>
+
+  <text x="60" y="665" class="ip-wire">SDA</text>
+  <line x1="115" y1="660" x2="395" y2="660" stroke="#2563EB" stroke-width="3"/>
+  <line x1="140" y1="660" x2="372" y2="660" stroke="#DC2626" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ip-arrow)"/>
+
+  <text x="60" y="689" class="ip-wire">SCL</text>
+  <line x1="115" y1="684" x2="395" y2="684" stroke="#2563EB" stroke-width="3"/>
+  <line x1="140" y1="684" x2="372" y2="684" stroke="#DC2626" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#ip-arrow)"/>
+
+  <text x="60" y="721" class="ip-wire">+15 V</text>
+  <line x1="115" y1="716" x2="395" y2="716" stroke="#94A3B8" stroke-width="3"/>
+
+  <!-- accolade SDA/SCL -->
+  <path d="M405,652 q6,0 6,6 v8 q0,6 6,6 q-6,0 -6,6 v8 q0,6 -6,6" fill="none" stroke="#64748B" stroke-width="1.5"/>
+
+  <text x="425" y="637" class="ip-txt"><tspan font-weight="700">0 V :</tspan> le chemin normal du courant d'équilibrage.</text>
+  <text x="425" y="660" class="ip-txt"><tspan font-weight="700">Fils de données :</tspan> au-delà d'un écart d'environ 6 à 8 V</text>
+  <text x="425" y="676" class="ip-txt">entre deux îlots, leurs protections conduisent. SDA et SCL</text>
+  <text x="425" y="692" class="ip-txt">deviennent des chemins parallèles au fil 0 V.</text>
+  <text x="425" y="716" class="ip-txt"><tspan font-weight="700">+15 V :</tspan> ne porte pas ce courant, mais reporte l'écart sur</text>
+  <text x="425" y="732" class="ip-txt">l'alimentation du BA (régulateur à sa limite vers 10 V d'écart).</text>
+</svg>

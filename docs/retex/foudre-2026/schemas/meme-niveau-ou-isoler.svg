@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 650" width="900" height="650" role="img" aria-labelledby="mn-title mn-desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="mn-title">Même niveau dans le coffret, isolement entre bâtiments</title>
+  <desc id="mn-desc">À gauche, dans un même coffret : une petite carte passive en étoile relie le 0 V de chaque boîtier auxiliaire par deux faisceaux courts (J1 et J2) et celui du boîtier principal par J31. Les quatre 0 V restent au même niveau : le courant d'équilibrage nécessaire pour faire conduire les protections passe d'environ 11 à 20 A à environ 79 à 173 A (calculé). Le 0 V est relié au 0 V, jamais à la terre. À droite, entre bâtiments ou pour un boîtier déporté : un module d'isolement coupe à la fois les données et l'alimentation. À la frontière du coffret, chaque port qui sort est isolé, d'abord l'Ethernet du boîtier principal. Solution long terme : carte d'interconnexion équipotentielle pour un coffret unique, module d'isolement par boîtier auxiliaire pour un boîtier déporté.</desc>
+  <style>
+    .mn-h1{font-size:26px;font-weight:700;fill:#0F172A}
+    .mn-sub{font-size:15px;fill:#475569}
+    .mn-txt{font-size:13px;fill:#334155}
+    .mn-b{font-weight:700}
+    .mn-sm{font-size:12px;fill:#475569}
+    .mn-card{font-size:13px;font-weight:700;fill:#1E3A8A}
+    .mn-pill{font-size:11px;font-weight:700;letter-spacing:.06em}
+  </style>
+
+  <rect x="1" y="1" width="898" height="648" rx="18" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+  <text x="40" y="48" class="mn-h1">Dans un coffret : même niveau. Entre bâtiments : isoler.</text>
+  <text x="40" y="76" class="mn-sub">Écrêter plus fort ne supprime pas le chemin du courant : on rend l'écart négligeable, ou on coupe la boucle.</text>
+
+  <!-- ===================== Panneau gauche : étoile 0 V ===================== -->
+  <rect x="40" y="98" width="405" height="402" rx="12" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="2"/>
+  <path d="M40,138 V110 a12,12 0 0 1 12,-12 H433 a12,12 0 0 1 12,12 V138 Z" fill="#D1FAE5"/>
+  <text x="58" y="125" font-size="15" font-weight="700" fill="#065F46">Même coffret : tous au même niveau</text>
+
+  <rect x="60" y="152" width="365" height="200" rx="10" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="413" y="171" text-anchor="end" class="mn-sm">coffret domotique</text>
+
+  <!-- étoile 0 V -->
+  <rect x="84" y="182" width="70" height="160" rx="8" fill="#BBF7D0" stroke="#047857" stroke-width="2"/>
+  <text x="119" y="252" text-anchor="middle" font-size="15" font-weight="700" fill="#065F46">étoile</text>
+  <text x="119" y="271" text-anchor="middle" font-size="15" font-weight="700" fill="#065F46">0 V</text>
+  <text x="119" y="292" text-anchor="middle" class="mn-sm" fill="#065F46">carte</text>
+  <text x="119" y="306" text-anchor="middle" class="mn-sm" fill="#065F46">passive</text>
+
+  <!-- rayons : deux par BA (J1, J2), un pour le BP (J31) -->
+  <g stroke="#047857" stroke-width="3" fill="none">
+    <path d="M154,196 L260,192"/><path d="M154,206 L260,210"/>
+    <path d="M154,236 L260,232"/><path d="M154,246 L260,250"/>
+    <path d="M154,276 L260,272"/><path d="M154,286 L260,290"/>
+    <path d="M154,326 L260,321"/>
+  </g>
+  <text x="207" y="182" text-anchor="middle" class="mn-sm" fill="#065F46" font-weight="700">J1 + J2, ≤ 15 cm</text>
+  <text x="207" y="340" text-anchor="middle" class="mn-sm" fill="#065F46" font-weight="700">J31</text>
+
+  <g stroke="#1D4ED8" stroke-width="1.5" fill="#DBEAFE">
+    <rect x="260" y="186" width="150" height="30" rx="7"/>
+    <rect x="260" y="226" width="150" height="30" rx="7"/>
+    <rect x="260" y="266" width="150" height="30" rx="7"/>
+    <rect x="260" y="306" width="150" height="30" rx="7"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="335" y="206" class="mn-card">BA · SC940D</text>
+    <text x="335" y="246" class="mn-card">BA · SC941C</text>
+    <text x="335" y="286" class="mn-card">BA · SC942C</text>
+    <text x="335" y="326" class="mn-card">BP · SC944D</text>
+  </g>
+
+  <text x="58" y="378" class="mn-txt">Chaque BA est relié à l'étoile par deux faisceaux courts,</text>
+  <text x="58" y="395" class="mn-txt">le BP par J31 : les quatre 0 V restent ensemble.</text>
+  <text x="58" y="422" class="mn-txt mn-b" fill="#065F46">Courant qu'il faut pour faire conduire les protections :</text>
+  <text x="58" y="441" class="mn-txt"><tspan class="mn-b">≈ 11 à 20 A</tspan> aujourd'hui  →  <tspan class="mn-b">≈ 79 à 173 A</tspan></text>
+  <rect x="345" y="428" width="78" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="384" y="442" text-anchor="middle" class="mn-pill" fill="#1D4ED8">CALCULÉ</text>
+  <text x="58" y="468" class="mn-txt">Le 0 V est relié au 0 V, <tspan class="mn-b">jamais à la terre</tspan> : la très</text>
+  <text x="58" y="485" class="mn-txt">basse tension de sécurité (TBTS) est conservée.</text>
+
+  <!-- ===================== Panneau droit : isoler ===================== -->
+  <rect x="455" y="98" width="405" height="402" rx="12" fill="#FFFFFF" stroke="#93C5FD" stroke-width="2"/>
+  <path d="M455,138 V110 a12,12 0 0 1 12,-12 H848 a12,12 0 0 1 12,12 V138 Z" fill="#DBEAFE"/>
+  <text x="473" y="125" font-size="15" font-weight="700" fill="#1E3A8A">Entre bâtiments (BA déporté) : isoler</text>
+
+  <!-- bâtiment A -->
+  <path d="M472,206 L522,170 L572,206 V340 H472 Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="487" y="268" width="70" height="32" rx="7" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="1.5"/>
+  <text x="522" y="289" text-anchor="middle" class="mn-card">BP</text>
+  <text x="522" y="230" text-anchor="middle" class="mn-sm">bâtiment A</text>
+
+  <!-- bâtiment B -->
+  <path d="M626,206 L734,170 L842,206 V340 H626 Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2" stroke-linejoin="round"/>
+  <text x="796" y="230" text-anchor="middle" class="mn-sm">bâtiment B</text>
+  <rect x="768" y="262" width="62" height="44" rx="7" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="1.5"/>
+  <text x="799" y="289" text-anchor="middle" class="mn-card">BA</text>
+
+  <!-- câble de bus entre les bâtiments -->
+  <path d="M557,276 H640" stroke="#6D28D9" stroke-width="3"/>
+  <path d="M557,292 H640" stroke="#F97316" stroke-width="3"/>
+  <text x="606" y="267" text-anchor="middle" class="mn-sm" fill="#5B21B6" font-weight="700">données</text>
+  <text x="598" y="309" text-anchor="middle" class="mn-sm" fill="#C2410C" font-weight="700">énergie</text>
+
+  <!-- module d'isolement -->
+  <rect x="640" y="240" width="112" height="76" rx="9" fill="#FFFFFF" stroke="#334155" stroke-width="2"/>
+  <line x1="696" y1="236" x2="696" y2="324" stroke="#DC2626" stroke-width="3" stroke-dasharray="6 4"/>
+  <!-- données -->
+  <path d="M640,276 H688" stroke="#6D28D9" stroke-width="3"/>
+  <path d="M704,276 H752" stroke="#6D28D9" stroke-width="3"/>
+  <path d="M686,268 a6,8 0 0 1 0,16 M706,268 a6,8 0 0 0 0,16" fill="none" stroke="#6D28D9" stroke-width="2"/>
+  <!-- alimentation -->
+  <path d="M640,292 H688" stroke="#F97316" stroke-width="3"/>
+  <path d="M704,292 H752" stroke="#F97316" stroke-width="3"/>
+  <path d="M686,286 v14 M706,286 v14" stroke="#F97316" stroke-width="2"/>
+  <path d="M752,276 H768 M752,292 H768" stroke="#334155" stroke-width="2.5"/>
+  <text x="696" y="230" text-anchor="middle" class="mn-sm" fill="#B91C1C" font-weight="700">barrière</text>
+  <text x="696" y="358" text-anchor="middle" class="mn-sm" fill="#0F172A" font-weight="700">module d'isolement par BA</text>
+
+  <text x="473" y="386" class="mn-txt">Isoler <tspan class="mn-b">les données et l'alimentation ensemble</tspan> :</text>
+  <text x="473" y="403" class="mn-txt">isoler seulement les données ne sert à rien, le courant</text>
+  <text x="473" y="420" class="mn-txt">passerait encore par le 0 V et le +15 V.</text>
+  <text x="473" y="447" class="mn-txt"><tspan class="mn-b">Aussi à la frontière du coffret :</tspan> isoler chaque port</text>
+  <text x="473" y="464" class="mn-txt">qui sort, d'abord l'Ethernet du BP (fibre ou isolateur),</text>
+  <text x="473" y="481" class="mn-txt">sans parafoudre RJ45 relié à la terre.</text>
+
+  <!-- ===================== Solution long terme ===================== -->
+  <a xlink:href="#solution-long-terme" href="#solution-long-terme">
+    <rect x="40" y="516" width="820" height="112" rx="12" fill="#EEF2FF" stroke="#6366F1" stroke-width="2"/>
+    <text x="60" y="545" font-size="15" font-weight="700" fill="#3730A3">→ Vers la solution long terme</text>
+    <text x="60" y="570" class="mn-txt"><tspan class="mn-b">Coffret unique, comme ici :</tspan> carte d'interconnexion équipotentielle (un « fond de panier » qui porte</text>
+    <text x="60" y="587" class="mn-txt">le plan 0 V et les protections de chaque port), plus l'isolement des ports qui sortent du coffret.</text>
+    <text x="60" y="612" class="mn-txt"><tspan class="mn-b">BA déporté</tspan> (autre coffret, plus de 2 à 3 m de câble, autre bâtiment) : module d'isolement par BA.</text>
+  </a>
+</svg>

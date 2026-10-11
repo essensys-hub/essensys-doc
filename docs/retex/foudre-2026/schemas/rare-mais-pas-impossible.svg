@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" role="img" aria-labelledby="rp-title rp-desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="rp-title">Peu fréquent, mais pas impossible</title>
+  <desc id="rp-desc">Courant d'équilibrage, calculé, à partir duquel le choc passe aussi par les fils de données entre le SC940D et le BP. Aujourd'hui : environ 11 A pour un choc raide (front rapide) et 20 A pour l'onde normalisée 8/20. Avec l'étoile 0 V : environ 79 A et 173 A, soit 6 à 9 fois plus. Pour un choc très raide : 4 A aujourd'hui, 26 A avec l'étoile. Plus tard, avec une carte d'interconnexion et des BA révisés : environ 292 à 875 A.</desc>
+  <style>
+    .rp-h1{font-size:26px;font-weight:700;fill:#0F172A}
+    .rp-sub{font-size:15px;fill:#475569}
+    .rp-txt{font-size:13px;fill:#334155}
+    .rp-b{font-weight:700}
+    .rp-sm{font-size:12px;fill:#475569}
+    .rp-grp{font-size:15px;font-weight:700;fill:#0F172A}
+    .rp-val{font-size:14px;font-weight:700;fill:#0F172A}
+    .rp-pill{font-size:11px;font-weight:700;letter-spacing:.06em}
+  </style>
+
+  <rect x="1" y="1" width="898" height="558" rx="18" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+  <text x="40" y="48" class="rp-h1">Peu fréquent, mais pas impossible</text>
+  <text x="40" y="76" class="rp-sub">Courant d'équilibrage au-delà duquel le choc passe aussi par les fils de données (SC940D – BP).</text>
+
+  <!-- légende -->
+  <rect x="40" y="98" width="16" height="16" rx="3" fill="#2563EB"/>
+  <text x="64" y="111" class="rp-txt">choc raide (front rapide)</text>
+  <rect x="246" y="98" width="16" height="16" rx="3" fill="#60A5FA"/>
+  <text x="270" y="111" class="rp-txt">choc normalisé (onde 8/20)</text>
+  <rect x="704" y="96" width="78" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+  <text x="743" y="110" text-anchor="middle" class="rp-pill" fill="#1D4ED8">CALCULÉ</text>
+  <text x="790" y="111" class="rp-sm">non mesuré</text>
+
+  <!-- grille : x(A) = 260 + 2.8*A ; 0→260, 50→400, 100→540, 150→680, 200→820 -->
+  <g stroke="#E2E8F0" stroke-width="1">
+    <line x1="400" y1="136" x2="400" y2="306"/>
+    <line x1="540" y1="136" x2="540" y2="306"/>
+    <line x1="680" y1="136" x2="680" y2="306"/>
+    <line x1="820" y1="136" x2="820" y2="306"/>
+  </g>
+  <line x1="260" y1="136" x2="260" y2="306" stroke="#94A3B8" stroke-width="1.5"/>
+  <g text-anchor="middle" class="rp-sm">
+    <text x="260" y="324">0</text>
+    <text x="400" y="324">50 A</text>
+    <text x="540" y="324">100 A</text>
+    <text x="680" y="324">150 A</text>
+    <text x="820" y="324">200 A</text>
+  </g>
+
+  <!-- groupe 1 : aujourd'hui -->
+  <text x="40" y="170" class="rp-grp">Aujourd'hui</text>
+  <text x="40" y="189" class="rp-sm">câble de bus seul (3 tronçons)</text>
+  <path d="M260,146 H286.8 Q290.8,146 290.8,150 V168 Q290.8,172 286.8,172 H260 Z" fill="#2563EB"/>
+  <path d="M260,174 H312 Q316,174 316,178 V196 Q316,200 312,200 H260 Z" fill="#60A5FA"/>
+  <text x="300" y="165" class="rp-val">11 A</text>
+  <text x="325" y="193" class="rp-val">20 A</text>
+
+  <!-- groupe 2 : étoile 0 V -->
+  <text x="40" y="256" class="rp-grp">Avec l'étoile 0 V</text>
+  <text x="40" y="275" class="rp-sm">correctif court terme (N2)</text>
+  <path d="M260,232 H477.2 Q481.2,232 481.2,236 V254 Q481.2,258 477.2,258 H260 Z" fill="#2563EB"/>
+  <path d="M260,260 H740.4 Q744.4,260 744.4,264 V282 Q744.4,286 740.4,286 H260 Z" fill="#60A5FA"/>
+  <text x="490" y="251" class="rp-val">79 A</text>
+  <text x="753" y="279" class="rp-val">173 A</text>
+
+  <!-- annotation du gain -->
+  <rect x="560" y="164" width="236" height="28" rx="14" fill="#D1FAE5" stroke="#047857"/>
+  <text x="678" y="183" text-anchor="middle" font-size="14" font-weight="700" fill="#065F46">6 à 9 fois plus de marge</text>
+
+  <text x="540" y="345" text-anchor="middle" class="rp-sm">courant d'équilibrage entre les cartes (ampères)</text>
+
+  <!-- notes -->
+  <line x1="40" y1="366" x2="860" y2="366" stroke="#E2E8F0" stroke-width="1.5"/>
+  <text x="40" y="392" class="rp-txt"><tspan class="rp-b">Pourquoi « peu fréquent » :</tspan> pour circuler entre les cartes, ce courant doit trouver un chemin (amorçage, boucle).</text>
+  <text x="40" y="411" class="rp-txt">Sur le site, ce chemin n'est pas encore identifié (environ 9 ans sans incident ; aucune statistique).</text>
+  <text x="40" y="438" class="rp-txt"><tspan class="rp-b">Pourquoi « pas impossible » :</tspan> une fois ce chemin ouvert, 11 à 20 A, c'est peu à côté d'un coup de foudre,</text>
+  <text x="40" y="457" class="rp-txt">qui se compte en milliers d'ampères. Un parafoudre de type 2 de tableau est prévu pour 5 000 A (courant nominal).</text>
+  <text x="40" y="484" class="rp-txt"><tspan class="rp-b">Au-delà du seuil,</tspan> la résistance de 47 Ω limite les dégâts sans relever le seuil lui-même.</text>
+  <text x="40" y="515" class="rp-sm">Choc très raide : 4 A aujourd'hui, 26 A avec l'étoile. Plus tard, carte d'interconnexion et BA révisés : ≈ 292 à 875 A.</text>
+  <text x="40" y="536" class="rp-sm">Valeurs calculées pour la carte en bout de chaîne (SC940D), à confirmer au banc.</text>
+</svg>
