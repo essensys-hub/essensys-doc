@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 900 690" width="900" height="690" role="img" aria-labelledby="mf-title mf-desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <title id="mf-title">Qui encaisse le choc ?</title>
+  <desc id="mf-desc">Sur une ligne de données d'un boîtier auxiliaire (BA), la diode interne du microcontrôleur conduit dès environ 5,5 V, avant la diode de protection TVS qui ne conduit qu'à partir de 6,4 V. Aujourd'hui, la résistance série vaut 0 ohm : rien ne limite le courant, le microcontrôleur encaisse le choc (calculé : 1 à 2 A dans la broche, 50 à 100 fois son maximum). Avec une résistance de 47 ohms, la TVS prend l'essentiel du courant ; le microcontrôleur reçoit encore environ 20 à 140 mA : survie probable, pas garantie.</desc>
+  <defs>
+    <marker id="mf-arrow" viewBox="0 0 10 10" refX="2" refY="5" markerUnits="userSpaceOnUse" markerWidth="24" markerHeight="24" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/>
+    </marker>
+    <marker id="mf-arrow-s" viewBox="0 0 10 10" refX="3" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/>
+    </marker>
+    <!-- symbole TVS (cathode en haut) -->
+    <g id="mf-tvs">
+      <path d="M-10,22 L10,22 L0,4 Z" fill="#FDE68A" stroke="#92400E" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M-14,8 L-10,4 L10,4 L14,0" fill="none" stroke="#92400E" stroke-width="2.5"/>
+    </g>
+    <g id="mf-gnd" stroke="#334155" stroke-width="2">
+      <line x1="-12" y1="0" x2="12" y2="0"/><line x1="-7" y1="5" x2="7" y2="5"/><line x1="-3" y1="10" x2="3" y2="10"/>
+    </g>
+  </defs>
+  <style>
+    .mf-h1{font-size:26px;font-weight:700;fill:#0F172A}
+    .mf-sub{font-size:15px;fill:#475569}
+    .mf-h2{font-size:15px;font-weight:700;fill:#0F172A}
+    .mf-txt{font-size:13px;fill:#334155}
+    .mf-b{font-weight:700}
+    .mf-muted{font-size:12.5px;fill:#475569}
+    .mf-pill{font-size:11px;font-weight:700;letter-spacing:.06em}
+  </style>
+
+  <rect x="1" y="1" width="898" height="688" rx="18" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+  <text x="40" y="48" class="mf-h1">Qui encaisse le choc ?</text>
+  <text x="40" y="76" class="mf-sub">Sur une ligne de données d'un BA, la protection n'est pas la première à réagir : c'est le microcontrôleur.</text>
+
+  <!-- ================= Échelle de tension ================= -->
+  <rect x="40" y="98" width="290" height="500" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
+  <text x="56" y="124" class="mf-h2">Tension sur la ligne</text>
+  <text x="56" y="142" class="mf-muted">(échelle dilatée au-dessus de 4,5 V)</text>
+
+  <!-- y(v) = 520 - 105.7*(v-4.5) ; 5→467 ; 5.5→414 ; 6.4→319 ; 8→150 -->
+  <rect x="60" y="414" width="34" height="53" fill="#F1F5F9"/>
+  <rect x="60" y="319" width="34" height="95" fill="#FECACA"/>
+  <rect x="60" y="170" width="34" height="149" fill="#FDE68A"/>
+  <rect x="60" y="467" width="34" height="63" fill="#BBF7D0"/>
+  <rect x="60" y="170" width="34" height="360" fill="none" stroke="#64748B" stroke-width="1.5"/>
+  <!-- coupure d'axe -->
+  <path d="M54,500 l10,-6 l10,6 l10,-6 l10,6 l10,-6" fill="none" stroke="#64748B" stroke-width="1.5"/>
+  <!-- flèche « la surtension monte » -->
+  <line x1="77" y1="170" x2="77" y2="156" stroke="#DC2626" stroke-width="3" marker-end="url(#mf-arrow-s)"/>
+  <text x="104" y="166" class="mf-txt" fill="#B91C1C"><tspan class="mf-b" fill="#B91C1C">↑ la surtension monte</tspan></text>
+
+  <!-- graduations -->
+  <g stroke="#334155" stroke-width="2">
+    <line x1="56" y1="467" x2="98" y2="467"/>
+    <line x1="56" y1="414" x2="98" y2="414"/>
+    <line x1="56" y1="319" x2="98" y2="319"/>
+  </g>
+
+  <text x="104" y="214" class="mf-txt mf-b">Au-dessus de 6,4 V,</text>
+  <text x="104" y="230" class="mf-txt">les deux conduisent :</text>
+  <text x="104" y="246" class="mf-txt">c'est R1 qui décide</text>
+  <text x="104" y="262" class="mf-txt">qui prend le courant.</text>
+  <text x="104" y="315" class="mf-txt"><tspan class="mf-b" fill="#92400E">6,4 V : la TVS</tspan></text>
+  <text x="104" y="331" class="mf-txt">(diode de protection)</text>
+  <text x="104" y="347" class="mf-txt">commence seulement</text>
+  <text x="104" y="363" class="mf-txt">à conduire</text>
+
+  <text x="104" y="410" class="mf-txt"><tspan class="mf-b" fill="#B91C1C">≈ 5,5 V : la diode interne</tspan></text>
+  <text x="104" y="426" class="mf-txt">du microcontrôleur conduit</text>
+  <text x="104" y="442" class="mf-txt">déjà : elle passe en premier</text>
+
+  <text x="104" y="472" class="mf-txt"><tspan class="mf-b" fill="#047857">5 V</tspan></text>
+  <text x="104" y="508" class="mf-txt">0 à 5 V : fonctionnement</text>
+  <text x="104" y="524" class="mf-txt">normal du bus</text>
+  <text x="56" y="560" class="mf-muted">Seuils tirés des fiches techniques</text>
+  <text x="56" y="577" class="mf-muted">des composants.</text>
+
+  <!-- ================= Panneau A : aujourd'hui ================= -->
+  <g transform="translate(350,98)">
+    <rect x="0" y="0" width="510" height="236" rx="12" fill="#FFFFFF" stroke="#FCA5A5" stroke-width="2"/>
+    <text x="16" y="27" class="mf-h2">Aujourd'hui : R1 = 0 Ω, rien ne limite le courant</text>
+    <rect x="410" y="13" width="84" height="20" rx="10" fill="#D1FAE5" stroke="#047857"/>
+    <text x="452" y="27" text-anchor="middle" class="mf-pill" fill="#047857">CONSTATÉ</text>
+
+    <!-- câblage -->
+    <text x="16" y="62" class="mf-muted">depuis le câble</text>
+    <line x1="16" y1="80" x2="300" y2="80" stroke="#334155" stroke-width="2.5"/>
+    <circle cx="100" cy="80" r="4" fill="#334155"/>
+    <line x1="100" y1="80" x2="100" y2="104" stroke="#334155" stroke-width="2.5"/>
+    <use xlink:href="#mf-tvs" transform="translate(100,104)"/>
+    <line x1="100" y1="126" x2="100" y2="140" stroke="#334155" stroke-width="2.5"/>
+    <use xlink:href="#mf-gnd" transform="translate(100,140)"/>
+    <text x="120" y="122" class="mf-txt mf-b">TVS</text>
+    <text x="120" y="138" class="mf-muted">6,4 V</text>
+    <!-- R1 = 0 Ω : un simple pont -->
+    <rect x="160" y="68" width="80" height="24" rx="4" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="200" y="60" text-anchor="middle" class="mf-txt mf-b">R1 = 0 Ω</text>
+    <text x="200" y="110" text-anchor="middle" class="mf-muted">simple pont</text>
+
+    <!-- microcontrôleur -->
+    <rect x="300" y="44" width="194" height="118" rx="10" fill="#EEF2FF" stroke="#4338CA" stroke-width="2"/>
+    <line x1="318" y1="56" x2="480" y2="56" stroke="#4338CA" stroke-width="2"/>
+    <text x="476" y="72" text-anchor="end" class="mf-muted">+5 V</text>
+    <line x1="300" y1="80" x2="330" y2="80" stroke="#334155" stroke-width="2.5"/>
+    <line x1="330" y1="80" x2="330" y2="78" stroke="#334155" stroke-width="2"/>
+    <path d="M321,80 L339,80 L330,63 Z" fill="#FECACA" stroke="#B91C1C" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="320" y1="62" x2="340" y2="62" stroke="#B91C1C" stroke-width="2.5"/>
+    <line x1="330" y1="62" x2="330" y2="56" stroke="#B91C1C" stroke-width="2"/>
+    <text x="348" y="86" class="mf-txt mf-b" fill="#B91C1C">diode interne</text>
+    <text x="348" y="102" class="mf-muted">conduit dès ≈ 5,5 V</text>
+    <text x="316" y="134" class="mf-txt mf-b">microcontrôleur du BA</text>
+    <text x="316" y="151" class="mf-muted">PIC16F946 · max 20 mA</text>
+
+    <!-- courants -->
+    <line x1="118" y1="80" x2="272" y2="80" stroke="#DC2626" stroke-width="11" stroke-opacity="0.85" marker-end="url(#mf-arrow)"/>
+    <line x1="82" y1="92" x2="82" y2="128" stroke="#DC2626" stroke-width="4" stroke-opacity="0.85" marker-end="url(#mf-arrow-s)"/>
+
+    <!-- verdict -->
+    <text x="16" y="182" class="mf-txt">Le courant file vers la broche : jusqu'à <tspan class="mf-b">1 à 2 A</tspan>, soit 50 à 100 fois</text>
+    <text x="16" y="199" class="mf-txt">son maximum de 20 mA.</text>
+    <rect x="16" y="208" width="78" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+    <text x="55" y="222" text-anchor="middle" class="mf-pill" fill="#1D4ED8">CALCULÉ</text>
+    <rect x="270" y="205" width="224" height="26" rx="13" fill="#DC2626"/>
+    <text x="382" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">le microcontrôleur encaisse</text>
+  </g>
+
+  <!-- ================= Panneau B : 47 Ω ================= -->
+  <g transform="translate(350,348)">
+    <rect x="0" y="0" width="510" height="236" rx="12" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="2"/>
+    <text x="16" y="27" class="mf-h2">Correctif court terme : R1 = 47 Ω, un frein</text>
+
+    <text x="16" y="62" class="mf-muted">depuis le câble</text>
+    <line x1="16" y1="80" x2="300" y2="80" stroke="#334155" stroke-width="2.5"/>
+    <circle cx="100" cy="80" r="4" fill="#334155"/>
+    <line x1="100" y1="80" x2="100" y2="104" stroke="#334155" stroke-width="2.5"/>
+    <use xlink:href="#mf-tvs" transform="translate(100,104)"/>
+    <line x1="100" y1="126" x2="100" y2="140" stroke="#334155" stroke-width="2.5"/>
+    <use xlink:href="#mf-gnd" transform="translate(100,140)"/>
+    <text x="120" y="122" class="mf-txt mf-b">TVS</text>
+    <text x="120" y="138" class="mf-muted">6,4 V</text>
+    <!-- R1 = 47 Ω -->
+    <rect x="160" y="68" width="80" height="24" rx="4" fill="#FEF3C7" stroke="#B45309" stroke-width="2"/>
+    <text x="200" y="85" text-anchor="middle" class="mf-txt mf-b" fill="#92400E">47 Ω</text>
+    <text x="200" y="60" text-anchor="middle" class="mf-txt mf-b">R1 = 47 Ω</text>
+    <text x="200" y="110" text-anchor="middle" class="mf-muted">limite le courant</text>
+
+    <rect x="300" y="44" width="194" height="118" rx="10" fill="#EEF2FF" stroke="#4338CA" stroke-width="2"/>
+    <line x1="318" y1="56" x2="480" y2="56" stroke="#4338CA" stroke-width="2"/>
+    <text x="476" y="72" text-anchor="end" class="mf-muted">+5 V</text>
+    <line x1="300" y1="80" x2="330" y2="80" stroke="#334155" stroke-width="2.5"/>
+    <path d="M321,80 L339,80 L330,63 Z" fill="#FECACA" stroke="#B91C1C" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="320" y1="62" x2="340" y2="62" stroke="#B91C1C" stroke-width="2.5"/>
+    <line x1="330" y1="62" x2="330" y2="56" stroke="#B91C1C" stroke-width="2"/>
+    <text x="348" y="86" class="mf-txt mf-b" fill="#B91C1C">diode interne</text>
+    <text x="348" y="102" class="mf-muted">conduit dès ≈ 5,5 V</text>
+    <text x="316" y="134" class="mf-txt mf-b">microcontrôleur du BA</text>
+    <text x="316" y="151" class="mf-muted">PIC16F946 · max 20 mA</text>
+
+    <!-- courants : l'essentiel dans la TVS, un filet vers le PIC -->
+    <path d="M24,80 L80,80 L80,112" fill="none" stroke="#DC2626" stroke-width="11" stroke-opacity="0.85" stroke-linejoin="round" marker-end="url(#mf-arrow)"/>
+    <line x1="112" y1="74" x2="286" y2="74" stroke="#DC2626" stroke-width="2.5" stroke-opacity="0.9" marker-end="url(#mf-arrow-s)"/>
+
+    <text x="16" y="182" class="mf-txt">La TVS prend l'essentiel. La broche reçoit encore <tspan class="mf-b">≈ 20 à 140 mA</tspan></text>
+    <text x="16" y="199" class="mf-txt">selon le choc : souvent plus que 20 mA, mais bien moins qu'avant.</text>
+    <rect x="16" y="208" width="78" height="20" rx="10" fill="#DBEAFE" stroke="#1D4ED8"/>
+    <text x="55" y="222" text-anchor="middle" class="mf-pill" fill="#1D4ED8">CALCULÉ</text>
+    <rect x="270" y="205" width="224" height="26" rx="13" fill="#047857"/>
+    <text x="382" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">survie probable, pas garantie</text>
+  </g>
+
+  <!-- ================= Notes ================= -->
+  <text x="40" y="622" class="mf-txt"><tspan class="mf-b">Pourquoi pas plus de 47 Ω ?</tspan> Avec les tirages actuels du BP (1 kΩ), 100 Ω dégraderait le signal en temps normal.</text>
+  <text x="40" y="644" class="mf-txt"><tspan class="mf-b">Ce que 47 Ω ne fait pas :</tspan> relever le seuil (≈ 11 à 20 A d'équilibrage). Il limite les dégâts au-delà.</text>
+  <text x="40" y="666" class="mf-muted">Côté BP, même logique : la TVS laisse monter la ligne vers 9 à 10 V ; le circuit d'adaptation (PCA9306) tient 7 V.</text>
+</svg>

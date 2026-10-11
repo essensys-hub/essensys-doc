@@ -54,9 +54,9 @@ fix_ansible_doc_links() {
   python3 - "$file" << 'PY'
 import re, sys
 path = sys.argv[1]
-base = "https://github.com/essensys-hub/essensys-ansible/blob/main/docs"
+base = "https://github.com/essensys-hub/essensys-ansible/blob/V.1.3.0/docs"
 text = open(path, encoding="utf-8").read()
-pattern = r"\]\((tls-local-domain\.md|playbooks\.md|ports-reference\.md|nginx-vs-caddy\.md|roles\.md|guide-utilisateur-https-local\.md)(#[^)]*)?\)"
+pattern = r"\]\((tls-local-domain\.md|playbooks\.md|ports-reference\.md|nginx-vs-caddy\.md|roles\.md|guide-utilisateur-https-local\.md|secrets\.md)(#[^)]*)?\)"
 text = re.sub(pattern, lambda m: f"]({base}/{m.group(1)}{m.group(2) or ''})", text)
 open(path, "w", encoding="utf-8").write(text)
 PY

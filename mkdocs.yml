@@ -76,6 +76,11 @@ nav:
     - Materiel: architecture/hardware-overview.md
     - Diagrammes: architecture/diagrams.md
     - Client legacy: architecture/legacy-client.md
+  - Retours d'expérience:
+    - Présentation: retex/index.md
+    - Foudre du 9 août 2026:
+      - Synthèse: retex/foudre-2026/synthese.md
+      - Analyse experte: retex/foudre-2026/analyse-experte.md
 
 extra:
   generator: false
