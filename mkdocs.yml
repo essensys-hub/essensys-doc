@@ -65,6 +65,7 @@ nav:
     - Gateway CM5: install/gateway-cm5.md
     - HTTPS local: install/https-local.md
     - Raspberry Pi: install/raspberry-pi.md
+    - Module N2 ESP32: install/module-n2-esp32.md
   - Architecture:
     - Vue d'ensemble: architecture/overview.md
     - Table d'echange: architecture/exchange-table.md
