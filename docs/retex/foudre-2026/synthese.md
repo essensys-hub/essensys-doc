@@ -89,11 +89,11 @@ Si les historiques ont expiré, l'origine pourrait rester incertaine.
 
 - **Sécurité et diagnostic** par un électricien : une carte mal isolée n'est pas remise en service.
 - **Cartes renforcées** : résistances de 47 Ω et alimentation des BA protégée.
-- **Bus en étoile** (cartes reliées à un point central par des câbles courts, au lieu de la chaîne) : il faut 6 à 9 fois plus de courant pour atteindre les fils de données *(calculé)*.
+- **Bus en étoile** (cartes reliées à un point central par des câbles courts, au lieu de la chaîne) : il faut 4 à 6 fois plus de courant pour atteindre les fils de données *(calculé)*.
 
 <figure markdown="span">
-  ![Graphique en barres horizontales sur un axe de 0 à 200 A. « Aujourd'hui » : 11 A pour un choc raide et 20 A pour l'onde 8/20. « Avec l'étoile 0 V » : 79 A et 173 A. Une pastille verte indique « 6 à 9 fois plus de marge ». Les notes expliquent pourquoi l'événement est peu fréquent (il faut un chemin, pas encore identifié sur le site ; environ 9 ans sans incident, aucune statistique) et pourquoi il n'est pas impossible (un coup de foudre se compte en milliers d'ampères ; un parafoudre de type 2 de tableau est prévu pour 5 000 A nominaux).](schemas/rare-mais-pas-impossible.svg){ loading=lazy }
-  <figcaption>Le courant entre les cartes au-delà duquel le choc atteint les fils de données : 11 à 20 A aujourd'hui, 79 à 173 A avec le bus en étoile (« étoile 0 V » sur le schéma). Valeurs calculées, à confirmer au banc.</figcaption>
+  ![Graphique en barres horizontales sur un axe de 0 à 200 A. « Aujourd'hui » : 11 A pour un choc raide et 20 A pour l'onde 8/20. « Avec l'étoile 0 V » : 50 à 65 A et 80 à 120 A. Une pastille verte indique « 4 à 6 fois plus de marge ». Les notes expliquent pourquoi l'événement est peu fréquent (il faut un chemin, pas encore identifié sur le site ; environ 9 ans sans incident, aucune statistique) et pourquoi il n'est pas impossible (un coup de foudre se compte en milliers d'ampères ; un parafoudre de type 2 de tableau est prévu pour 5 000 A nominaux).](schemas/rare-mais-pas-impossible.svg){ loading=lazy }
+  <figcaption>Le courant entre les cartes au-delà duquel le choc atteint les fils de données : 11 à 20 A aujourd'hui, 50 à 120 A avec le bus en étoile (« étoile 0 V » sur le schéma). Valeurs calculées, à confirmer au banc.</figcaption>
 </figure>
 
 ### Long terme, pour toutes les installations { #long-terme }
