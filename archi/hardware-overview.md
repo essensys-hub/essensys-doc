@@ -67,6 +67,8 @@ graph TB
 | **Projet Altium** | SC944D.PrjPCB | SC940D.PrjPCB | SC941C.PrjPCB | SC942C.PrjPCB |
 | **Depot Git** | essensys-board-SC944D | essensys-board-SC940 | essensys-board-SC941C | essensys-board-SC942C |
 
+**Carte annexe N2 « étoile 0 V »** (retour d'expérience foudre 2026) : carte passive sur rail DIN qui relie le BP (J31) à chaque BA (J1 et J2) en étoile autour d'un plan 0 V, avec cavalier, PTC et TVS par port. Dépôt : [essensys-i2c-etoile-0v](https://github.com/essensys-hub/essensys-i2c-etoile-0v).
+
 ## 3. Bus I2C Inter-cartes
 
 Le BP (SC944D) est maitre I2C a 50 kHz. Les 3 BA sont esclaves.
