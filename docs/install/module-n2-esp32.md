@@ -29,24 +29,12 @@ Contexte : [retour d'expérience foudre 2026](../retex/foudre-2026/synthese.md).
 
 ## Principe
 
-```mermaid
-flowchart LR
-  BP[BP SC944D<br/>J31] --- N2
-  subgraph N2 [Carte N2]
-    direction TB
-    ZB[Zone bus<br/>étoile 0 V, cavaliers,<br/>PTC + TVS par port]
-    ISO[Isolateur ISO7720<br/>bus → module uniquement]
-    ZM[Zone module<br/>ESP32-C3, RTC, ADC,<br/>batterie, sirène]
-    ZB -->|SDA, SCL| ISO --> ZM
-    ZB -->|mesures +15 V, écart 0 V| ZM
-  end
-  N2 --- BA1[BA1]
-  N2 --- BA2[BA2]
-  N2 --- BA3[BA3]
-  ZM -->|MQTT TLS, Wi-Fi| BROKER[(Broker MQTT)]
-  Z[4 boucles d'alarme<br/>clé d'armement] --> ZM
-  ZM --> S[Sirène 12 V]
-```
+<iframe src="../archify/module-n2-esp32.html?embed=1&amp;theme=light" title="Schéma d'architecture interactif : le module N2, son écoute du bus, ses mesures, son alimentation et ses sorties" loading="lazy" style="width:100%;aspect-ratio:1389/820;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/module-n2-esp32.html){ target="_blank" rel="noopener" }. Le BP et les trois BA rejoignent la zone bus en étoile. Le module ne reçoit du bus que l'écoute (à travers l'isolateur), les mesures et son alimentation protégée ; la batterie prend le relais sans coupure.
+
+??? info "Image fixe du diagramme"
+    ![Capture du schéma d'architecture : le BP SC944D au-dessus de la zone bus en étoile 0 V, reliée à BA1, BA2 et BA3 par trois ports. Dans le cadre « Carte N2 rév. B : 0 V TBTS jamais relié au PE », la zone bus alimente trois blocs : l'isolateur ISO7720 à sens unique (SDA, SCL), les mesures et le latch (+15 V amont et aval des PTC, écart de 0 V) et l'alimentation propre (PTC 0,2 A, anti-retour, TVS). Ces trois blocs et la batterie LiFePO4, en tirets pour le secours sans coupure, convergent vers l'ESP32-C3. À droite, les 4 boucles d'alarme entrent dans l'ESP32, qui commande la sirène 12 V et publie vers le broker MQTT en TLS.](archify/module-n2-esp32.png){ loading=lazy }
 
 **Pourquoi il ne peut pas perturber le bus.** L'écoute passe par un isolateur numérique dont les deux canaux vont
 dans le sens bus → module : côté bus, il n'existe que des entrées. Aucune configuration logicielle ne peut tirer
