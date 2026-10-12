@@ -37,7 +37,7 @@ graph TB
     subgraph Alimentation
         VIN["15V depuis BP"]
         LMR["LMR12010<br/>Step-Down"]
-        VCC["VCC 3.3V"]
+        VCC["VCC 5 V"]
     end
 
     subgraph Coeur
@@ -48,8 +48,8 @@ graph TB
 
     subgraph Communication
         I2C["I2C Esclave<br/>Addr 0x12"]
-        IDC["IDC 26 broches<br/>vers BP"]
-        MN["Micro Mate-n-Lok<br/>Alimentation"]
+        IDC["J1 / J2 Micro Mate-n-Lok 2x2<br/>bus I2C + 15 V vers BP"]
+        MN["J3 IDC 26 broches<br/>entrées TOR"]
     end
 
     subgraph Sorties
@@ -65,7 +65,8 @@ graph TB
     MCU --- Q
     RST --> MCU
     MCU --- I2C --- IDC
-    MN --> VIN
+    IDC --> VIN
+    MN --> MCU
 
     MCU --> DRV --> MOSFET
     MOSFET --> REL_M
@@ -134,13 +135,17 @@ Le SC942C possede le plus grand nombre de variateurs du systeme (4 sur 8 total),
 
 ## 6. Connectique
 
+!!! note "Corrections 2026-10 (BOM DM et schéma)"
+    La logique du BA est en **5 V** (LMR12010 → +5 V, PIC16F946 alimenté en 5 V), et non en 3,3 V. Le bus I2C arrive par **J1/J2** (Micro Mate-n-Lok 2×2) ; **J3** (IDC 26) porte les entrées TOR. La self de mode commun **L3 n'est pas montée**. Voir le [retour d'expérience foudre 2026](../retex/foudre-2026/analyse-experte.md).
+
+
 | Type | Pas | Quantite | Fonction |
 |------|-----|----------|----------|
 | Bornier FFKDSA1/V2 | 7.62 mm | 22 | Raccordement puissance |
 | Bornier FFKDS/V2 | 5.08 mm | 18 | Raccordement signal |
 | Bornier FFKDSA/V2 | 7.62 mm | 7 | Raccordement puissance |
-| IDC 26 broches | 2.54 mm | 1 | Bus I2C + alim vers BP |
-| Micro Mate-n-Lok 2x2 | 3 mm | 2 | Alimentation DC |
+| IDC 26 broches | 2.54 mm | 1 | **J3** : entrées TOR (nappe vers les boutons muraux), pas le bus |
+| Micro Mate-n-Lok 2x2 | 3 mm | 2 | **J1, J2** (câblés en parallèle) : bus I2C + alimentation 15 V vers le BP et chaînage (1 SDA, 2 SCL, 3 GNDBUS, 4 +VBUS) |
 
 ## 7. BOM Complet
 
@@ -161,7 +166,7 @@ Le SC942C est la seule carte BA disposant d'un fichier BOM CSV complet dans le d
 |-----------|---------------------|----------|
 | Condensateurs ceramiques | 100 nF X7R 0805 (x33), 10 uF X5R (x3), 18 pF NPO (x2), 10 nF (x1), 220 pF (x1) | 40 |
 | Resistances | 10K (x34), 22K (x21), 6.8K (x21), 1K (x2), 0R (x3), 9.1K (x1), 47K (x1) | 83 |
-| Selfs/Ferrites | 10 uH (x1), ferrite 1206 (x1), filtre double 2x1000 uH (x1) | 3 |
+| Selfs/Ferrites | 10 uH (x1), ferrite 1206 (x1), filtre double 2x1000 uH (L3, **non montée** depuis la modification DM de 2017 : R79/R80 0 Ω à la place) | 2 montés |
 
 ### 7.3 Relais et Supports
 
