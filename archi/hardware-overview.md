@@ -136,11 +136,16 @@ Les modules variateurs SC943-0C sont des cartes filles presentes sur chaque BA :
 
 Total systeme : **8 variateurs** pour le controle d'eclairage par gradation.
 
-## 5. Connecteur Inter-cartes IDC 26 Broches
+## 5. Connecteurs inter-cartes (J31 / J1-J2)
 
-Chaque BA dispose d'un connecteur IDC 26 broches (Wurth 61202621621, pas 2.54 mm) pour la liaison avec le BP via le bus I2C et l'alimentation.
+La liaison BP ↔ BA (I2C + alimentation +15 V) ne passe **pas** par un connecteur IDC 26 broches, mais par des embases **Micro Mate-n-Lok 2×2** (Würth 66200421122, pas 3 mm) :
 
-Le BP dispose egalement de ce connecteur (J3) pour la programmation/debug et la liaison vers le bus BA.
+| Carte | Connecteur bus | Brochage |
+|-------|----------------|----------|
+| SC944D (BP) | **J31** (page « Liaison Boîtiers Auxiliaires », p. 7 du PDF de schéma) | 1 = SDA, 2 = SCL, 3 = GND, 4 = BA_ALIM (+15 V) |
+| SC940D, SC941C, SC942C (BA) | **J1 et J2**, câblés en parallèle (chaînage) | 1 = SDA, 2 = SCL, 3 = GNDBUS, 4 = +VBUS |
+
+Le connecteur IDC 26 broches (Würth 61202621621) existe sur chaque carte sous le repère **J3**, mais il porte les **entrées/sorties TBT terrain** (entrées TOR des BA ; détecteurs, sirènes, sondes du BP), pas le bus BA.
 
 ## 6. Protection et Securite Electrique
 
@@ -149,6 +154,7 @@ Toutes les cartes integrent des protections :
 | Type | Composant | Carte(s) |
 |------|-----------|----------|
 | TVS 5V (200 W) | SMF5V0A-GS08 | SC940D, SC941C, SC942C |
+| TVS 5V (200 W) | SMF5V0A-GS08 (D33/D34, lignes I2C) | SC944D |
 | TVS 16V (400 W) | SMAJ16A | SC944D |
 | Varistance 275 Vac | VDR 820572711 | SC940D, SC941C, SC942C |
 | Varistance 300 Vac | V300LA10P | SC944D |

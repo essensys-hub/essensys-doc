@@ -42,7 +42,7 @@ Le projet contient 22 feuilles de schema Altium :
 | 14 | `SDEC944-xD_Borniers` | Borniers de raccordement terrain |
 | 15 | `SDEC944-xD_Detecteur_ouverture_maison_(signal)` | Detecteur intrusion — ouverture porte |
 | 16 | `SDEC944-xD_Detecteurs_presence_(alim+signal+ouverture)` | Detecteurs de presence (alarme) |
-| 17 | `SDEC944-xD_Liaison_Boitiers_Auxiliaires` | Bus I2C vers les 3 BA (connecteur IDC 26) |
+| 17 | `SDEC944-xD_Liaison_Boitiers_Auxiliaires` | Bus I2C vers les 3 BA par **J31** (Micro Mate-n-Lok 2×2, page 7 du PDF de schéma) |
 | 18 | `SDEC944-xD_Machines_laver_1-2_(detection_fuites)` | Sondes de fuite eau (ADC) |
 | 19 | `SDEC944-xD_Prises_de_Securite` | Coupure prise securite (relais DD4) |
 | 20 | `SDEC944-xD_Reserves_(ETOR)` | Entrees de reserve (extensions futures) |
@@ -261,11 +261,20 @@ graph TB
 
 ## 8. Connectique
 
+!!! note "Liaison vers les boîtiers auxiliaires (correction 2026-10)"
+    Le bus I2C et l'alimentation des BA sortent du BP par **J31** (Micro Mate-n-Lok 2×2), et non par J3.
+    Côté BP : MCF52259 (3,3 V) → translateur PCA9306 (U19) → perles L30/L32 → TVS SMF5V0A D33/D34 → J31 ; pull-ups 1 kΩ (R155/R156) vers +5VS.
+    J31-4 porte BA_ALIM (+15VSP, commuté par TE2 si le cavalier J58 est fermé). Voir le
+    [retour d'expérience foudre 2026](../retex/foudre-2026/analyse-experte.md) et la
+    [procédure de remise en service](../install/remise-en-service-surtension.md).
+
+
 | Designator | Composant | Type | Fonction |
 |------------|-----------|------|----------|
 | J1, J34-J50 | FFKDSA/V2 | Bornier a ressort 7.62 mm | Raccordement terrain (puissance) |
 | J2, J51 | FFKDSA1/V2 | Bornier a ressort 7.62 mm | Raccordement terrain |
-| J3 | 61202621621 | IDC 26 broches, 2.54 mm | Bus BA / Debug |
+| J3 | 61202621621 | IDC 26 broches, 2.54 mm | Entrées/sorties TBT terrain (IHM, détecteurs de présence, sirènes, fuites, pluie, vent, compteur gaz). **Ce n'est pas le bus BA** |
+| J31 | Würth 66200421122 | Micro Mate-n-Lok 2×2, pas 3 mm | **Liaison BA** : 1 = BA_SDA, 2 = BA_SCL, 3 = GND, 4 = BA_ALIM (+15VSP via L31, sans fusible) |
 | J32 | 74990101210 | RJ45 + transformateur | Ethernet 10/100 Base-T |
 | J33 | Barrette 2x5 | Barrette male 2.54 mm | JTAG/BDM debug |
 | J52, J53 | Wurth 4.2 mm | Connecteur 1x2 | Alimentation puissance |
@@ -285,7 +294,7 @@ graph TB
 | **Condensateurs** | 100 nF (x45), 10 uF (x7), 22 uF (x6), 3900 uF (x3), etc. | ~105 |
 | **Resistances** | 10K (x21), 4.7K (x13), 1K (x15), 680R (x7), etc. | ~110 |
 | **Selfs/Ferrites** | 15 uH (x2), ferrites 0603/1206 (x11), etc. | ~17 |
-| **Diodes** | BAT54C/S (x10), TVS SMAJ16A (x2), Schottky PMEG4050EP (x6), etc. | ~25 |
+| **Diodes** | BAT54C/S (x10), TVS SMAJ16A (x11), TVS SMF5V0A (x2, D33/D34 du bus BA), Schottky PMEG4050EP (x6), etc. | ~25 |
 | **Connecteurs** | Borniers 7.62 mm (x20), RJ45, IDC 26, Wurth 4.2 mm | ~25 |
 | **Fusibles** | UMT250 (x2), Polyswitch (x2), MF-RX012 (x4) | 8 |
 | **Protection** | Varistance V300LA10P, condensateur X2 | 2 |
