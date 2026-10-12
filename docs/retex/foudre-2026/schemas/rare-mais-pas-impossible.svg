@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" role="img" aria-labelledby="rp-title rp-desc" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
   <title id="rp-title">Peu fréquent, mais pas impossible</title>
-  <desc id="rp-desc">Courant d'équilibrage, calculé, à partir duquel le choc passe aussi par les fils de données entre le SC940D et le BP. Aujourd'hui : environ 11 A pour un choc raide (front rapide) et 20 A pour l'onde normalisée 8/20. Avec l'étoile 0 V : environ 79 A et 173 A, soit 6 à 9 fois plus. Pour un choc très raide : 4 A aujourd'hui, 26 A avec l'étoile. Plus tard, avec une carte d'interconnexion et des BA révisés : environ 292 à 875 A.</desc>
+  <desc id="rp-desc">Courant d'équilibrage, calculé, à partir duquel le choc passe aussi par les fils de données entre le SC940D et le BP. Aujourd'hui : environ 11 A pour un choc raide (front rapide) et 20 A pour l'onde normalisée 8/20. Avec l'étoile 0 V : environ 50 à 65 A et 80 à 120 A, soit 4 à 6 fois plus (modèle corrigé, à confirmer au banc). Pour un choc très raide : 4 A aujourd'hui, moins de 26 A avec l'étoile. Plus tard, avec une carte d'interconnexion et des BA révisés : environ 292 à 875 A.</desc>
   <style>
     .rp-h1{font-size:26px;font-weight:700;fill:#0F172A}
     .rp-sub{font-size:15px;fill:#475569}
@@ -52,14 +52,14 @@
   <!-- groupe 2 : étoile 0 V -->
   <text x="40" y="256" class="rp-grp">Avec l'étoile 0 V</text>
   <text x="40" y="275" class="rp-sm">correctif court terme (N2)</text>
-  <path d="M260,232 H477.2 Q481.2,232 481.2,236 V254 Q481.2,258 477.2,258 H260 Z" fill="#2563EB"/>
-  <path d="M260,260 H740.4 Q744.4,260 744.4,264 V282 Q744.4,286 740.4,286 H260 Z" fill="#60A5FA"/>
-  <text x="490" y="251" class="rp-val">79 A</text>
-  <text x="753" y="279" class="rp-val">173 A</text>
+  <path d="M260,232 H417 Q421,232 421,236 V254 Q421,258 417,258 H260 Z" fill="#2563EB"/>
+  <path d="M260,260 H536 Q540,260 540,264 V282 Q540,286 536,286 H260 Z" fill="#60A5FA"/>
+  <text x="430" y="251" class="rp-val">50 à 65 A</text>
+  <text x="549" y="279" class="rp-val">80 à 120 A</text>
 
   <!-- annotation du gain -->
   <rect x="560" y="164" width="236" height="28" rx="14" fill="#D1FAE5" stroke="#047857"/>
-  <text x="678" y="183" text-anchor="middle" font-size="14" font-weight="700" fill="#065F46">6 à 9 fois plus de marge</text>
+  <text x="678" y="183" text-anchor="middle" font-size="14" font-weight="700" fill="#065F46">4 à 6 fois plus de marge</text>
 
   <text x="540" y="345" text-anchor="middle" class="rp-sm">courant d'équilibrage entre les cartes (ampères)</text>
 

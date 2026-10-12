@@ -362,10 +362,10 @@
    <g>
     <rect fill="#ffe9c8" height="611.111" stroke="#fabc4f" stroke-width="77.7778" width="2366.67" x="38.8889" y="38.8889"/>
     <g fill="#000000" font-family="'Droid Sans', 'Noto Sans', 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif" font-size="92.7083" stroke="none" text-anchor="left">
-     <text fill="#000000" x="122.222" y="214.931">Seuil d&#x2019;&#xe9;quilibrage estim&#xe9; : &#x2248; 173 A (onde 8/20) et </text>
+     <text fill="#000000" x="122.222" y="214.931">Seuil d&#x2019;&#xe9;quilibrage estim&#xe9; : &#x2248; 80 &#xe0; 120 A (onde 8/20) et </text>
     </g>
     <g fill="#000000" font-family="'Droid Sans', 'Noto Sans', 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif" font-size="92.7083" stroke="none" text-anchor="left">
-     <text fill="#000000" x="122.222" y="337.153">79 A (front rapide), contre 20 et 11 A aujourd&#x2019;hui </text>
+     <text fill="#000000" x="122.222" y="337.153">50 &#xe0; 65 A (front rapide), contre 20 et 11 A aujourd&#x2019;hui </text>
     </g>
     <g fill="#000000" font-family="'Droid Sans', 'Noto Sans', 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif" font-size="92.7083" stroke="none" text-anchor="left">
      <text fill="#000000" x="122.222" y="459.375">[d&#xe9;duit, &#xe0; valider au banc].</text>
