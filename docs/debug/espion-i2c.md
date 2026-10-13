@@ -24,14 +24,14 @@ Sources, schémas et décodeur : dépôt [essensys-i2c-ba-sniffer](https://githu
 
 ## Principe
 
-<iframe src="../archify/espion-i2c.html?embed=1&amp;theme=light" title="Schéma d'architecture interactif : l'armoire, la sonde passive, l'analyseur, sigrok, le décodeur et la corrélation avec les journaux de la gateway" loading="lazy" style="width:100%;aspect-ratio:2048/1320;height:auto;border:0"></iframe>
+<iframe src="../archify/espion-i2c.html?embed=1&amp;theme=light" title="Schéma d'architecture interactif : l'armoire, la gateway CM5, la sonde passive, l'hôte de capture sur batterie et la corrélation" loading="lazy" style="width:100%;aspect-ratio:2000/1205;height:auto;border:0"></iframe>
 
 [Ouvrir le diagramme en plein écran](archify/espion-i2c.html){ target="_blank" rel="noopener" }.
 
 ??? info "Image fixe du diagramme"
-    ![Capture du schéma d'architecture. Dans le cadre « Armoire, 0 V TBTS jamais relié au PE », le BP SC944D envoie trames et réponses sur le bus I2C 50 kHz, relié aux BA 0x11 (ACK), 0x12 et 0x13 (NACK ?). Du bus part une liaison « écoute seule, 3 fils » vers la sonde passive, reliée à l'analyseur FX2. Dans le cadre « Hôte sur batterie, Wi-Fi seulement », l'analyseur envoie son flux brut à sigrok-cli et au décodeur essensys-i2c-sniff ; sigrok transmet ses annotations au décodeur, qui produit la capture. En bas, la gateway CM5 produit les journaux du backend ; leur export et la capture alimentent le rapport de corrélation.](archify/espion-i2c.png){ loading=lazy }
+    ![Schéma d'architecture. Dans le cadre « Armoire, 0 V TBTS jamais relié au PE » : le BP SC944D envoie une trame puis lit la réponse du BA sur le bus I2C 50 kHz, relié aux BA 0x11, 0x12 et 0x13. En bas à gauche, dans le cadre « Réseau local, relié au PE » : la gateway CM5 envoie les actions au BP en HTTP (/api/done part avant l'I2C) et produit les journaux du backend. Du bus part une liaison en lecture seule (SDA, SCL et 0 V) vers la sonde passive. Dans le cadre « Hôte sur batterie, même 0 V que l'armoire dès que la sonde est branchée, aucun lien vers le PE » : sonde, analyseur FX2 (USB), sigrok-cli d'acquisition, décodeur essensys-i2c-sniff, sigrok-cli décodeur I2C (oracle) et capture. Le rapport de corrélation rapproche la capture et les journaux, copiés par Wi-Fi.](archify/espion-i2c.png){ loading=lazy }
 
-1. **La sonde** (3 fils : SDA, SCL, 0 V) relève les signaux du bus à travers des résistances et un tampon. Elle ne peut rien y injecter.
+1. **La sonde** (3 fils : SDA, SCL, 0 V) relève les signaux du bus à travers des résistances et un tampon. Elle ne peut rien y injecter, mais elle **relie le 0 V de l'hôte à celui de l'armoire** : c'est pourquoi l'hôte doit rester sur batterie, sans aucun lien vers le PE.
 2. **L'analyseur logique** échantillonne SDA et SCL à 1 MHz au moins, soit 20 fois le débit du bus.
 3. **sigrok** décode le protocole I2C : adresses, octets, ACK et NACK. Le décodeur Python lit le même flux pour repérer les lignes bloquées.
 4. **Le décodeur Essensys** reconstitue chaque échange : code de trame, longueur, CRC-16, réponse du BA, lampes, volets et variateurs visés.
@@ -41,7 +41,7 @@ Sources, schémas et décodeur : dépôt [essensys-i2c-ba-sniffer](https://githu
 
 | Élément | Remarque |
 |---|---|
-| Analyseur logique USB 8 voies à puce Cypress FX2 (CY7C68013A) | Clone « 24 MHz 8CH » pris en charge par le pilote sigrok `fx2lafw` |
+| Analyseur logique USB 8 voies à puce Cypress FX2 (CY7C68013A) | Clone « 24 MHz 8CH » pris en charge par le pilote sigrok `fx2lafw`. La première voie (D0) est marquée CH0 ou CH1 selon le modèle |
 | Raspberry Pi (3 ou plus récent) | Raspberry Pi OS. Ou un portable, à condition qu'il soit **sur batterie** |
 | Batterie USB | Pour alimenter le Pi pendant la capture |
 | Sonde passive à fabriquer | Voir ci-dessous : moins de 10 € de composants |
@@ -59,7 +59,7 @@ Sources, schémas et décodeur : dépôt [essensys-i2c-ba-sniffer](https://githu
 
 La sonde tient sur une petite **plaque à pastilles**. Le tampon U1 (boîtier SC-70) et la protection D1 (SOT-23) se soudent sur des adaptateurs vers DIP et SIP.
 
-![Schéma KiCad de la sonde : J1 vers le BA (contacts 1 SDA, 2 SCL, 3 0 V, position 4 vide), R1 et R2 de 1 kΩ en série, R3 et R4 de 1 MΩ vers le 0 V, protection D1 SP0502BAHT, tampon U1 74LVC2G17 alimenté en 3,3 V et découplé par C1, sorties SCL_OUT et SDA_OUT vers J2 et l'analyseur.](img/sonde-schema-kicad.png){ loading=lazy }
+![Schéma KiCad de la sonde, de gauche à droite. Côté bus, J1 (BA J1/J2) : contact 2 SCL vers R2 (1 kΩ), contact 1 SDA vers R1 (1 kΩ), contact 3 au 0 V, contact 4 non raccordé. Après les résistances, R4 et R3 (1 MΩ) rappellent SCL et SDA au 0 V, D1 SP0502BAHT protège les deux lignes, puis U1A et U1B (74LVC2G17) recopient SCL et SDA vers J2. J2 : 1 +3,3 V, 2 SCL, 3 SDA, 4 0 V. U1 est alimenté en +3,3 V et découplé par C1 (100 nF).](img/sonde-schema-kicad.png){ loading=lazy }
 
 | Repère | Valeur | Rôle |
 |---|---|---|
@@ -69,11 +69,17 @@ La sonde tient sur une petite **plaque à pastilles**. Le tampon U1 (boîtier SC
 | D1 | SP0502BAHT | Protection contre les décharges électrostatiques, 5,5 V |
 | U1 | 74LVC2G17 | Tampon : accepte 5,5 V en entrée sous 3,3 V d'alimentation |
 | C1 | 100 nF | Découplage de U1 |
-| J2 | Barrette 1×4 | 1 GND, 2 voie D0 (SCL), 3 voie D1 (SDA), 4 +3,3 V |
+| J2 | Barrette 1×4 | 1 +3,3 V, 2 SCL vers D0, 3 SDA vers D1, 4 0 V |
 
-Le +3,3 V de U1 vient de l'analyseur s'il le fournit, sinon de la broche 1 du connecteur GPIO du Raspberry Pi. La sonde ne prend **ni pull-up ni alimentation** sur le bus.
+Le +3,3 V de U1 (J2-1) vient de la broche 1 du connecteur GPIO du Raspberry Pi, ou de l'analyseur s'il le fournit. Le 0 V (J2-4) va à la masse de l'analyseur **et** à la broche 9 (GND) du GPIO ; le câble USB relie aussi ces masses. La sonde ne prend **ni pull-up ni alimentation** sur le bus.
 
-![Câblage Fritzing : connecteur du BA à gauche, puis les résistances, D1, U1 et C1 sur la plaque, la barrette J2, l'analyseur FX2 (CH0 = SCL, CH1 = SDA, GND) et le Raspberry Pi sur batterie, dont la broche 1 fournit le 3,3 V. Les notes rappellent que la position 4 (+15 V) reste vide et que le Pi doit être sur batterie, en Wi-Fi seulement.](img/sonde-cablage-fritzing.png){ loading=lazy }
+**Plan d'implantation** (vue de dessus, pas de 2,54 mm). Les points noirs sont des jonctions soudées. Les deux croisements sans point (0 V sur SDA, +3,3 V sur SCL) sont des fils isolés, sans contact.
+
+![Plan d'implantation Fritzing sur plaque à pastilles. À gauche, le boîtier J1 vu de face : contacts 1, 2 et 3, position 4 barrée en rouge (+15 V, contact vide). Le fil SCL (jaune) arrive sur R2, le fil SDA (bleu) sur R1, le 0 V (noir) sur un bus en anneau qui fait le tour de la plaque. R4 et R3 (1 MΩ) relient SCL et SDA au bus. D1 SP0502BAHT, sur adaptateur SIP3, est relié à SDA, SCL et au 0 V. U1 74LVC2G17, sur adaptateur DIP6, reçoit SCL (broche 1) et SDA (broche 3) et sort vers J2 (broches 6 et 4). Sa broche 5 reçoit le +3,3 V (rouge) de J2-1, découplé par C1. Une légende explique les couleurs, les jonctions et les croisements.](img/sonde-implantation-fritzing.png){ loading=lazy }
+
+**Montage d'ensemble.**
+
+![Montage d'ensemble Fritzing. Dans le cadre « Armoire (TBTS) » : le BA en bout de chaîne avec le câble WR-MPC3 enfiché (contacts 1-2-3, position 4 barrée). Dans le cadre « Hôte de capture, il partage le 0 V de l'armoire dès que la sonde est branchée, isolé du PE » : la sonde, reliée à l'analyseur FX2 (SCL vers CH0, SDA vers CH1, 0 V vers GND), au GPIO du Raspberry Pi (+3,3 V sur la broche 1, 0 V sur la broche 9), le câble USB de l'analyseur vers le Pi, la batterie USB branchée sur la prise d'alimentation du Pi, et le port Ethernet barré « pas d'Ethernet ».](img/sonde-ensemble-fritzing.png){ loading=lazy }
 
 **Contrôles avant la première utilisation :**
 
@@ -101,7 +107,7 @@ essensys-i2c-sniff --version
 
 ## Mode opératoire
 
-1. **Préparer l'hôte.** Pi sur batterie, Wi-Fi connecté, aucun câble Ethernet ni chargeur. Analyseur en USB sur le Pi, sonde reliée à l'analyseur (D0 = SCL, D1 = SDA, GND).
+1. **Préparer l'hôte.** Pi sur batterie, Wi-Fi connecté, aucun câble Ethernet ni chargeur. Analyseur en USB sur le Pi. Sonde reliée à l'analyseur (J2-2 → D0, J2-3 → D1, J2-4 → GND) et au GPIO du Pi (J2-1 → broche 1, J2-4 → broche 9).
 2. **Raccorder la sonde, armoire hors tension** (personne habilitée). Brancher J1 de la sonde sur le connecteur **libre** du BA en bout de chaîne. Remettre sous tension.
 3. **Lancer la capture**, en gardant aussi le flux brut pour pouvoir le rejouer :
 

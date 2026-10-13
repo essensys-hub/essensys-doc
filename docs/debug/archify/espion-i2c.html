@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-preset="classic">
+<html lang="fr" data-theme="dark" data-preset="classic">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="archify 3.0.1">
   <meta name="archify-reader-contract" content="declared-wide-v1">
-  <title>Espion I2C passif : chaîne de debug du bus BP / BA Diagram</title>
+  <title>Diagramme Espion I2C passif : chaîne de debug du bus BP / BA</title>
   <script>
     // Resolve the theme before first paint so light-preference users don't
     // see a dark flash. The toolbar script below re-applies with UI state.
@@ -4873,19 +4873,19 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   <!-- Toolbar: theme, live visual style, trace motion, presentation stage, and export.
        Motion appears only for trace-enabled artifacts and has no shortcut;
        Keyboard: T toggles theme, S cycles style, F toggles the stage, E opens export. -->
-  <div class="toolbar" role="toolbar" aria-label="Diagram actions">
+  <div class="toolbar" role="toolbar" aria-label="Actions du diagramme">
     <div class="toolbar-group">
     <button id="btn-theme" type="button"
-            title="Toggle theme (T)"
-            aria-label="Toggle color theme"
+            title="Changer de thème (T)"
+            aria-label="Changer le thème de couleur"
             aria-pressed="false">
       <span id="theme-icon" class="toolbar-icon" aria-hidden="true"></span>
-      <span id="theme-label">Dark</span>
+      <span id="theme-label">Sombre</span>
     </button>
     <div class="preset-wrap">
       <button id="btn-preset" type="button"
-              title="Choose visual style (S cycles)"
-              aria-label="Choose visual style"
+              title="Choisir le style visuel (S pour changer)"
+              aria-label="Choisir le style visuel"
               aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="preset-menu"
@@ -4894,77 +4894,77 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         <span id="preset-label">Style</span>
         <span class="toolbar-icon toolbar-chevron" aria-hidden="true"></span>
       </button>
-      <div class="preset-menu" id="preset-menu" role="menu" aria-label="Visual style">
-        <div class="preset-menu-heading" role="presentation"><span>Visual identity</span><span class="preset-menu-shortcut"><kbd>S</kbd>to cycle</span></div>
+      <div class="preset-menu" id="preset-menu" role="menu" aria-label="Style visuel">
+        <div class="preset-menu-heading" role="presentation"><span>Identité visuelle</span><span class="preset-menu-shortcut"><kbd>S</kbd>S pour changer</span></div>
         <button class="preset-option" data-preset-value="classic" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch classic" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Classic</strong><small>Stable technical default</small></span>
+          <span class="preset-option-copy"><strong>Classic</strong><small>Style technique stable par défaut</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
         <button class="preset-option" data-preset-value="signal-flow" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch signal-flow" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Signal Flow</strong><small>Motion-forward presentation</small></span>
+          <span class="preset-option-copy"><strong>Flux de signal</strong><small>Présentation animée et dynamique</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
         <button class="preset-option" data-preset-value="blueprint" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch blueprint" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Blueprint</strong><small>Engineering review</small></span>
+          <span class="preset-option-copy"><strong>Plan</strong><small>Revue technique</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
         <button class="preset-option" data-preset-value="editorial" type="button" role="menuitemradio" aria-checked="false" tabindex="-1">
           <span class="preset-option-swatch editorial" aria-hidden="true"></span>
-          <span class="preset-option-copy"><strong>Editorial</strong><small>Publication and launch notes</small></span>
+          <span class="preset-option-copy"><strong>Éditorial</strong><small>Notes de publication et de lancement</small></span>
           <span class="preset-option-check" aria-hidden="true"></span>
         </button>
       </div>
     </div>
     <button id="btn-motion" type="button" hidden
-            title="Pause motion"
-            aria-label="Pause motion"
+            title="Mettre l&#39;animation en pause"
+            aria-label="Mettre l&#39;animation en pause"
             aria-pressed="true">
       <span class="motion-control-dot" aria-hidden="true"></span>
-      <span id="motion-label">Live</span>
+      <span id="motion-label">Animé</span>
     </button>
     <button id="btn-present" type="button"
-            title="Presentation stage (F)"
-            aria-label="Enter presentation stage"
+            title="Mode présentation (F)"
+            aria-label="Entrer en mode présentation"
             aria-pressed="false">
       <span id="present-icon" class="toolbar-icon" aria-hidden="true"></span>
-      <span id="present-label">Present</span>
+      <span id="present-label">Présenter</span>
     </button>
     </div>
     <div class="export-wrap">
       <button id="btn-export" type="button"
-              title="Export diagram (E)"
-              aria-label="Export diagram"
+              title="Exporter le diagramme (E)"
+              aria-label="Exporter le diagramme"
               aria-haspopup="menu"
               aria-expanded="false"
               aria-controls="export-menu">
-        Export <span class="toolbar-icon toolbar-chevron" aria-hidden="true"></span>
+        Exporter <span class="toolbar-icon toolbar-chevron" aria-hidden="true"></span>
       </button>
-      <div class="export-menu" id="export-menu" role="menu" aria-label="Export">
+      <div class="export-menu" id="export-menu" role="menu" aria-label="Exporter">
         <div class="export-menu-header" role="presentation">
-          <div><strong>Export diagram</strong><span>Portable, clean outputs</span></div>
+          <div><strong>Exporter le diagramme</strong><span>Des exports portables et soignés</span></div>
           <kbd>E</kbd>
         </div>
-        <div class="export-menu-section" role="group" aria-label="Share">
-          <span class="export-menu-heading" aria-hidden="true">Share</span>
-          <button data-action="route-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>Route Share Card</strong><small class="hint">1200&times;630 PNG</small></span></button>
-          <button data-action="reach-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>Reach Share Card</strong><small class="hint">1200&times;630 PNG</small></span></button>
-          <button data-action="copy" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>Copy diagram</strong><small class="hint">PNG to clipboard</small></span></button>
+        <div class="export-menu-section" role="group" aria-label="Partager">
+          <span class="export-menu-heading" aria-hidden="true">Partager</span>
+          <button data-action="route-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>Carte de partage d&#39;itinéraire</strong><small class="hint">1200&times;630 PNG</small></span></button>
+          <button data-action="reach-share-card" type="button" role="menuitem" tabindex="-1" hidden disabled><span class="export-item-copy"><strong>Carte de partage de portée</strong><small class="hint">1200&times;630 PNG</small></span></button>
+          <button data-action="copy" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>Copier le diagramme</strong><small class="hint">PNG vers le presse-papiers</small></span></button>
         </div>
-        <div class="export-menu-section" role="group" aria-label="Raster images">
+        <div class="export-menu-section" role="group" aria-label="Images matricielles">
           <span class="export-menu-heading" aria-hidden="true">Image</span>
-          <button data-format="png" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>PNG</strong><small class="hint">Lossless image</small></span></button>
-          <button data-format="jpeg" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>JPEG</strong><small class="hint">Compact image</small></span></button>
-          <button data-format="webp" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebP</strong><small class="hint">Modern image</small></span></button>
+          <button data-format="png" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>PNG</strong><small class="hint">Image sans perte</small></span></button>
+          <button data-format="jpeg" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>JPEG</strong><small class="hint">Image compacte</small></span></button>
+          <button data-format="webp" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebP</strong><small class="hint">Image au format moderne</small></span></button>
         </div>
-        <div class="export-menu-section" role="group" aria-label="Vector and motion">
-          <span class="export-menu-heading" aria-hidden="true">Vector &amp; motion</span>
+        <div class="export-menu-section" role="group" aria-label="Vecteur et animation">
+          <span class="export-menu-heading" aria-hidden="true">Vecteur et animation</span>
           <button data-format="svg" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>SVG · Auto</strong><small class="hint">Matches host theme</small></span></button>
           <button data-format="svg-light" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>SVG · Light</strong><small class="hint">Always light</small></span></button>
           <button data-format="svg-dark" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>SVG · Dark</strong><small class="hint">Always dark</small></span></button>
-          <button data-format="webm" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebM</strong><small class="hint">6s motion</small></span></button>
+          <button data-format="webm" type="button" role="menuitem" tabindex="-1"><span class="export-item-copy"><strong>WebM</strong><small class="hint">Animation de 6 s</small></span></button>
         </div>
       </div>
     </div>
@@ -4974,22 +4974,22 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
     <!-- Header -->
     <div class="header">
       <div class="header-row"
-           data-preset-badge-signal-flow="SIGNAL FLOW"
-           data-preset-badge-blueprint="BLUEPRINT / REV 01"
-           data-preset-badge-editorial="EDITORIAL / FIELD NOTE">
+           data-preset-badge-signal-flow="FLUX DE SIGNAL"
+           data-preset-badge-blueprint="PLAN / RÉV. 01"
+           data-preset-badge-editorial="ÉDITORIAL / NOTE DE TERRAIN">
         <div class="pulse-dot"></div>
         <h1>Espion I2C passif : chaîne de debug du bus BP / BA</h1>
       </div>
     </div>
 
 
-    <script id="archify-i18n-data" type="application/json">{"locale":"en","messages":{"viewer.kind.frontend":"Frontend","viewer.kind.backend":"Backend","viewer.kind.database":"Database","viewer.kind.cloud":"Cloud","viewer.kind.security":"Security","viewer.kind.messagebus":"Message bus","viewer.kind.external":"External","viewer.kind.neutral":"Neutral","viewer.kind.node":"Node","viewer.kind.start":"Start","viewer.kind.active":"Active","viewer.kind.waiting":"Waiting","viewer.kind.decision":"Decision","viewer.kind.success":"Success","viewer.kind.failure":"Failure","viewer.toolbar.actions":"Diagram actions","viewer.theme.toggle.title":"Toggle theme (T)","viewer.theme.toggle":"Toggle color theme","viewer.theme.dark":"Dark","viewer.theme.light":"Light","viewer.preset.choose.title":"Choose visual style (S cycles)","viewer.preset.choose":"Choose visual style","viewer.preset.style":"Style","viewer.preset.menu":"Visual style","viewer.preset.identity":"Visual identity","viewer.preset.cycles":"to cycle","viewer.preset.classic":"Classic","viewer.preset.classic.short":"Classic","viewer.preset.classic.hint":"Stable technical default","viewer.preset.flow":"Signal Flow","viewer.preset.flow.short":"Flow","viewer.preset.flow.hint":"Motion-forward presentation","viewer.preset.blueprint":"Blueprint","viewer.preset.blueprint.hint":"Engineering review","viewer.preset.editorial":"Editorial","viewer.preset.editorial.hint":"Publication and launch notes","viewer.preset.badge.signalFlow":"SIGNAL FLOW","viewer.preset.badge.blueprint":"BLUEPRINT / REV 01","viewer.preset.badge.editorial":"EDITORIAL / FIELD NOTE","viewer.preset.badge.editorialPlate":"ARCHIFY / PLATE 04","viewer.preset.current":"Visual style: {style}. Choose visual style","viewer.motion.live":"Live","viewer.motion.still":"Still","viewer.motion.pause":"Pause motion","viewer.motion.resume":"Resume motion","viewer.motion.reduced":"Motion paused by reduced-motion preference","viewer.motion.hidden":"Motion paused while this page is hidden","viewer.motion.yielding":"Pause motion; currently yielding to {owner}","viewer.motion.yielding.title":"Live preview enabled · yielding to {owner}","viewer.owner.route":"Route Probe","viewer.owner.lens":"Semantic Lens","viewer.owner.relationship":"Relationship Preview","viewer.owner.intent":"Intent Trace","viewer.owner.focus":"semantic focus","viewer.owner.legend":"legend preview","viewer.owner.reader":"reader interaction","viewer.present.enter":"Enter presentation stage","viewer.present.enter.title":"Presentation stage (F)","viewer.present.exit":"Exit presentation stage","viewer.present.exit.title":"Exit presentation stage (F or Escape)","viewer.present.present":"Present","viewer.present.exit.label":"Exit","viewer.export.button":"Export","viewer.export.button.title":"Export diagram (E)","viewer.export.diagram":"Export diagram","viewer.export.menu":"Export","viewer.export.subtitle":"Portable, clean outputs","viewer.export.share":"Share","viewer.export.shareCard":"Share Card","viewer.export.routeShareCard":"Route Share Card","viewer.export.reachShareCard":"Reach Share Card","viewer.export.copyDiagram":"Copy diagram","viewer.export.clipboardPng":"PNG to clipboard","viewer.export.raster":"Raster images","viewer.export.image":"Image","viewer.export.lossless":"Lossless image","viewer.export.compact":"Compact image","viewer.export.modern":"Modern image","viewer.export.vectorMotion":"Vector and motion","viewer.export.vectorMotion.heading":"Vector \u0026 motion","viewer.export.editable":"Editable vector","viewer.export.svg.auto":"SVG · Auto","viewer.export.svg.auto.hint":"Matches host theme","viewer.export.svg.light":"SVG · Light","viewer.export.svg.light.hint":"Always light","viewer.export.svg.dark":"SVG · Dark","viewer.export.svg.dark.hint":"Always dark","viewer.export.motion6s":"6s motion","viewer.export.unsupported":"Not supported by this browser","viewer.export.clipboardUnsupported":"Clipboard image write not supported by this browser","viewer.export.clipboardUnsupported.short":"Clipboard image write not supported in this browser.","viewer.export.motionUnavailable":"Motion capture unavailable in this browser","viewer.export.webmUnavailable":"WebM unavailable in this browser","viewer.export.failed":"Export failed: {message}","viewer.export.unknownVariant":"Unknown Share Card variant: {variant}","viewer.export.routeRequired":"Trace a route before exporting a Route Share Card","viewer.export.reachRequired":"Trace authored reach before exporting a Reach Share Card","viewer.export.unknown":"unknown","viewer.export.routeFailed":"Route Share Card export failed: {message}","viewer.export.reachFailed":"Reach Share Card export failed: {message}","viewer.export.copyFailed":"Copy failed: {message}","viewer.export.copiedPng":"Copied PNG to clipboard","viewer.export.downloadedRoute":"Downloaded Route Share Card","viewer.export.downloadedReach":"Downloaded Reach Share Card","viewer.export.downloadedWebm":"Downloaded WebM","viewer.export.recording":"Recording 6 seconds of motion…","viewer.export.card.routeSummary.one":"Path: {source} → {target} · {count} step","viewer.export.card.routeSummary.other":"Path: {source} → {target} · {count} steps","viewer.export.card.reachSummary":"Authored {direction} from {origin} · {nodes} · {links} · max {hops}","viewer.export.card.node.one":"{count} node","viewer.export.card.node.other":"{count} nodes","viewer.export.card.link.one":"{count} link","viewer.export.card.link.other":"{count} links","viewer.export.card.hop.one":"{count} hop","viewer.export.card.hop.other":"{count} hops","viewer.export.card.routeBadge":"ARCHIFY · ROUTE · {hops}","viewer.export.card.reachBadge":"ARCHIFY · {direction} REACH","viewer.export.direction.upstream":"Upstream","viewer.export.direction.downstream":"Downstream","viewer.export.error.canvasUnavailable":"Canvas unavailable for {label}","viewer.export.error.contextUnavailable":"2D canvas context unavailable for {label}","viewer.export.error.toBlobUnavailable":"canvas.toBlob unavailable for {label}","viewer.export.error.toBlobNull":"canvas.toBlob returned no data for {label}","viewer.export.error.variantsCombined":"Share Card variants cannot be combined","viewer.export.error.viewerState":"Share Card export could not remove temporary viewer state","viewer.export.error.routeState":"Route Card export could not preserve the resolved route safely","viewer.export.error.reachState":"Reach Card export could not preserve authored reach safely","viewer.export.error.webmRequirements":"WebM motion export requires a trace animation and browser MediaRecorder support","viewer.export.error.mediaRecorder":"MediaRecorder failed","viewer.export.error.emptyWebm":"MediaRecorder produced an empty WebM","viewer.export.error.webmBackground":"SVG background could not be loaded for WebM export","viewer.guide.title":"Explore this system","viewer.focus.selectedNodes":"{count} selected nodes","viewer.guide.eyebrow":"Diagram guide","viewer.guide.close":"Close diagram guide","viewer.guide.inspecting":"Inspecting compiled semantics","viewer.guide.actions":"Diagram exploration actions","viewer.guide.find":"Find any node","viewer.guide.find.hint":"Search labels, responsibilities, kinds, and stable IDs.","viewer.guide.route":"Trace a route","viewer.guide.route.aria":"Trace a directed route","viewer.guide.route.hint":"Ask how two semantic nodes connect in authored direction.","viewer.guide.map":"See the whole system","viewer.guide.map.hint":"Open Semantic Radar with a live viewport and stable nodes.","viewer.guide.lens":"Compare semantic kinds","viewer.guide.lens.hint":"Count roles, reveal their traffic, and compare direct authored links.","viewer.guide.present":"Enter Presentation Stage","viewer.guide.present.hint":"Give the live diagram the viewport without changing export.","viewer.guide.shortcuts":"Additional keyboard shortcuts","viewer.guide.shortcut.export":"Export","viewer.guide.shortcut.theme":"Theme","viewer.guide.shortcut.style":"Style","viewer.guide.shortcut.reset":"Reset","viewer.guide.shortcut.zoomIn":"Zoom in","viewer.guide.shortcut.zoomOut":"Zoom out","viewer.guide.shortcut.close":"Close","viewer.guide.facts":"{nodes} · {relationships}","viewer.guide.fact.node.one":"{count} semantic node","viewer.guide.fact.node.other":"{count} semantic nodes","viewer.guide.fact.relationship.one":"{count} relationship","viewer.guide.fact.relationship.other":"{count} relationships","viewer.guide.open":"Open diagram guide","viewer.finder.title":"Find a node","viewer.finder.close":"Close node finder","viewer.finder.placeholder":"Search labels or IDs","viewer.finder.search":"Search diagram nodes","viewer.finder.results":"Diagram nodes","viewer.finder.empty":"No matching nodes","viewer.finder.result.focus":"Focus {label}","viewer.finder.result.routeStart":"Choose {label} as route start","viewer.finder.result.routeTarget":"Choose {label} as route destination, {links}","viewer.finder.status.empty":"No matching nodes","viewer.finder.status.count.one":"{count} matching node","viewer.finder.status.count.other":"{count} matching nodes","viewer.finder.noun.nodes":"nodes","viewer.finder.link.one":"{count} link","viewer.finder.link.other":"{count} links","viewer.finder.result.focus.one":"Focus {label}, {count} related connection","viewer.finder.result.focus.other":"Focus {label}, {count} related connections","viewer.finder.status.filtered":"{visible} of {available} {noun}","viewer.finder.status.all":"{available} {noun}","viewer.passport.eyebrow":"Semantic passport","viewer.passport.metadata":"Node metadata","viewer.passport.evidence":"Verified source evidence","viewer.passport.verified":"Verified source","viewer.passport.verificationScope":"Verified against local Git at the pinned revision. Remote access has not been checked.","viewer.passport.reach":"Authored reach","viewer.passport.reach.trace":"Trace authored reachability","viewer.passport.upstream":"Upstream","viewer.passport.downstream":"Downstream","viewer.passport.upstream.trace":"Trace upstream authored reachability","viewer.passport.downstream.trace":"Trace downstream authored reachability","viewer.passport.close":"Close semantic passport","viewer.passport.move":"Move semantic passport. Drag, use arrow keys, or press Home to reset.","viewer.passport.copy":"Copy link","viewer.passport.copy.focus":"Copy link to focused node","viewer.passport.relations":"Relations","viewer.passport.relations.show":"Show connected relationships","viewer.passport.relations.hide":"Hide connected relationships","viewer.passport.relations.list":"Connected relationships","viewer.passport.copyRelation":"Copy relation","viewer.passport.copyNode":"Copy node","viewer.passport.copyPinned":"Copy link to pinned relationship","viewer.passport.copySource":"Copy link to source node","viewer.passport.copy.focused.success":"Focused node link copied","viewer.passport.copy.pinned.success":"Pinned relationship link copied","viewer.passport.copy.focused.failed":"Could not copy focused node link","viewer.passport.copy.pinned.failed":"Could not copy pinned relationship link","viewer.passport.relationship.none":"No connected relationships","viewer.passport.relationship.count.one":"{count} relation","viewer.passport.relationship.count.other":"{count} relations","viewer.passport.relationship.show.one":"Show {count} connected relationship","viewer.passport.relationship.show.other":"Show {count} connected relationships","viewer.passport.relationship.summary":"{out} outgoing · {in} incoming{loops}","viewer.passport.relationship.loops":" · {count} loop","viewer.passport.relationship.explorer":"Direct relationship explorer","viewer.passport.relationship.help":"Use arrow keys to explore relationships. Press Enter or Space to pin details; Escape clears.","viewer.passport.relationship.loopsBack":"loops back","viewer.passport.relationship.connectsTo":"connects to","viewer.passport.relationship.connectsFrom":"connects from","viewer.passport.relationship.pinned":"Pinned relationship · {from} → {to} · {label}","viewer.passport.relationship.inspect":"Inspect relationship {index} of {total}: {from} to {to}, {label}. Press Enter for details.","viewer.passport.relationship.group.out":"Outgoing","viewer.passport.relationship.group.in":"Incoming","viewer.passport.relationship.group.loop":"Self loops","viewer.passport.relationship.row":"{group}: {relationship}, {neighbor}","viewer.passport.relationship.direction.out":"OUT →","viewer.passport.relationship.direction.in":"← IN","viewer.passport.relationship.direction.loop":"LOOP","viewer.passport.sourceCount.one":"{count} verified source reference","viewer.passport.sourceCount.other":"{count} verified source references","viewer.passport.sourceMarker":"SRC","viewer.passport.beacon.one":"{count} verified source; focus this node to inspect","viewer.passport.beacon.other":"{count} verified sources; focus this node to inspect","viewer.passport.repository.open":"Open verified repository revision {revision}","viewer.passport.source.open":"Open verified source {path} at revision {revision}","viewer.passport.source.openLink":"Open ↗","viewer.passport.reach.upstream.one":"Trace {count} upstream authored node","viewer.passport.reach.upstream.other":"Trace {count} upstream authored nodes","viewer.passport.reach.downstream.one":"Trace {count} downstream authored node","viewer.passport.reach.downstream.other":"Trace {count} downstream authored nodes","viewer.passport.reach.noUpstream":"No upstream authored nodes","viewer.passport.reach.noDownstream":"No downstream authored nodes","viewer.passport.reach.status":"{direction} · {nodes} nodes · {links} links · max {hops} hops","viewer.route.eyebrow":"Path","viewer.route.start":"Click where the path starts","viewer.route.start.find":"Find start","viewer.route.start.find.aria":"Find a route start","viewer.route.copy":"Copy link","viewer.route.copy.aria":"Copy link to traced route","viewer.route.clear":"Clear","viewer.route.clear.aria":"Clear route probe","viewer.route.traced":"Path","viewer.route.pickTwo":"Click two nodes on the diagram","viewer.route.pickOne":"Click a node on the diagram","viewer.route.controls":"Route journey controls","viewer.route.previous":"Previous route position","viewer.route.play":"Play route journey","viewer.route.pause":"Pause route journey","viewer.route.replay":"Replay route journey","viewer.route.next":"Next route position","viewer.route.journey":"Journey","viewer.route.pause.label":"Pause","viewer.route.replay.label":"Replay","viewer.route.overview":"Overview","viewer.route.overview.aria":"Show complete route overview","viewer.route.instructions":"Click a start, then an end. Paths follow the arrows.","viewer.route.destination":"Where does the path from {label} end?","viewer.route.destination.find":"Find target","viewer.route.destination.find.aria":"Find a reachable route destination","viewer.route.differentDestination":"Choose a different destination","viewer.route.distinct":"Pick two different nodes.","viewer.route.unreachable":"Cannot reach {label} from here","viewer.route.unreachable.detail":"{target} cannot be reached from {source} along the arrows. Pick a highlighted node.","viewer.route.start.instructions":"Next, pick the end. Only nodes you can reach will light up.","viewer.route.copy.success":"Traced route link copied","viewer.route.copy.failed":"Could not copy traced route link","viewer.route.position":"Route position {index} of {total}: {label}","viewer.route.step":"Step {index} of {total} · {phase} · {label}","viewer.route.motionRequired":"Automatic journey requires Live motion","viewer.route.trigger.clear":"Clear traced route","viewer.route.overview.status":"{nodes} · {hops} · shortest path","viewer.route.overview.node.one":"{count} node","viewer.route.overview.node.other":"{count} nodes","viewer.route.overview.hop.one":"{count} step","viewer.route.overview.hop.other":"{count} steps","viewer.route.phase.playing":"Playing","viewer.route.phase.complete":"Complete","viewer.route.phase.inspecting":"Inspecting","viewer.route.destination.count.one":"{count} reachable node is highlighted. Click it.","viewer.route.destination.count.other":"{count} reachable nodes are highlighted. Click one.","viewer.route.noOutgoing":"No arrows lead out of this node. Clear it and pick another start.","viewer.route.result.title":"{source} to {target}","viewer.route.finder.source.title":"Choose route start","viewer.route.finder.source.placeholder":"Search route sources","viewer.route.finder.source.empty":"No matching route sources","viewer.route.finder.source.results":"Nodes that can start a route","viewer.route.finder.source.noun":"route sources","viewer.route.finder.source.badge":"start","viewer.route.finder.target.title":"Destination from {label}","viewer.route.finder.target.placeholder":"Search reachable destinations","viewer.route.finder.target.empty":"No matching reachable destinations","viewer.route.finder.target.results":"Reachable route destinations","viewer.route.finder.target.noun":"reachable destinations","viewer.route.hop.one":"{count} hop","viewer.route.hop.other":"{count} hops","viewer.lens.eyebrow":"Semantic lens","viewer.lens.title":"Compare system roles","viewer.lens.close":"Close semantic lens","viewer.lens.instruction":"Choose up to two semantic kinds. One reveals its real traffic; two compare only direct authored relationships.","viewer.lens.kinds":"Semantic kinds","viewer.lens.choose":"Choose a kind to inspect its nodes and touching relationships.","viewer.lens.copy":"Copy link to semantic lens","viewer.lens.clear":"Clear semantic lens","viewer.lens.open":"Open semantic lens","viewer.lens.openActive":"Open active semantic lens","viewer.lens.legend":"Semantic legend","viewer.lens.legend.inspect.one":"Inspect {label}, {count} node","viewer.lens.legend.inspect.other":"Inspect {label}, {count} nodes","viewer.lens.kind.count.one":"{label}, {count} node","viewer.lens.kind.count.other":"{label}, {count} nodes","viewer.lens.compare.one":"{first} → {second}: {forward} · {second} → {first}: {reverse} · {count} direct relationship","viewer.lens.compare.other":"{first} → {second}: {forward} · {second} → {first}: {reverse} · {count} direct relationships","viewer.lens.single":"{nodes} · {relationships} · connected peers remain visible","viewer.lens.node.one":"{count} {label} node","viewer.lens.node.other":"{count} {label} nodes","viewer.lens.relationship.one":"{count} touching relationship","viewer.lens.relationship.other":"{count} touching relationships","viewer.radar.title":"Semantic radar","viewer.radar.building":"Building overview","viewer.radar.openFull":"Open full semantic radar","viewer.radar.open":"Open radar","viewer.radar.close":"Close semantic radar","viewer.radar.surface":"Diagram overview. Click a node to focus it, or use arrow keys to pan.","viewer.radar.click":"Click node","viewer.radar.drag":"Drag to pan","viewer.radar.space":"Semantic radar needs more MAP space.","viewer.radar.nodes":"Semantic diagram radar nodes","viewer.radar.focus":"Focus {label} from Semantic Radar","viewer.radar.status":"{count} nodes · {viewport}","viewer.radar.fullMap":"{count} nodes · full map","viewer.radar.compacted":"Radar compacted to avoid covering the Semantic Passport or MAP controls.","viewer.radar.cancelWaiting":"Cancel semantic radar waiting for more MAP space","viewer.radar.needsSpace":"Semantic radar needs more visible MAP space","viewer.radar.viewport.full":"full map","viewer.radar.viewport.width":"{percent}% width","viewer.radar.viewport.scale":"{percent}% viewport","viewer.nav.controls":"Diagram view controls","viewer.nav.route":"Trace a directed route","viewer.nav.route.title":"Trace route (R)","viewer.nav.route.short":"PATH","viewer.nav.radar":"Open semantic radar","viewer.nav.radar.title":"Semantic radar (M)","viewer.nav.radar.short":"MAP","viewer.nav.lens":"Open semantic lens","viewer.nav.lens.title":"Semantic lens (L)","viewer.nav.lens.short":"LENS","viewer.nav.find":"Find a node","viewer.nav.find.title":"Find a node (/)","viewer.outline.title":"Node index","viewer.rail.show":"Notes \u0026 index","viewer.rail.controls":"Side panel","viewer.rail.collapse":"Collapse side panel","viewer.rail.bottom":"Move panel below the diagram","viewer.rail.right":"Move panel beside the diagram","viewer.nav.guide":"Open diagram guide","viewer.nav.guide.title":"Diagram guide (?)","viewer.nav.zoomOut":"Zoom out","viewer.nav.zoomOut.title":"Zoom out (-)","viewer.nav.reset":"Reset diagram view","viewer.nav.reset.title":"Reset view (0)","viewer.nav.read":"READ","viewer.nav.zoomIn":"Zoom in","viewer.nav.zoomIn.title":"Zoom in (+)","viewer.nav.camera":"{hint}. Reset diagram view","viewer.nav.camera.title":"{semantic}{hint} · reset view (0)","viewer.nav.camera.semantic":"Semantic camera active · ","viewer.nav.level.map":"MAP","viewer.nav.level.read":"READ","viewer.nav.level.full":"FULL","viewer.nav.level.auto":"AUTO","viewer.nav.detail.map":"Zoom in to reveal relationship labels and node context","viewer.nav.detail.read":"Zoom in again to reveal tags and annotations","viewer.nav.detail.full":"Full diagram detail","viewer.intent.summary":"{label}. {out} outgoing, {in} incoming{loops}. {total} connections. Press Enter for details.","viewer.intent.loops":", {count} self loop","viewer.common.copied":"Copied","viewer.common.copyFailed":"Copy failed","viewer.common.copyLink":"Copy link","viewer.common.clear":"Clear","viewer.common.close":"Close"}}</script>
+    <script id="archify-i18n-data" type="application/json">{"locale":"fr","messages":{"viewer.kind.frontend":"Frontend","viewer.kind.backend":"Backend","viewer.kind.database":"Base de données","viewer.kind.cloud":"Cloud","viewer.kind.security":"Sécurité","viewer.kind.messagebus":"Bus de messages","viewer.kind.external":"Externe","viewer.kind.neutral":"Neutre","viewer.kind.node":"Nœud","viewer.kind.start":"Début","viewer.kind.active":"Actif","viewer.kind.waiting":"En attente","viewer.kind.decision":"Décision","viewer.kind.success":"Succès","viewer.kind.failure":"Échec","viewer.toolbar.actions":"Actions du diagramme","viewer.theme.toggle.title":"Changer de thème (T)","viewer.theme.toggle":"Changer le thème de couleur","viewer.theme.dark":"Sombre","viewer.theme.light":"Clair","viewer.preset.choose.title":"Choisir le style visuel (S pour changer)","viewer.preset.choose":"Choisir le style visuel","viewer.preset.style":"Style","viewer.preset.menu":"Style visuel","viewer.preset.identity":"Identité visuelle","viewer.preset.cycles":"S pour changer","viewer.preset.classic":"Classic","viewer.preset.classic.short":"Classic","viewer.preset.classic.hint":"Style technique stable par défaut","viewer.preset.flow":"Flux de signal","viewer.preset.flow.short":"Flux","viewer.preset.flow.hint":"Présentation animée et dynamique","viewer.preset.blueprint":"Plan","viewer.preset.blueprint.hint":"Revue technique","viewer.preset.editorial":"Éditorial","viewer.preset.editorial.hint":"Notes de publication et de lancement","viewer.preset.badge.signalFlow":"FLUX DE SIGNAL","viewer.preset.badge.blueprint":"PLAN / RÉV. 01","viewer.preset.badge.editorial":"ÉDITORIAL / NOTE DE TERRAIN","viewer.preset.badge.editorialPlate":"ARCHIFY / PLANCHE 04","viewer.preset.current":"Style visuel : {style}. Choisir le style visuel","viewer.motion.live":"Animé","viewer.motion.still":"Statique","viewer.motion.pause":"Mettre l'animation en pause","viewer.motion.resume":"Reprendre l'animation","viewer.motion.reduced":"Animation suspendue en raison de la préférence de mouvement réduit","viewer.motion.hidden":"Animation suspendue pendant que la page est masquée","viewer.motion.yielding":"Mettre l'animation en pause ; cède actuellement la place à {owner}","viewer.motion.yielding.title":"Aperçu en direct activé · cède la place à {owner}","viewer.owner.route":"Sonde d'itinéraire","viewer.owner.lens":"Lentille sémantique","viewer.owner.relationship":"Aperçu de relation","viewer.owner.intent":"Trace d'intention","viewer.owner.focus":"le focus sémantique","viewer.owner.legend":"l'aperçu de la légende","viewer.owner.reader":"l'interaction du lecteur","viewer.present.enter":"Entrer en mode présentation","viewer.present.enter.title":"Mode présentation (F)","viewer.present.exit":"Quitter le mode présentation","viewer.present.exit.title":"Quitter le mode présentation (F ou Échap)","viewer.present.present":"Présenter","viewer.present.exit.label":"Quitter","viewer.export.button":"Exporter","viewer.export.button.title":"Exporter le diagramme (E)","viewer.export.diagram":"Exporter le diagramme","viewer.export.menu":"Exporter","viewer.export.subtitle":"Des exports portables et soignés","viewer.export.share":"Partager","viewer.export.shareCard":"Carte de partage","viewer.export.routeShareCard":"Carte de partage d'itinéraire","viewer.export.reachShareCard":"Carte de partage de portée","viewer.export.copyDiagram":"Copier le diagramme","viewer.export.clipboardPng":"PNG vers le presse-papiers","viewer.export.raster":"Images matricielles","viewer.export.image":"Image","viewer.export.lossless":"Image sans perte","viewer.export.compact":"Image compacte","viewer.export.modern":"Image au format moderne","viewer.export.vectorMotion":"Vecteur et animation","viewer.export.vectorMotion.heading":"Vecteur et animation","viewer.export.editable":"Vecteur modifiable","viewer.export.svg.auto":"SVG · Auto","viewer.export.svg.auto.hint":"Matches host theme","viewer.export.svg.light":"SVG · Light","viewer.export.svg.light.hint":"Always light","viewer.export.svg.dark":"SVG · Dark","viewer.export.svg.dark.hint":"Always dark","viewer.export.motion6s":"Animation de 6 s","viewer.export.unsupported":"Non pris en charge par ce navigateur","viewer.export.clipboardUnsupported":"L'écriture d'image dans le presse-papiers n'est pas prise en charge par ce navigateur","viewer.export.clipboardUnsupported.short":"L'écriture d'image dans le presse-papiers n'est pas prise en charge par ce navigateur.","viewer.export.motionUnavailable":"Capture d'animation indisponible dans ce navigateur","viewer.export.webmUnavailable":"WebM indisponible dans ce navigateur","viewer.export.failed":"Échec de l'export : {message}","viewer.export.unknownVariant":"Variante de carte de partage inconnue : {variant}","viewer.export.routeRequired":"Tracez un itinéraire avant d'exporter une carte de partage d'itinéraire","viewer.export.reachRequired":"Tracez une portée éditée avant d'exporter une carte de partage de portée","viewer.export.unknown":"inconnu","viewer.export.routeFailed":"Échec de l'export de la carte de partage d'itinéraire : {message}","viewer.export.reachFailed":"Échec de l'export de la carte de partage de portée : {message}","viewer.export.copyFailed":"Échec de la copie : {message}","viewer.export.copiedPng":"PNG copié dans le presse-papiers","viewer.export.downloadedRoute":"Carte de partage d'itinéraire téléchargée","viewer.export.downloadedReach":"Carte de partage de portée téléchargée","viewer.export.downloadedWebm":"WebM téléchargé","viewer.export.recording":"Enregistrement de 6 secondes d'animation…","viewer.export.card.routeSummary.one":"Itinéraire : {source} → {target} · {count} saut orienté","viewer.export.card.routeSummary.other":"Itinéraire : {source} → {target} · {count} sauts orientés","viewer.export.card.reachSummary":"Portée {direction} éditée depuis {origin} · {nodes} · {links} · max {hops}","viewer.export.card.node.one":"{count} nœud","viewer.export.card.node.other":"{count} nœuds","viewer.export.card.link.one":"{count} lien","viewer.export.card.link.other":"{count} liens","viewer.export.card.hop.one":"{count} saut","viewer.export.card.hop.other":"{count} sauts","viewer.export.card.routeBadge":"ARCHIFY · ITINÉRAIRE · {hops}","viewer.export.card.reachBadge":"ARCHIFY · PORTÉE {direction}","viewer.export.direction.upstream":"Amont","viewer.export.direction.downstream":"Aval","viewer.export.error.canvasUnavailable":"Canevas indisponible pour {label}","viewer.export.error.contextUnavailable":"Contexte de canevas 2D indisponible pour {label}","viewer.export.error.toBlobUnavailable":"canvas.toBlob indisponible pour {label}","viewer.export.error.toBlobNull":"canvas.toBlob n'a renvoyé aucune donnée pour {label}","viewer.export.error.variantsCombined":"Les variantes de carte de partage ne peuvent pas être combinées","viewer.export.error.viewerState":"L'export de la carte de partage n'a pas pu supprimer l'état temporaire du visualiseur","viewer.export.error.routeState":"L'export de la carte d'itinéraire n'a pas pu préserver l'itinéraire résolu en toute sécurité","viewer.export.error.reachState":"L'export de la carte de portée n'a pas pu préserver la portée éditée en toute sécurité","viewer.export.error.webmRequirements":"L'export d'animation WebM nécessite une animation de trace et la prise en charge de MediaRecorder par le navigateur","viewer.export.error.mediaRecorder":"Échec de MediaRecorder","viewer.export.error.emptyWebm":"MediaRecorder a produit un fichier WebM vide","viewer.export.error.webmBackground":"L'arrière-plan SVG n'a pas pu être chargé pour l'export WebM","viewer.guide.title":"Explore this system","viewer.focus.selectedNodes":"{count} selected nodes","viewer.guide.eyebrow":"Guide du diagramme","viewer.guide.close":"Fermer le guide du diagramme","viewer.guide.inspecting":"Inspection de la sémantique compilée","viewer.guide.actions":"Actions d'exploration du diagramme","viewer.guide.find":"Trouver un nœud","viewer.guide.find.hint":"Rechercher par libellés, responsabilités, types et identifiants stables.","viewer.guide.route":"Tracer un itinéraire","viewer.guide.route.aria":"Tracer un itinéraire orienté","viewer.guide.route.hint":"Découvrez comment deux nœuds sémantiques sont reliés dans le sens édité.","viewer.guide.map":"Voir tout le système","viewer.guide.map.hint":"Ouvrir le radar sémantique avec un viewport en direct et des nœuds stables.","viewer.guide.lens":"Comparer les types sémantiques","viewer.guide.lens.hint":"Comptez les rôles, révélez leur trafic et comparez les liens édités directs.","viewer.guide.present":"Entrer en mode présentation","viewer.guide.present.hint":"Donnez tout le viewport au diagramme en direct sans modifier l'export.","viewer.guide.shortcuts":"Raccourcis clavier supplémentaires","viewer.guide.shortcut.export":"Exporter","viewer.guide.shortcut.theme":"Thème","viewer.guide.shortcut.style":"Style","viewer.guide.shortcut.reset":"Réinitialiser","viewer.guide.shortcut.zoomIn":"Zoom avant","viewer.guide.shortcut.zoomOut":"Zoom arrière","viewer.guide.shortcut.close":"Fermer","viewer.guide.facts":"{nodes} · {relationships}","viewer.guide.fact.node.one":"{count} nœud sémantique","viewer.guide.fact.node.other":"{count} nœuds sémantiques","viewer.guide.fact.relationship.one":"{count} relation","viewer.guide.fact.relationship.other":"{count} relations","viewer.guide.open":"Ouvrir le guide du diagramme","viewer.finder.title":"Trouver un nœud","viewer.finder.close":"Fermer le chercheur de nœuds","viewer.finder.placeholder":"Rechercher par libellé ou identifiant","viewer.finder.search":"Rechercher les nœuds du diagramme","viewer.finder.results":"Nœuds du diagramme","viewer.finder.empty":"Aucun nœud correspondant","viewer.finder.result.focus":"Centrer sur {label}","viewer.finder.result.routeStart":"Choisir {label} comme point de départ de l'itinéraire","viewer.finder.result.routeTarget":"Choisir {label} comme destination de l'itinéraire, {links}","viewer.finder.status.empty":"Aucun nœud correspondant","viewer.finder.status.count.one":"{count} nœud correspondant","viewer.finder.status.count.other":"{count} nœuds correspondants","viewer.finder.noun.nodes":"nœuds","viewer.finder.link.one":"{count} lien","viewer.finder.link.other":"{count} liens","viewer.finder.result.focus.one":"Centrer sur {label}, {count} connexion associée","viewer.finder.result.focus.other":"Centrer sur {label}, {count} connexions associées","viewer.finder.status.filtered":"{visible} sur {available} {noun}","viewer.finder.status.all":"{available} {noun}","viewer.passport.eyebrow":"Passeport sémantique","viewer.passport.metadata":"Métadonnées du nœud","viewer.passport.evidence":"Preuve de source vérifiée","viewer.passport.verified":"Source vérifiée","viewer.passport.verificationScope":"Vérifié par rapport au Git local à la révision épinglée. L'accès distant n'a pas été vérifié.","viewer.passport.reach":"Portée éditée","viewer.passport.reach.trace":"Tracer l'accessibilité éditée","viewer.passport.upstream":"Amont","viewer.passport.downstream":"Aval","viewer.passport.upstream.trace":"Tracer l'accessibilité éditée en amont","viewer.passport.downstream.trace":"Tracer l'accessibilité éditée en aval","viewer.passport.close":"Fermer le passeport sémantique","viewer.passport.move":"Move semantic passport. Drag, use arrow keys, or press Home to reset.","viewer.passport.copy":"Copier le lien","viewer.passport.copy.focus":"Copier le lien du nœud centré","viewer.passport.relations":"Relations","viewer.passport.relations.show":"Afficher les relations connectées","viewer.passport.relations.hide":"Masquer les relations connectées","viewer.passport.relations.list":"Relations connectées","viewer.passport.copyRelation":"Copier la relation","viewer.passport.copyNode":"Copier le nœud","viewer.passport.copyPinned":"Copier le lien de la relation épinglée","viewer.passport.copySource":"Copier le lien du nœud source","viewer.passport.copy.focused.success":"Lien du nœud centré copié","viewer.passport.copy.pinned.success":"Lien de la relation épinglée copié","viewer.passport.copy.focused.failed":"Impossible de copier le lien du nœud centré","viewer.passport.copy.pinned.failed":"Impossible de copier le lien de la relation épinglée","viewer.passport.relationship.none":"Aucune relation connectée","viewer.passport.relationship.count.one":"{count} relation","viewer.passport.relationship.count.other":"{count} relations","viewer.passport.relationship.show.one":"Afficher {count} relation connectée","viewer.passport.relationship.show.other":"Afficher {count} relations connectées","viewer.passport.relationship.summary":"{out} sortantes · {in} entrantes{loops}","viewer.passport.relationship.loops":" · {count} boucle","viewer.passport.relationship.explorer":"Explorateur de relations directes","viewer.passport.relationship.help":"Utilisez les flèches pour explorer les relations. Appuyez sur Entrée ou Espace pour épingler les détails ; Échap efface.","viewer.passport.relationship.loopsBack":"boucle vers","viewer.passport.relationship.connectsTo":"se connecte à","viewer.passport.relationship.connectsFrom":"se connecte depuis","viewer.passport.relationship.pinned":"Relation épinglée · {from} → {to} · {label}","viewer.passport.relationship.inspect":"Inspecter la relation {index} sur {total} : {from} vers {to}, {label}. Appuyez sur Entrée pour les détails.","viewer.passport.relationship.group.out":"Sortantes","viewer.passport.relationship.group.in":"Entrantes","viewer.passport.relationship.group.loop":"Boucles propres","viewer.passport.relationship.row":"{group} : {relationship}, {neighbor}","viewer.passport.relationship.direction.out":"SORT →","viewer.passport.relationship.direction.in":"← ENTRE","viewer.passport.relationship.direction.loop":"BOUCLE","viewer.passport.sourceCount.one":"{count} référence de source vérifiée","viewer.passport.sourceCount.other":"{count} références de source vérifiées","viewer.passport.sourceMarker":"SOURCE","viewer.passport.beacon.one":"{count} source vérifiée ; centrez ce nœud pour l'inspecter","viewer.passport.beacon.other":"{count} sources vérifiées ; centrez ce nœud pour l'inspecter","viewer.passport.repository.open":"Ouvrir la révision {revision} du dépôt vérifié","viewer.passport.source.open":"Ouvrir la source vérifiée {path} à la révision {revision}","viewer.passport.source.openLink":"Ouvrir ↗","viewer.passport.reach.upstream.one":"Tracer {count} nœud édité en amont","viewer.passport.reach.upstream.other":"Tracer {count} nœuds édités en amont","viewer.passport.reach.downstream.one":"Tracer {count} nœud édité en aval","viewer.passport.reach.downstream.other":"Tracer {count} nœuds édités en aval","viewer.passport.reach.noUpstream":"Aucun nœud édité en amont","viewer.passport.reach.noDownstream":"Aucun nœud édité en aval","viewer.passport.reach.status":"{direction} · {nodes} nœuds · {links} liens · max {hops} sauts","viewer.route.eyebrow":"Sonde d'itinéraire","viewer.route.start":"Choisir un nœud de départ","viewer.route.start.find":"Trouver le départ","viewer.route.start.find.aria":"Trouver un départ d'itinéraire","viewer.route.copy":"Copier le lien","viewer.route.copy.aria":"Copier le lien de l'itinéraire tracé","viewer.route.clear":"Effacer","viewer.route.clear.aria":"Effacer la sonde d'itinéraire","viewer.route.traced":"Itinéraire tracé","viewer.route.pickTwo":"Choisissez deux nœuds sémantiques sur le diagramme","viewer.route.pickOne":"Choisissez un nœud sémantique sur le diagramme","viewer.route.controls":"Contrôles du parcours d'itinéraire","viewer.route.previous":"Position précédente de l'itinéraire","viewer.route.play":"Lire le parcours de l'itinéraire","viewer.route.pause":"Mettre le parcours de l'itinéraire en pause","viewer.route.replay":"Rejouer le parcours de l'itinéraire","viewer.route.next":"Position suivante de l'itinéraire","viewer.route.journey":"Parcours","viewer.route.pause.label":"Pause","viewer.route.replay.label":"Rejouer","viewer.route.overview":"Vue d'ensemble","viewer.route.overview.aria":"Afficher la vue d'ensemble complète de l'itinéraire","viewer.route.instructions":"Choisissez la source, puis la destination. Le sens compte.","viewer.route.destination":"Choisir une destination depuis {label}","viewer.route.destination.find":"Trouver une cible","viewer.route.destination.find.aria":"Trouver une destination d'itinéraire accessible","viewer.route.differentDestination":"Choisir une autre destination","viewer.route.distinct":"Un itinéraire nécessite deux nœuds sémantiques distincts.","viewer.route.unreachable":"Aucun itinéraire orienté vers {label}","viewer.route.unreachable.detail":"{target} n'est pas accessible depuis {source}. Choisissez une destination surlignée.","viewer.route.start.instructions":"Sélectionnez la source. L'étape suivante ne révélera que les destinations orientées.","viewer.route.copy.success":"Lien de l'itinéraire tracé copié","viewer.route.copy.failed":"Impossible de copier le lien de l'itinéraire tracé","viewer.route.position":"Position {index} sur {total} de l'itinéraire : {label}","viewer.route.step":"Étape {index} sur {total} · {phase} · {label}","viewer.route.motionRequired":"Le parcours automatique nécessite le mode Animé","viewer.route.trigger.clear":"Effacer l'itinéraire tracé","viewer.route.overview.status":"{nodes} · {hops} · itinéraire édité le plus court","viewer.route.overview.node.one":"{count} nœud","viewer.route.overview.node.other":"{count} nœuds","viewer.route.overview.hop.one":"{count} saut orienté","viewer.route.overview.hop.other":"{count} sauts orientés","viewer.route.phase.playing":"En lecture","viewer.route.phase.complete":"Terminé","viewer.route.phase.inspecting":"Inspection","viewer.route.destination.count.one":"{count} destination orientée disponible. Choisissez un nœud surligné.","viewer.route.destination.count.other":"{count} destinations orientées disponibles. Choisissez un nœud surligné.","viewer.route.noOutgoing":"Aucun itinéraire sortant ne débute ici. Effacez et choisissez une autre source.","viewer.route.result.title":"{source} vers {target}","viewer.route.finder.source.title":"Choisir le départ de l'itinéraire","viewer.route.finder.source.placeholder":"Rechercher des sources d'itinéraire","viewer.route.finder.source.empty":"Aucune source d'itinéraire correspondante","viewer.route.finder.source.results":"Nœuds pouvant débuter un itinéraire","viewer.route.finder.source.noun":"sources d'itinéraire","viewer.route.finder.source.badge":"départ","viewer.route.finder.target.title":"Destination depuis {label}","viewer.route.finder.target.placeholder":"Rechercher des destinations accessibles","viewer.route.finder.target.empty":"Aucune destination accessible correspondante","viewer.route.finder.target.results":"Destinations d'itinéraire accessibles","viewer.route.finder.target.noun":"destinations accessibles","viewer.route.hop.one":"{count} saut","viewer.route.hop.other":"{count} sauts","viewer.lens.eyebrow":"Lentille sémantique","viewer.lens.title":"Comparer les rôles du système","viewer.lens.close":"Fermer la lentille sémantique","viewer.lens.instruction":"Choisissez jusqu'à deux types sémantiques. Un seul révèle son trafic réel ; deux comparent uniquement les relations éditées directes.","viewer.lens.kinds":"Types sémantiques","viewer.lens.choose":"Choisissez un type pour inspecter ses nœuds et relations associées.","viewer.lens.copy":"Copier le lien de la lentille sémantique","viewer.lens.clear":"Effacer la lentille sémantique","viewer.lens.open":"Ouvrir la lentille sémantique","viewer.lens.openActive":"Ouvrir la lentille sémantique active","viewer.lens.legend":"Légende sémantique","viewer.lens.legend.inspect.one":"Inspecter {label}, {count} nœud","viewer.lens.legend.inspect.other":"Inspecter {label}, {count} nœuds","viewer.lens.kind.count.one":"{label}, {count} nœud","viewer.lens.kind.count.other":"{label}, {count} nœuds","viewer.lens.compare.one":"{first} → {second} : {forward} · {second} → {first} : {reverse} · {count} relation directe","viewer.lens.compare.other":"{first} → {second} : {forward} · {second} → {first} : {reverse} · {count} relations directes","viewer.lens.single":"{nodes} · {relationships} · les nœuds connectés restent visibles","viewer.lens.node.one":"{count} nœud {label}","viewer.lens.node.other":"{count} nœuds {label}","viewer.lens.relationship.one":"{count} relation associée","viewer.lens.relationship.other":"{count} relations associées","viewer.radar.title":"Radar sémantique","viewer.radar.building":"Construction de la vue d'ensemble","viewer.radar.openFull":"Ouvrir le radar sémantique complet","viewer.radar.open":"Ouvrir le radar","viewer.radar.close":"Fermer le radar sémantique","viewer.radar.surface":"Vue d'ensemble du diagramme. Cliquez sur un nœud pour le centrer, ou utilisez les flèches pour vous déplacer.","viewer.radar.click":"Cliquer sur le nœud","viewer.radar.drag":"Glisser pour se déplacer","viewer.radar.space":"Le radar sémantique a besoin de plus d'espace MAP.","viewer.radar.nodes":"Nœuds du radar du diagramme sémantique","viewer.radar.focus":"Centrer sur {label} depuis le radar sémantique","viewer.radar.status":"{count} nœuds · {viewport}","viewer.radar.fullMap":"{count} nœuds · carte complète","viewer.radar.compacted":"Radar compacté pour éviter de masquer le passeport sémantique ou les contrôles MAP.","viewer.radar.cancelWaiting":"Annuler l'attente du radar sémantique pour plus d'espace MAP","viewer.radar.needsSpace":"Le radar sémantique a besoin de plus d'espace MAP visible","viewer.radar.viewport.full":"carte complète","viewer.radar.viewport.width":"{percent} % de largeur","viewer.radar.viewport.scale":"{percent} % du viewport","viewer.nav.controls":"Contrôles de la vue du diagramme","viewer.nav.route":"Tracer un itinéraire orienté","viewer.nav.route.title":"Tracer l'itinéraire (R)","viewer.nav.route.short":"ROUTE","viewer.nav.radar":"Ouvrir le radar sémantique","viewer.nav.radar.title":"Radar sémantique (M)","viewer.nav.radar.short":"CARTE","viewer.nav.lens":"Ouvrir la lentille sémantique","viewer.nav.lens.title":"Lentille sémantique (L)","viewer.nav.lens.short":"LENTILLE","viewer.nav.find":"Trouver un nœud","viewer.nav.find.title":"Trouver un nœud (/)","viewer.outline.title":"Node index","viewer.rail.show":"Notes \u0026 index","viewer.rail.controls":"Side panel","viewer.rail.collapse":"Collapse side panel","viewer.rail.bottom":"Move panel below the diagram","viewer.rail.right":"Move panel beside the diagram","viewer.nav.guide":"Ouvrir le guide du diagramme","viewer.nav.guide.title":"Guide du diagramme (?)","viewer.nav.zoomOut":"Zoom arrière","viewer.nav.zoomOut.title":"Zoom arrière (-)","viewer.nav.reset":"Réinitialiser la vue du diagramme","viewer.nav.reset.title":"Réinitialiser la vue (0)","viewer.nav.read":"LIRE","viewer.nav.zoomIn":"Zoom avant","viewer.nav.zoomIn.title":"Zoom avant (+)","viewer.nav.camera":"{hint}. Réinitialiser la vue du diagramme","viewer.nav.camera.title":"{semantic}{hint} · réinitialiser la vue (0)","viewer.nav.camera.semantic":"Caméra sémantique active · ","viewer.nav.level.map":"CARTE","viewer.nav.level.read":"LIRE","viewer.nav.level.full":"COMPLET","viewer.nav.level.auto":"AUTO","viewer.nav.detail.map":"Zoomez pour révéler les libellés des relations et le contexte des nœuds","viewer.nav.detail.read":"Zoomez à nouveau pour révéler les étiquettes et annotations","viewer.nav.detail.full":"Détail complet du diagramme","viewer.intent.summary":"{label}. {out} sortantes, {in} entrantes{loops}. {total} connexions. Appuyez sur Entrée pour les détails.","viewer.intent.loops":", {count} boucle propre","viewer.common.copied":"Copié","viewer.common.copyFailed":"Échec de la copie","viewer.common.copyLink":"Copier le lien","viewer.common.clear":"Effacer","viewer.common.close":"Fermer"}}</script>
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read"
-         data-preset-badge-editorial-plate="ARCHIFY / PLATE 04">
-      <svg viewBox="0 0 1660 932" role="img" lang="en" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase" data-reader-fit="intrinsic-height" data-reader-min-text="7.5" data-reader-primary-text="14">
+         data-preset-badge-editorial-plate="ARCHIFY / PLANCHE 04">
+      <svg viewBox="0 0 1525 912" role="img" lang="fr" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase" data-reader-fit="intrinsic-height" data-reader-min-text="7.5" data-reader-primary-text="14">
         <title id="archify-diagram-title">Espion I2C passif : chaîne de debug du bus BP / BA</title>
-        <desc id="archify-diagram-description">An architecture diagram generated by Archify.</desc>
+        <desc id="archify-diagram-description">Un diagramme d&#39;architecture généré par Archify.</desc>
         <!-- Definitions -->
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -5013,319 +5013,344 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
         <rect width="100%" height="100%" fill="url(#grid)" />
 
         <!-- Boundaries (behind everything) -->
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" data-composition-frame-label="Armoire · 0 V TBTS jamais relié au PE" x="10" y="10" width="920" height="314" rx="12" class="c-region" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" data-composition-frame-label="Armoire · 0 V TBTS jamais relié au PE" x="10" y="10" width="850" height="314" rx="12" class="c-region" stroke-width="1"/>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="security-group" data-composition-frame-id="1" data-composition-frame-label="Hôte sur batterie · Wi-Fi seulement" x="690" y="370" width="930" height="334" rx="8" class="c-security-group" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="security-group" data-composition-frame-id="1" data-composition-frame-label="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE" x="310" y="410" width="1140" height="274" rx="8" class="c-security-group" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="2" data-composition-frame-label="Réseau local · relié au PE" x="10" y="570" width="290" height="274" rx="12" class="c-region" stroke-width="1"/>
 
         <!-- Connection paths (before components for correct z-order) -->
         <g data-graph-role="automatic-crossover" style="--step:0">
-          <path data-graph-role="automatic-crossover-underlay" d="M 200 172 L 380 172" fill="none" stroke="var(--mask)" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="bp" data-edge-to="bus" data-edge-label="trames + réponses" data-edge-key="0" data-edge-id="bp-bus" data-composition-points="200,172;380,172" data-composition-crossover="halo" data-composition-independent="true" d="M 200 172 L 380 172" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 125 600 L 125 204" fill="none" stroke="var(--mask)" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="cm5" data-edge-to="bp" data-edge-label="HTTP : actions, /api/done avant l&#39;I2C" data-edge-key="0" data-edge-id="cm5-bp" data-composition-points="125,600;125,204" data-composition-crossover="halo" data-composition-independent="true" d="M 125 600 L 125 204" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:1">
-          <path data-graph-role="automatic-crossover-underlay" d="M 550 158 L 566 158 Q 574 158 574 150 L 574 80 Q 574 72 582 72 L 720 72" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="bus" data-edge-to="ba11" data-edge-label="ACK" data-edge-key="1" data-edge-id="bus-ba11" data-composition-points="550,158;574,158;574,72;720,72" data-composition-crossover="halo" data-composition-independent="true" d="M 550 158 L 566 158 Q 574 158 574 150 L 574 80 Q 574 72 582 72 L 720 72" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 210 172 L 340 172" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="bp" data-edge-to="bus" data-edge-label="trame, puis réponse du BA" data-edge-key="1" data-edge-id="bp-bus" data-composition-points="210,172;340,172" data-composition-crossover="halo" data-composition-independent="true" d="M 210 172 L 340 172" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:2">
-          <path data-graph-role="automatic-crossover-underlay" d="M 550 172 L 720 172" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="bus" data-edge-to="ba12" data-edge-label="NACK ?" data-edge-key="2" data-edge-id="bus-ba12" data-composition-points="550,172;720,172" data-composition-crossover="halo" data-composition-independent="true" d="M 550 172 L 720 172" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 530 158 L 587 158 Q 595 158 595 150 L 595 80 Q 595 72 603 72 L 660 72" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="bus" data-edge-to="ba11" data-edge-key="2" data-edge-id="bus-ba11" data-composition-points="530,158;595,158;595,72;660,72" data-composition-crossover="halo" data-composition-independent="true" d="M 530 158 L 587 158 Q 595 158 595 150 L 595 80 Q 595 72 603 72 L 660 72" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:3">
-          <path data-graph-role="automatic-crossover-underlay" d="M 550 186 L 627 186 Q 635 186 635 194 L 635 264 Q 635 272 643 272 L 720 272" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="bus" data-edge-to="ba13" data-edge-label="NACK ?" data-edge-key="3" data-edge-id="bus-ba13" data-composition-points="550,186;635,186;635,272;720,272" data-composition-crossover="halo" data-composition-independent="true" d="M 550 186 L 627 186 Q 635 186 635 194 L 635 264 Q 635 272 643 272 L 720 272" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 530 172 L 660 172" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="bus" data-edge-to="ba12" data-edge-key="3" data-edge-id="bus-ba12" data-composition-points="530,172;660,172" data-composition-crossover="halo" data-composition-independent="true" d="M 530 172 L 660 172" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:4">
-          <path data-graph-role="automatic-crossover-underlay" d="M 465 204 L 465 480" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="bus" data-edge-to="sonde" data-edge-label="écoute seule · 3 fils" data-edge-key="4" data-edge-id="bus-sonde" data-composition-points="465,204;465,480" data-composition-crossover="halo" data-composition-independent="true" d="M 465 204 L 465 480" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 530 186 L 587 186 Q 595 186 595 194 L 595 264 Q 595 272 603 272 L 660 272" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="bus" data-edge-to="ba13" data-edge-key="4" data-edge-id="bus-ba13" data-composition-points="530,186;595,186;595,272;660,272" data-composition-crossover="halo" data-composition-independent="true" d="M 530 186 L 587 186 Q 595 186 595 194 L 595 264 Q 595 272 603 272 L 660 272" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:5">
-          <path data-graph-role="automatic-crossover-underlay" d="M 550 512 L 720 512" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="sonde" data-edge-to="fx2" data-edge-label="D0 SCL · D1 SDA" data-edge-key="5" data-edge-id="sonde-fx2" data-composition-points="550,512;720,512" data-composition-crossover="halo" data-composition-independent="true" d="M 550 512 L 720 512" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 435 204 L 435 440" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="bus" data-edge-to="sonde" data-edge-label="lecture seule · SDA, SCL et 0 V" data-edge-key="5" data-edge-id="bus-sonde" data-composition-points="435,204;435,440" data-composition-crossover="halo" data-composition-independent="true" d="M 435 204 L 435 440" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:6">
-          <path data-graph-role="automatic-crossover-underlay" d="M 900 505 L 972 505 Q 980 505 980 497 L 980 440 Q 980 432 988 432 L 1060 432" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="fx2" data-edge-to="sigrok" data-edge-label="flux brut" data-edge-key="6" data-edge-id="fx2-sigrok" data-composition-points="900,505;980,505;980,432;1060,432" data-composition-crossover="halo" data-composition-independent="true" d="M 900 505 L 972 505 Q 980 505 980 497 L 980 440 Q 980 432 988 432 L 1060 432" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 530 472 L 620 472" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="sonde" data-edge-to="fx2" data-edge-label="SCL, SDA, 0 V" data-edge-key="6" data-edge-id="sonde-fx2" data-composition-points="530,472;620,472" data-composition-crossover="halo" data-composition-independent="true" d="M 530 472 L 620 472" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:7">
-          <path data-graph-role="automatic-crossover-underlay" d="M 900 519 L 1400 519" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="fx2" data-edge-to="decoder" data-edge-label="flux brut · lignes bloquées" data-edge-key="7" data-edge-id="fx2-decoder" data-composition-points="900,519;1400,519" data-composition-crossover="halo" data-composition-independent="true" d="M 900 519 L 1400 519" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 800 472 L 900 472" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="fx2" data-edge-to="acq" data-edge-label="USB" data-edge-key="7" data-edge-id="fx2-acq" data-composition-points="800,472;900,472" data-composition-crossover="halo" data-composition-independent="true" d="M 800 472 L 900 472" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:8">
-          <path data-graph-role="automatic-crossover-underlay" d="M 1240 432 L 1312 432 Q 1320 432 1320 440 L 1320 497 Q 1320 505 1328 505 L 1400 505" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="sigrok" data-edge-to="decoder" data-edge-label="annotations" data-edge-key="8" data-edge-id="sigrok-decoder" data-composition-points="1240,432;1320,432;1320,505;1400,505" data-composition-crossover="halo" data-composition-independent="true" d="M 1240 432 L 1312 432 Q 1320 432 1320 440 L 1320 497 Q 1320 505 1328 505 L 1400 505" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 1110 465 L 1210 465" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="acq" data-edge-to="decoder" data-edge-label="flux brut" data-edge-key="8" data-edge-id="acq-decoder" data-composition-points="1110,465;1210,465" data-composition-crossover="halo" data-composition-independent="true" d="M 1110 465 L 1210 465" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:9">
-          <path data-graph-role="automatic-crossover-underlay" d="M 1495 544 L 1495 620" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="decoder" data-edge-to="capture" data-edge-label="enregistrements" data-edge-key="9" data-edge-id="decoder-capture" data-composition-points="1495,544;1495,620" data-composition-crossover="halo" data-composition-independent="true" d="M 1495 544 L 1495 620" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 1315 504 L 1315 600" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="decoder" data-edge-to="pd" data-edge-label="flux brut" data-edge-key="9" data-edge-id="decoder-pd" data-composition-points="1315,504;1315,600" data-composition-crossover="halo" data-composition-independent="true" d="M 1315 504 L 1315 600" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:10">
-          <path data-graph-role="automatic-crossover-underlay" d="M 900 792 L 1060 792" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="cm5" data-edge-to="logs" data-edge-label="docker logs" data-edge-key="10" data-edge-id="cm5-logs" data-composition-points="900,792;1060,792" data-composition-crossover="halo" data-composition-independent="true" d="M 900 792 L 1060 792" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 1420 632 L 1436 632 Q 1444 632 1444 624 L 1444 480 Q 1444 472 1436 472 L 1420 472" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="pd" data-edge-to="decoder" data-edge-label="annotations I2C" data-edge-key="10" data-edge-id="pd-decoder" data-composition-points="1420,632;1444,632;1444,472;1420,472" data-composition-crossover="halo" data-composition-independent="true" d="M 1420 632 L 1436 632 Q 1444 632 1444 624 L 1444 480 Q 1444 472 1436 472 L 1420 472" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:11">
-          <path data-graph-role="automatic-crossover-underlay" d="M 1260 792 L 1322 792 Q 1330 792 1330 800 L 1330 824 Q 1330 832 1338 832 L 1400 832" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="logs" data-edge-to="rapport" data-edge-label="export fichier" data-edge-key="11" data-edge-id="logs-rapport" data-composition-points="1260,792;1330,792;1330,832;1400,832" data-composition-crossover="halo" data-composition-independent="true" d="M 1260 792 L 1322 792 Q 1330 792 1330 800 L 1330 824 Q 1330 832 1338 832 L 1400 832" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 1210 479 L 1168 479 Q 1160 479 1160 487 L 1160 617 Q 1160 625 1152 625 L 1110 625" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="decoder" data-edge-to="capture" data-edge-label="enregistrements" data-edge-key="11" data-edge-id="decoder-capture" data-composition-points="1210,479;1160,479;1160,625;1110,625" data-composition-crossover="halo" data-composition-independent="true" d="M 1210 479 L 1168 479 Q 1160 479 1160 487 L 1160 617 Q 1160 625 1152 625 L 1110 625" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
         <g data-graph-role="automatic-crossover" style="--step:12">
-          <path data-graph-role="automatic-crossover-underlay" d="M 1495 684 L 1495 800" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
-          <path data-edge-from="capture" data-edge-to="rapport" data-edge-label="correlate" data-edge-key="12" data-edge-id="capture-rapport" data-composition-points="1495,684;1495,800" data-composition-crossover="halo" data-composition-independent="true" d="M 1495 684 L 1495 800" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+          <path data-graph-role="automatic-crossover-underlay" d="M 125 664 L 125 704 Q 125 712 133 712 L 147 712 Q 155 712 155 720 L 155 760" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="cm5" data-edge-to="logs" data-edge-label="docker logs" data-edge-key="12" data-edge-id="cm5-logs" data-composition-points="125,664;125,712;155,712;155,760" data-composition-crossover="halo" data-composition-independent="true" d="M 125 664 L 125 704 Q 125 712 133 712 L 147 712 Q 155 712 155 720 L 155 760" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:13">
+          <path data-graph-role="automatic-crossover-underlay" d="M 270 799 L 1210 799" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="logs" data-edge-to="rapport" data-edge-label="fichier copié par Wi-Fi" data-edge-key="13" data-edge-id="logs-rapport" data-composition-points="270,799;1210,799" data-composition-crossover="halo" data-composition-independent="true" d="M 270 799 L 1210 799" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:14">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1110 639 L 1152 639 Q 1160 639 1160 647 L 1160 777 Q 1160 785 1168 785 L 1210 785" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="capture" data-edge-to="rapport" data-edge-label="correlate" data-edge-key="14" data-edge-id="capture-rapport" data-composition-points="1110,639;1160,639;1160,785;1210,785" data-composition-crossover="halo" data-composition-independent="true" d="M 1110 639 L 1152 639 Q 1160 639 1160 647 L 1160 777 Q 1160 785 1168 785 L 1210 785" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
         </g>
 
         <!-- Components -->
-        <g id="node-bp" data-node-id="bp" data-node-label="BP SC944D" tabindex="0" role="button" aria-label="Focus BP SC944D, maître I2C 0x10 · 099-37, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="backend" data-node-sublabel="maître I2C 0x10 · 099-37" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
-          <title>BP SC944D · maître I2C 0x10 · 099-37 · Armoire · 0 V TBTS jamais relié au PE</title>
-          <rect x="40" y="140" width="160" height="64" rx="6" class="c-mask"/>
-          <rect x="40" y="140" width="160" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 146) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+        <g id="node-bp" data-node-id="bp" data-node-label="BP SC944D" tabindex="0" role="button" aria-label="Centrer sur BP SC944D, maître I2C 0x10, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="maître I2C 0x10" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
+          <title>BP SC944D · maître I2C 0x10 · Armoire · 0 V TBTS jamais relié au PE</title>
+          <rect x="40" y="140" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="40" y="140" width="170" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(46 146) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="120" y="170" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BP SC944D</text>
-        <text data-detail="context" x="120" y="186" class="t-muted" font-size="9" text-anchor="middle">maître I2C 0x10 · 099-37</text>
+          <text data-node-label="" data-detail-anchor="" x="125" y="170" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BP SC944D</text>
+        <text data-detail="context" x="125" y="186" class="t-muted" font-size="9" text-anchor="middle">maître I2C 0x10</text>
         </g>
 
-        <g id="node-bus" data-node-id="bus" data-node-label="Bus I2C 50 kHz" tabindex="0" role="button" aria-label="Focus Bus I2C 50 kHz, SDA · SCL · 0 V (5 V), Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="messagebus" data-node-sublabel="SDA · SCL · 0 V (5 V)" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
-          <title>Bus I2C 50 kHz · SDA · SCL · 0 V (5 V) · Armoire · 0 V TBTS jamais relié au PE</title>
-          <rect x="380" y="140" width="170" height="64" rx="6" class="c-mask"/>
-          <rect x="380" y="140" width="170" height="64" rx="6" class="c-messagebus" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(386 146) scale(0.6875)">
+        <g id="node-bus" data-node-id="bus" data-node-label="Bus I2C 50 kHz" tabindex="0" role="button" aria-label="Centrer sur Bus I2C 50 kHz, SDA · SCL · 0 V (niveaux 5 V), Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="messagebus" data-node-sublabel="SDA · SCL · 0 V (niveaux 5 V)" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
+          <title>Bus I2C 50 kHz · SDA · SCL · 0 V (niveaux 5 V) · Armoire · 0 V TBTS jamais relié au PE</title>
+          <rect x="340" y="140" width="190" height="64" rx="6" class="c-mask"/>
+          <rect x="340" y="140" width="190" height="64" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(346 146) scale(0.6875)">
             <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
             <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
             <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
             <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="465" y="170" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Bus I2C 50 kHz</text>
-        <text data-detail="context" x="465" y="186" class="t-muted" font-size="9" text-anchor="middle">SDA · SCL · 0 V (5 V)</text>
+          <text data-node-label="" data-detail-anchor="" x="435" y="170" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Bus I2C 50 kHz</text>
+        <text data-detail="context" x="435" y="186" class="t-muted" font-size="9" text-anchor="middle">SDA · SCL · 0 V (niveaux 5 V)</text>
         </g>
 
-        <g id="node-ba11" data-node-id="ba11" data-node-label="BA 0x11" tabindex="0" role="button" aria-label="Focus BA 0x11, pièces de vie · SC940D, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="pièces de vie · SC940D" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
-          <title>BA 0x11 · pièces de vie · SC940D · Armoire · 0 V TBTS jamais relié au PE</title>
-          <rect x="720" y="40" width="180" height="64" rx="6" class="c-mask"/>
-          <rect x="720" y="40" width="180" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(726 46) scale(0.6875)">
+        <g id="node-ba11" data-node-id="ba11" data-node-label="BA 0x11" tabindex="0" role="button" aria-label="Centrer sur BA 0x11, pièces de vie, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="pièces de vie" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
+          <title>BA 0x11 · pièces de vie · Armoire · 0 V TBTS jamais relié au PE</title>
+          <rect x="660" y="40" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="660" y="40" width="170" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(666 46) scale(0.6875)">
             <rect x="2" y="3" width="12" height="10" rx="2"/>
             <path d="M2 6.5h12"/>
             <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
             <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="810" y="70" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BA 0x11</text>
-        <text data-detail="context" x="810" y="86" class="t-muted" font-size="9" text-anchor="middle">pièces de vie · SC940D</text>
+          <text data-node-label="" data-detail-anchor="" x="745" y="70" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BA 0x11</text>
+        <text data-detail="context" x="745" y="86" class="t-muted" font-size="9" text-anchor="middle">pièces de vie</text>
         </g>
 
-        <g id="node-ba12" data-node-id="ba12" data-node-label="BA 0x12" tabindex="0" role="button" aria-label="Focus BA 0x12, chambres · SC942C, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="chambres · SC942C" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
-          <title>BA 0x12 · chambres · SC942C · Armoire · 0 V TBTS jamais relié au PE</title>
-          <rect x="720" y="140" width="180" height="64" rx="6" class="c-mask"/>
-          <rect x="720" y="140" width="180" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(726 146) scale(0.6875)">
+        <g id="node-ba12" data-node-id="ba12" data-node-label="BA 0x12" tabindex="0" role="button" aria-label="Centrer sur BA 0x12, chambres, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="chambres" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
+          <title>BA 0x12 · chambres · Armoire · 0 V TBTS jamais relié au PE</title>
+          <rect x="660" y="140" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="660" y="140" width="170" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(666 146) scale(0.6875)">
             <rect x="2" y="3" width="12" height="10" rx="2"/>
             <path d="M2 6.5h12"/>
             <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
             <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="810" y="170" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BA 0x12</text>
-        <text data-detail="context" x="810" y="186" class="t-muted" font-size="9" text-anchor="middle">chambres · SC942C</text>
+          <text data-node-label="" data-detail-anchor="" x="745" y="170" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BA 0x12</text>
+        <text data-detail="context" x="745" y="186" class="t-muted" font-size="9" text-anchor="middle">chambres</text>
         </g>
 
-        <g id="node-ba13" data-node-id="ba13" data-node-label="BA 0x13" tabindex="0" role="button" aria-label="Focus BA 0x13, pièces d&#39;eau · SC941C, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="pièces d&#39;eau · SC941C" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
-          <title>BA 0x13 · pièces d&#39;eau · SC941C · Armoire · 0 V TBTS jamais relié au PE</title>
-          <rect x="720" y="240" width="180" height="64" rx="6" class="c-mask"/>
-          <rect x="720" y="240" width="180" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(726 246) scale(0.6875)">
+        <g id="node-ba13" data-node-id="ba13" data-node-label="BA 0x13" tabindex="0" role="button" aria-label="Centrer sur BA 0x13, pièces d&#39;eau, Armoire · 0 V TBTS jamais relié au PE" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="pièces d&#39;eau" data-node-context="Armoire · 0 V TBTS jamais relié au PE">
+          <title>BA 0x13 · pièces d&#39;eau · Armoire · 0 V TBTS jamais relié au PE</title>
+          <rect x="660" y="240" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="660" y="240" width="170" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(666 246) scale(0.6875)">
             <rect x="2" y="3" width="12" height="10" rx="2"/>
             <path d="M2 6.5h12"/>
             <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
             <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="810" y="270" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BA 0x13</text>
-        <text data-detail="context" x="810" y="286" class="t-muted" font-size="9" text-anchor="middle">pièces d&#39;eau · SC941C</text>
+          <text data-node-label="" data-detail-anchor="" x="745" y="270" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">BA 0x13</text>
+        <text data-detail="context" x="745" y="286" class="t-muted" font-size="9" text-anchor="middle">pièces d&#39;eau</text>
         </g>
 
-        <g id="node-sonde" data-node-id="sonde" data-node-label="Sonde passive" tabindex="0" role="button" aria-label="Focus Sonde passive, 1 kΩ · TVS · 74LVC2G17, Architecture component" aria-pressed="false" data-node-kind="security" data-node-sublabel="1 kΩ · TVS · 74LVC2G17" data-node-context="Architecture component">
-          <title>Sonde passive · 1 kΩ · TVS · 74LVC2G17 · Architecture component</title>
-          <rect x="380" y="480" width="170" height="64" rx="6" class="c-mask"/>
-          <rect x="380" y="480" width="170" height="64" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(386 486) scale(0.6875)">
-            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
-            <path d="m5.8 8 1.5 1.5 3-3"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="465" y="510" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Sonde passive</text>
-        <text data-detail="context" x="465" y="526" class="t-muted" font-size="9" text-anchor="middle">1 kΩ · TVS · 74LVC2G17</text>
-        </g>
-
-        <g id="node-fx2" data-node-id="fx2" data-node-label="Analyseur FX2" tabindex="0" role="button" aria-label="Focus Analyseur FX2, fx2lafw · ≥ 1 MHz, Hôte sur batterie · Wi-Fi seulement" aria-pressed="false" data-node-kind="backend" data-node-sublabel="fx2lafw · ≥ 1 MHz" data-node-context="Hôte sur batterie · Wi-Fi seulement">
-          <title>Analyseur FX2 · fx2lafw · ≥ 1 MHz · Hôte sur batterie · Wi-Fi seulement</title>
-          <rect x="720" y="480" width="180" height="64" rx="6" class="c-mask"/>
-          <rect x="720" y="480" width="180" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(726 486) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="810" y="510" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Analyseur FX2</text>
-        <text data-detail="context" x="810" y="526" class="t-muted" font-size="9" text-anchor="middle">fx2lafw · ≥ 1 MHz</text>
-        </g>
-
-        <g id="node-sigrok" data-node-id="sigrok" data-node-label="sigrok-cli" tabindex="0" role="button" aria-label="Focus sigrok-cli, décodeur I2C (oracle), Hôte sur batterie · Wi-Fi seulement" aria-pressed="false" data-node-kind="backend" data-node-sublabel="décodeur I2C (oracle)" data-node-context="Hôte sur batterie · Wi-Fi seulement">
-          <title>sigrok-cli · décodeur I2C (oracle) · Hôte sur batterie · Wi-Fi seulement</title>
-          <rect x="1060" y="400" width="180" height="64" rx="6" class="c-mask"/>
-          <rect x="1060" y="400" width="180" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(1066 406) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="1150" y="430" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">sigrok-cli</text>
-        <text data-detail="context" x="1150" y="446" class="t-muted" font-size="9" text-anchor="middle">décodeur I2C (oracle)</text>
-        </g>
-
-        <g id="node-decoder" data-node-id="decoder" data-node-label="essensys-i2c-sniff" tabindex="0" role="button" aria-label="Focus essensys-i2c-sniff, trames · CRC · commandes, Hôte sur batterie · Wi-Fi seulement" aria-pressed="false" data-node-kind="backend" data-node-sublabel="trames · CRC · commandes" data-node-context="Hôte sur batterie · Wi-Fi seulement">
-          <title>essensys-i2c-sniff · trames · CRC · commandes · Hôte sur batterie · Wi-Fi seulement</title>
-          <rect x="1400" y="480" width="190" height="64" rx="6" class="c-mask"/>
-          <rect x="1400" y="480" width="190" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(1406 486) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="1495" y="510" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">essensys-i2c-sniff</text>
-        <text data-detail="context" x="1495" y="526" class="t-muted" font-size="9" text-anchor="middle">trames · CRC · commandes</text>
-        </g>
-
-        <g id="node-capture" data-node-id="capture" data-node-label="Capture" tabindex="0" role="button" aria-label="Focus Capture, texte · NDJSON · .bin, Hôte sur batterie · Wi-Fi seulement" aria-pressed="false" data-node-kind="database" data-node-sublabel="texte · NDJSON · .bin" data-node-context="Hôte sur batterie · Wi-Fi seulement">
-          <title>Capture · texte · NDJSON · .bin · Hôte sur batterie · Wi-Fi seulement</title>
-          <rect x="1400" y="620" width="190" height="64" rx="6" class="c-mask"/>
-          <rect x="1400" y="620" width="190" height="64" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(1406 626) scale(0.6875)">
-            <ellipse cx="8" cy="4" rx="5" ry="2"/>
-            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="1495" y="650" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Capture</text>
-        <text data-detail="context" x="1495" y="666" class="t-muted" font-size="9" text-anchor="middle">texte · NDJSON · .bin</text>
-        </g>
-
-        <g id="node-cm5" data-node-id="cm5" data-node-label="Gateway CM5" tabindex="0" role="button" aria-label="Focus Gateway CM5, backend Go, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="backend Go" data-node-context="Architecture component">
-          <title>Gateway CM5 · backend Go · Architecture component</title>
-          <rect x="720" y="760" width="180" height="64" rx="6" class="c-mask"/>
-          <rect x="720" y="760" width="180" height="64" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(726 766) scale(0.6875)">
-            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="810" y="790" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Gateway CM5</text>
-        <text data-detail="context" x="810" y="806" class="t-muted" font-size="9" text-anchor="middle">backend Go</text>
-        </g>
-
-        <g id="node-logs" data-node-id="logs" data-node-label="Journaux backend" tabindex="0" role="button" aria-label="Focus Journaux backend, Sending Actions · acknowledged, Architecture component" aria-pressed="false" data-node-kind="database" data-node-sublabel="Sending Actions · acknowledged" data-node-context="Architecture component">
-          <title>Journaux backend · Sending Actions · acknowledged · Architecture component</title>
-          <rect x="1060" y="760" width="200" height="64" rx="6" class="c-mask"/>
-          <rect x="1060" y="760" width="200" height="64" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(1066 766) scale(0.6875)">
-            <ellipse cx="8" cy="4" rx="5" ry="2"/>
-            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="1160" y="790" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Journaux backend</text>
-        <text data-detail="context" x="1160" y="806" class="t-muted" font-size="9" text-anchor="middle">Sending Actions · acknowledged</text>
-        </g>
-
-        <g id="node-rapport" data-node-id="rapport" data-node-label="Rapport de corrélation" tabindex="0" role="button" aria-label="Focus Rapport de corrélation, action → trame → BA, Architecture component" aria-pressed="false" data-node-kind="external" data-node-sublabel="action → trame → BA" data-node-context="Architecture component">
-          <title>Rapport de corrélation · action → trame → BA · Architecture component</title>
-          <rect x="1400" y="800" width="200" height="64" rx="6" class="c-mask"/>
-          <rect x="1400" y="800" width="200" height="64" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(1406 806) scale(0.6875)">
+        <g id="node-sonde" data-node-id="sonde" data-node-label="Sonde passive" tabindex="0" role="button" aria-label="Centrer sur Sonde passive, 1 kΩ · TVS · tampon 74LVC2G17, Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE" aria-pressed="false" data-node-kind="external" data-node-sublabel="1 kΩ · TVS · tampon 74LVC2G17" data-node-context="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE">
+          <title>Sonde passive · 1 kΩ · TVS · tampon 74LVC2G17 · Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE</title>
+          <rect x="340" y="440" width="190" height="64" rx="6" class="c-mask"/>
+          <rect x="340" y="440" width="190" height="64" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(346 446) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="1500" y="830" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Rapport de corrélation</text>
-        <text data-detail="context" x="1500" y="846" class="t-muted" font-size="9" text-anchor="middle">action → trame → BA</text>
+          <text data-node-label="" data-detail-anchor="" x="435" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Sonde passive</text>
+        <text data-detail="context" x="435" y="486" class="t-muted" font-size="9" text-anchor="middle">1 kΩ · TVS · tampon 74LVC2G17</text>
+        </g>
+
+        <g id="node-fx2" data-node-id="fx2" data-node-label="Analyseur FX2" tabindex="0" role="button" aria-label="Centrer sur Analyseur FX2, D0 = SCL · D1 = SDA, Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE" aria-pressed="false" data-node-kind="external" data-node-sublabel="D0 = SCL · D1 = SDA" data-node-context="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE">
+          <title>Analyseur FX2 · D0 = SCL · D1 = SDA · Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE</title>
+          <rect x="620" y="440" width="180" height="64" rx="6" class="c-mask"/>
+          <rect x="620" y="440" width="180" height="64" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(626 446) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="710" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Analyseur FX2</text>
+        <text data-detail="context" x="710" y="486" class="t-muted" font-size="9" text-anchor="middle">D0 = SCL · D1 = SDA</text>
+        </g>
+
+        <g id="node-acq" data-node-id="acq" data-node-label="sigrok-cli (acquisition)" tabindex="0" role="button" aria-label="Centrer sur sigrok-cli (acquisition), fx2lafw · ≥ 1 MHz · -O binary, Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE" aria-pressed="false" data-node-kind="backend" data-node-sublabel="fx2lafw · ≥ 1 MHz · -O binary" data-node-context="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE">
+          <title>sigrok-cli (acquisition) · fx2lafw · ≥ 1 MHz · -O binary · Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE</title>
+          <rect x="900" y="440" width="210" height="64" rx="6" class="c-mask"/>
+          <rect x="900" y="440" width="210" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(906 446) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1005" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">sigrok-cli (acquisition)</text>
+        <text data-detail="context" x="1005" y="486" class="t-muted" font-size="9" text-anchor="middle">fx2lafw · ≥ 1 MHz · -O binary</text>
+        </g>
+
+        <g id="node-decoder" data-node-id="decoder" data-node-label="essensys-i2c-sniff" tabindex="0" role="button" aria-label="Centrer sur essensys-i2c-sniff, trames · CRC · lignes bloquées, Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE" aria-pressed="false" data-node-kind="backend" data-node-sublabel="trames · CRC · lignes bloquées" data-node-context="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE">
+          <title>essensys-i2c-sniff · trames · CRC · lignes bloquées · Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE</title>
+          <rect x="1210" y="440" width="210" height="64" rx="6" class="c-mask"/>
+          <rect x="1210" y="440" width="210" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(1216 446) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1315" y="470" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">essensys-i2c-sniff</text>
+        <text data-detail="context" x="1315" y="486" class="t-muted" font-size="9" text-anchor="middle">trames · CRC · lignes bloquées</text>
+        </g>
+
+        <g id="node-pd" data-node-id="pd" data-node-label="sigrok-cli (décodeur I2C)" tabindex="0" role="button" aria-label="Centrer sur sigrok-cli (décodeur I2C), oracle indépendant, Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE" aria-pressed="false" data-node-kind="backend" data-node-sublabel="oracle indépendant" data-node-context="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE">
+          <title>sigrok-cli (décodeur I2C) · oracle indépendant · Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE</title>
+          <rect x="1210" y="600" width="210" height="64" rx="6" class="c-mask"/>
+          <rect x="1210" y="600" width="210" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(1216 606) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1315" y="630" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">sigrok-cli (décodeur I2C)</text>
+        <text data-detail="context" x="1315" y="646" class="t-muted" font-size="9" text-anchor="middle">oracle indépendant</text>
+        </g>
+
+        <g id="node-capture" data-node-id="capture" data-node-label="Capture" tabindex="0" role="button" aria-label="Centrer sur Capture, texte · NDJSON · .bin, Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE" aria-pressed="false" data-node-kind="database" data-node-sublabel="texte · NDJSON · .bin" data-node-context="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE">
+          <title>Capture · texte · NDJSON · .bin · Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE</title>
+          <rect x="900" y="600" width="210" height="64" rx="6" class="c-mask"/>
+          <rect x="900" y="600" width="210" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(906 606) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1005" y="630" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Capture</text>
+        <text data-detail="context" x="1005" y="646" class="t-muted" font-size="9" text-anchor="middle">texte · NDJSON · .bin</text>
+        </g>
+
+        <g id="node-cm5" data-node-id="cm5" data-node-label="Gateway CM5" tabindex="0" role="button" aria-label="Centrer sur Gateway CM5, backend Go · port 80, Réseau local · relié au PE" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="backend Go · port 80" data-node-context="Réseau local · relié au PE">
+          <title>Gateway CM5 · backend Go · port 80 · Réseau local · relié au PE</title>
+          <rect x="40" y="600" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="40" y="600" width="170" height="64" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(46 606) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="125" y="630" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Gateway CM5</text>
+        <text data-detail="context" x="125" y="646" class="t-muted" font-size="9" text-anchor="middle">backend Go · port 80</text>
+        </g>
+
+        <g id="node-logs" data-node-id="logs" data-node-label="Journaux du backend" tabindex="0" role="button" aria-label="Centrer sur Journaux du backend, Sending Actions · Action acknowledged, Réseau local · relié au PE" aria-pressed="false" data-node-kind="database" data-node-sublabel="Sending Actions · Action acknowledged" data-node-context="Réseau local · relié au PE">
+          <title>Journaux du backend · Sending Actions · Action acknowledged · Réseau local · relié au PE</title>
+          <rect x="40" y="760" width="230" height="64" rx="6" class="c-mask"/>
+          <rect x="40" y="760" width="230" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(46 766) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="155" y="790" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Journaux du backend</text>
+        <text data-detail="context" x="155" y="806" class="t-muted" font-size="9" text-anchor="middle">Sending Actions · Action acknowledged</text>
+        </g>
+
+        <g id="node-rapport" data-node-id="rapport" data-node-label="Rapport de corrélation" tabindex="0" role="button" aria-label="Centrer sur Rapport de corrélation, action → trame → BA, Composant d&#39;architecture" aria-pressed="false" data-node-kind="database" data-node-sublabel="action → trame → BA" data-node-context="Composant d&#39;architecture">
+          <title>Rapport de corrélation · action → trame → BA · Composant d&#39;architecture</title>
+          <rect x="1210" y="760" width="210" height="64" rx="6" class="c-mask"/>
+          <rect x="1210" y="760" width="210" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(1216 766) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="1315" y="790" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Rapport de corrélation</text>
+        <text data-detail="context" x="1315" y="806" class="t-muted" font-size="9" text-anchor="middle">action → trame → BA</text>
         </g>
 
         <!-- Connection labels -->
-        <g data-detail="context" data-edge-from="bp" data-edge-to="bus" data-edge-label="trames + réponses" data-edge-key="0" data-edge-id="bp-bus">
-          <rect x="244.2" y="152" width="91.6" height="14" rx="3" class="c-mask"/>
-          <text x="290" y="162" class="t-edge-emphasis" font-size="8" text-anchor="middle">trames + réponses</text>
+        <g data-detail="context" data-edge-from="cm5" data-edge-to="bp" data-edge-label="HTTP : actions, /api/done avant l&#39;I2C" data-edge-key="0" data-edge-id="cm5-bp">
+          <rect x="131" y="395" width="187.6" height="14" rx="3" class="c-mask"/>
+          <text x="224.8" y="405" class="t-edge-emphasis" font-size="8" text-anchor="middle">HTTP : actions, /api/done avant l&#39;I2C</text>
         </g>
-        <g data-detail="context" data-edge-from="bus" data-edge-to="ba11" data-edge-label="ACK" data-edge-key="1" data-edge-id="bus-ba11">
-          <rect x="559" y="95" width="30" height="14" rx="3" class="c-mask"/>
-          <text x="574" y="105" class="t-edge-default" font-size="8" text-anchor="middle">ACK</text>
+        <g data-detail="context" data-edge-from="bp" data-edge-to="bus" data-edge-label="trame, puis réponse du BA" data-edge-key="1" data-edge-id="bp-bus">
+          <rect x="210" y="152" width="130" height="14" rx="3" class="c-mask"/>
+          <text x="275" y="162" class="t-edge-default" font-size="8" text-anchor="middle">trame, puis réponse du BA</text>
         </g>
-        <g data-detail="context" data-edge-from="bus" data-edge-to="ba12" data-edge-label="NACK ?" data-edge-key="2" data-edge-id="bus-ba12">
-          <rect x="615.6" y="152" width="38.8" height="14" rx="3" class="c-mask"/>
-          <text x="635" y="162" class="t-edge-dashed" font-size="8" text-anchor="middle">NACK ?</text>
+
+
+
+        <g data-detail="context" data-edge-from="bus" data-edge-to="sonde" data-edge-label="lecture seule · SDA, SCL et 0 V" data-edge-key="5" data-edge-id="bus-sonde">
+          <rect x="355.6" y="220" width="158.79999999999998" height="14" rx="3" class="c-mask"/>
+          <text x="435" y="230" class="t-edge-default" font-size="8" text-anchor="middle">lecture seule · SDA, SCL et 0 V</text>
         </g>
-        <g data-detail="context" data-edge-from="bus" data-edge-to="ba13" data-edge-label="NACK ?" data-edge-key="3" data-edge-id="bus-ba13">
-          <rect x="615.6" y="209" width="38.8" height="14" rx="3" class="c-mask"/>
-          <text x="635" y="219" class="t-edge-dashed" font-size="8" text-anchor="middle">NACK ?</text>
+        <g data-detail="context" data-edge-from="sonde" data-edge-to="fx2" data-edge-label="SCL, SDA, 0 V" data-edge-key="6" data-edge-id="sonde-fx2">
+          <rect x="538.8" y="452" width="72.4" height="14" rx="3" class="c-mask"/>
+          <text x="575" y="462" class="t-edge-default" font-size="8" text-anchor="middle">SCL, SDA, 0 V</text>
         </g>
-        <g data-detail="context" data-edge-from="bus" data-edge-to="sonde" data-edge-label="écoute seule · 3 fils" data-edge-key="4" data-edge-id="bus-sonde">
-          <rect x="348.20000000000005" y="335" width="110.8" height="14" rx="3" class="c-mask"/>
-          <text x="403.6" y="345" class="t-edge-security" font-size="8" text-anchor="middle">écoute seule · 3 fils</text>
+        <g data-detail="context" data-edge-from="fx2" data-edge-to="acq" data-edge-label="USB" data-edge-key="7" data-edge-id="fx2-acq">
+          <rect x="835" y="452" width="30" height="14" rx="3" class="c-mask"/>
+          <text x="850" y="462" class="t-edge-default" font-size="8" text-anchor="middle">USB</text>
         </g>
-        <g data-detail="context" data-edge-from="sonde" data-edge-to="fx2" data-edge-label="D0 SCL · D1 SDA" data-edge-key="5" data-edge-id="sonde-fx2">
-          <rect x="594" y="492" width="82" height="14" rx="3" class="c-mask"/>
-          <text x="635" y="502" class="t-edge-default" font-size="8" text-anchor="middle">D0 SCL · D1 SDA</text>
+        <g data-detail="context" data-edge-from="acq" data-edge-to="decoder" data-edge-label="flux brut" data-edge-key="8" data-edge-id="acq-decoder">
+          <rect x="1133.4" y="445" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="1160" y="455" class="t-edge-default" font-size="8" text-anchor="middle">flux brut</text>
         </g>
-        <g data-detail="context" data-edge-from="fx2" data-edge-to="sigrok" data-edge-label="flux brut" data-edge-key="6" data-edge-id="fx2-sigrok">
-          <rect x="953.4" y="448.5" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
-          <text x="980" y="458.5" class="t-edge-default" font-size="8" text-anchor="middle">flux brut</text>
+        <g data-detail="context" data-edge-from="decoder" data-edge-to="pd" data-edge-label="flux brut" data-edge-key="9" data-edge-id="decoder-pd">
+          <rect x="1255.8000000000002" y="545" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="1282.4" y="555" class="t-edge-default" font-size="8" text-anchor="middle">flux brut</text>
         </g>
-        <g data-detail="context" data-edge-from="fx2" data-edge-to="decoder" data-edge-label="flux brut · lignes bloquées" data-edge-key="7" data-edge-id="fx2-decoder">
-          <rect x="1080.2" y="499" width="139.6" height="14" rx="3" class="c-mask"/>
-          <text x="1150" y="509" class="t-edge-default" font-size="8" text-anchor="middle">flux brut · lignes bloquées</text>
+        <g data-detail="context" data-edge-from="pd" data-edge-to="decoder" data-edge-label="annotations I2C" data-edge-key="10" data-edge-id="pd-decoder">
+          <rect x="1403" y="532" width="82" height="14" rx="3" class="c-mask"/>
+          <text x="1444" y="542" class="t-edge-default" font-size="8" text-anchor="middle">annotations I2C</text>
         </g>
-        <g data-detail="context" data-edge-from="sigrok" data-edge-to="decoder" data-edge-label="annotations" data-edge-key="8" data-edge-id="sigrok-decoder">
-          <rect x="1288.6" y="448.5" width="62.8" height="14" rx="3" class="c-mask"/>
-          <text x="1320" y="458.5" class="t-edge-default" font-size="8" text-anchor="middle">annotations</text>
+        <g data-detail="context" data-edge-from="decoder" data-edge-to="capture" data-edge-label="enregistrements" data-edge-key="11" data-edge-id="decoder-capture">
+          <rect x="1119" y="532" width="82" height="14" rx="3" class="c-mask"/>
+          <text x="1160" y="542" class="t-edge-default" font-size="8" text-anchor="middle">enregistrements</text>
         </g>
-        <g data-detail="context" data-edge-from="decoder" data-edge-to="capture" data-edge-label="enregistrements" data-edge-key="9" data-edge-id="decoder-capture">
-          <rect x="1407" y="575" width="82" height="14" rx="3" class="c-mask"/>
-          <text x="1448" y="585" class="t-edge-default" font-size="8" text-anchor="middle">enregistrements</text>
+        <g data-detail="context" data-edge-from="cm5" data-edge-to="logs" data-edge-label="docker logs" data-edge-key="12" data-edge-id="cm5-logs">
+          <rect x="108.6" y="692" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="140" y="702" class="t-edge-default" font-size="8" text-anchor="middle">docker logs</text>
         </g>
-        <g data-detail="context" data-edge-from="cm5" data-edge-to="logs" data-edge-label="docker logs" data-edge-key="10" data-edge-id="cm5-logs">
-          <rect x="948.6" y="772" width="62.8" height="14" rx="3" class="c-mask"/>
-          <text x="980" y="782" class="t-edge-default" font-size="8" text-anchor="middle">docker logs</text>
+        <g data-detail="context" data-edge-from="logs" data-edge-to="rapport" data-edge-label="fichier copié par Wi-Fi" data-edge-key="13" data-edge-id="logs-rapport">
+          <rect x="679.8" y="779" width="120.39999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="740" y="789" class="t-edge-dashed" font-size="8" text-anchor="middle">fichier copié par Wi-Fi</text>
         </g>
-        <g data-detail="context" data-edge-from="logs" data-edge-to="rapport" data-edge-label="export fichier" data-edge-key="11" data-edge-id="logs-rapport">
-          <rect x="1291.4" y="792" width="77.2" height="14" rx="3" class="c-mask"/>
-          <text x="1330" y="802" class="t-edge-dashed" font-size="8" text-anchor="middle">export fichier</text>
-        </g>
-        <g data-detail="context" data-edge-from="capture" data-edge-to="rapport" data-edge-label="correlate" data-edge-key="12" data-edge-id="capture-rapport">
-          <rect x="1435.8000000000002" y="735" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
-          <text x="1462.4" y="745" class="t-edge-default" font-size="8" text-anchor="middle">correlate</text>
+        <g data-detail="context" data-edge-from="capture" data-edge-to="rapport" data-edge-label="correlate" data-edge-key="14" data-edge-id="capture-rapport">
+          <rect x="1133.4" y="692" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="1160" y="702" class="t-edge-default" font-size="8" text-anchor="middle">correlate</text>
         </g>
 
         <!-- Boundary labels (foreground masks keep routes out of titles) -->
         <g data-graph-role="structural-frame-label" data-composition-frame-id="0" data-composition-frame-kind="region" data-composition-frame-label="Armoire · 0 V TBTS jamais relié au PE">
-          <rect data-graph-role="structural-frame-label-mask" x="14" y="18" width="247.7548609096774" height="18" rx="3" class="c-mask"/>
-          <text data-boundary-label="" x="18" y="32.70967841935484" class="t-cloud" font-size="10.709678419354839" font-weight="600">Armoire · 0 V TBTS jamais relié au PE</text>
+          <rect data-graph-role="structural-frame-label-mask" x="14" y="19" width="228.41937703870965" height="17" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="18" y="32.83871067741936" class="t-cloud" font-size="9.838710677419355" font-weight="600">Armoire · 0 V TBTS jamais relié au PE</text>
         </g>
 
-        <g data-graph-role="structural-frame-label" data-composition-frame-id="1" data-composition-frame-kind="security-group" data-composition-frame-label="Hôte sur batterie · Wi-Fi seulement">
-          <rect data-graph-role="structural-frame-label-mask" x="694" y="378" width="234.90324680645162" height="18" rx="3" class="c-mask"/>
-          <text data-boundary-label="" x="698" y="392.7096784193548" class="t-security" font-size="10.709678419354839" font-weight="600">Hôte sur batterie · Wi-Fi seulement</text>
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="1" data-composition-frame-kind="security-group" data-composition-frame-label="Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE">
+          <rect data-graph-role="structural-frame-label-mask" x="314" y="419" width="576.7097350193548" height="17" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="318" y="432.83871067741933" class="t-security" font-size="9.838710677419355" font-weight="600">Hôte sur batterie · même 0 V que l&#39;armoire dès que la sonde est branchée · aucun lien vers le PE</text>
+        </g>
+
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="2" data-composition-frame-kind="region" data-composition-frame-label="Réseau local · relié au PE">
+          <rect data-graph-role="structural-frame-label-mask" x="14" y="579" width="163.48388656774193" height="17" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="18" y="592.8387106774194" class="t-cloud" font-size="9.838710677419355" font-weight="600">Réseau local · relié au PE</text>
         </g>
 
         <!-- Legend -->
         <g data-legend="" data-legend-bridge="">
-          <text x="40" y="896" class="t-primary" font-size="12" font-weight="650">Legend</text>
-          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Frontend" data-legend-x="40" data-legend-baseline="916" data-legend-width="83">
-            <rect x="40" y="907" width="16" height="10" rx="2.5" class="c-frontend" stroke-width="1"/>
-            <text x="62" y="916" class="t-muted" font-size="10" font-weight="500">Frontend</text>
+          <text x="40" y="876" class="t-primary" font-size="12" font-weight="650">Légende</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Cartes de l&#39;armoire" data-legend-x="40" data-legend-baseline="896" data-legend-width="138">
+            <rect x="40" y="887" width="16" height="10" rx="2.5" class="c-frontend" stroke-width="1"/>
+            <text x="62" y="896" class="t-muted" font-size="10" font-weight="500">Cartes de l&#39;armoire</text>
           </g>
-          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Backend" data-legend-x="145" data-legend-baseline="916" data-legend-width="78">
-            <rect x="145" y="907" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
-            <text x="167" y="916" class="t-muted" font-size="10" font-weight="500">Backend</text>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Logiciels sur l&#39;hôte" data-legend-x="200" data-legend-baseline="896" data-legend-width="143">
+            <rect x="200" y="887" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
+            <text x="222" y="896" class="t-muted" font-size="10" font-weight="500">Logiciels sur l&#39;hôte</text>
           </g>
-          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Database" data-legend-x="245" data-legend-baseline="916" data-legend-width="83">
-            <rect x="245" y="907" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
-            <text x="267" y="916" class="t-muted" font-size="10" font-weight="500">Database</text>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Fichiers et rapports" data-legend-x="365" data-legend-baseline="896" data-legend-width="143">
+            <rect x="365" y="887" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
+            <text x="387" y="896" class="t-muted" font-size="10" font-weight="500">Fichiers et rapports</text>
           </g>
-          <g data-legend-semantic-kind="cloud" data-legend-kind="cloud" data-legend-label="Cloud" data-legend-x="350" data-legend-baseline="916" data-legend-width="68">
-            <rect x="350" y="907" width="16" height="10" rx="2.5" class="c-cloud" stroke-width="1"/>
-            <text x="372" y="916" class="t-muted" font-size="10" font-weight="500">Cloud</text>
+          <g data-legend-semantic-kind="cloud" data-legend-kind="cloud" data-legend-label="Gateway CM5 (réseau local)" data-legend-x="530" data-legend-baseline="896" data-legend-width="172">
+            <rect x="530" y="887" width="16" height="10" rx="2.5" class="c-cloud" stroke-width="1"/>
+            <text x="552" y="896" class="t-muted" font-size="10" font-weight="500">Gateway CM5 (réseau local)</text>
           </g>
-          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Security" data-legend-x="440" data-legend-baseline="916" data-legend-width="83">
-            <rect x="440" y="907" width="16" height="10" rx="2.5" class="c-security" stroke-width="1"/>
-            <text x="462" y="916" class="t-muted" font-size="10" font-weight="500">Security</text>
+          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Bus I2C" data-legend-x="724" data-legend-baseline="896" data-legend-width="78">
+            <rect x="724" y="887" width="16" height="10" rx="2.5" class="c-messagebus" stroke-width="1"/>
+            <text x="746" y="896" class="t-muted" font-size="10" font-weight="500">Bus I2C</text>
           </g>
-          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Message bus" data-legend-x="545" data-legend-baseline="916" data-legend-width="98">
-            <rect x="545" y="907" width="16" height="10" rx="2.5" class="c-messagebus" stroke-width="1"/>
-            <text x="567" y="916" class="t-muted" font-size="10" font-weight="500">Message bus</text>
-          </g>
-          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="External" data-legend-x="665" data-legend-baseline="916" data-legend-width="83">
-            <rect x="665" y="907" width="16" height="10" rx="2.5" class="c-external" stroke-width="1"/>
-            <text x="687" y="916" class="t-muted" font-size="10" font-weight="500">External</text>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Matériel de capture" data-legend-x="824" data-legend-baseline="896" data-legend-width="138">
+            <rect x="824" y="887" width="16" height="10" rx="2.5" class="c-external" stroke-width="1"/>
+            <text x="846" y="896" class="t-muted" font-size="10" font-weight="500">Matériel de capture</text>
           </g>
         </g>
       </svg>
@@ -5333,167 +5358,167 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       <div class="diagram-guide no-print" id="diagram-guide" hidden role="dialog" aria-modal="false" aria-labelledby="diagram-guide-title">
         <div class="diagram-guide-head">
           <span>
-            <span class="diagram-guide-eyebrow">Diagram guide</span>
+            <span class="diagram-guide-eyebrow">Guide du diagramme</span>
             <strong class="diagram-guide-title" id="diagram-guide-title">Explore this system</strong>
           </span>
-          <button class="diagram-guide-close" id="diagram-guide-close" type="button" aria-label="Close diagram guide">&#215;</button>
+          <button class="diagram-guide-close" id="diagram-guide-close" type="button" aria-label="Fermer le guide du diagramme">&#215;</button>
         </div>
-        <p class="diagram-guide-stats" id="diagram-guide-stats">Inspecting compiled semantics</p>
-        <div class="diagram-guide-actions" id="diagram-guide-actions" role="group" aria-label="Diagram exploration actions">
-          <button class="diagram-guide-action" type="button" data-guide-action="find" aria-label="Find any node">
+        <p class="diagram-guide-stats" id="diagram-guide-stats">Inspection de la sémantique compilée</p>
+        <div class="diagram-guide-actions" id="diagram-guide-actions" role="group" aria-label="Actions d&#39;exploration du diagramme">
+          <button class="diagram-guide-action" type="button" data-guide-action="find" aria-label="Trouver un nœud">
             <span class="diagram-guide-index" aria-hidden="true">01</span>
-            <span class="diagram-guide-action-copy"><strong>Find any node</strong><small>Search labels, responsibilities, kinds, and stable IDs.</small></span>
+            <span class="diagram-guide-action-copy"><strong>Trouver un nœud</strong><small>Rechercher par libellés, responsabilités, types et identifiants stables.</small></span>
             <kbd aria-hidden="true">/</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="route" aria-label="Trace a directed route">
+          <button class="diagram-guide-action" type="button" data-guide-action="route" aria-label="Tracer un itinéraire orienté">
             <span class="diagram-guide-index" aria-hidden="true">02</span>
-            <span class="diagram-guide-action-copy"><strong>Trace a route</strong><small>Ask how two semantic nodes connect in authored direction.</small></span>
+            <span class="diagram-guide-action-copy"><strong>Tracer un itinéraire</strong><small>Découvrez comment deux nœuds sémantiques sont reliés dans le sens édité.</small></span>
             <kbd aria-hidden="true">R</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="map" aria-label="See the whole system">
+          <button class="diagram-guide-action" type="button" data-guide-action="map" aria-label="Voir tout le système">
             <span class="diagram-guide-index" aria-hidden="true">03</span>
-            <span class="diagram-guide-action-copy"><strong>See the whole system</strong><small>Open Semantic Radar with a live viewport and stable nodes.</small></span>
+            <span class="diagram-guide-action-copy"><strong>Voir tout le système</strong><small>Ouvrir le radar sémantique avec un viewport en direct et des nœuds stables.</small></span>
             <kbd aria-hidden="true">M</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="lens" aria-label="Compare semantic kinds">
+          <button class="diagram-guide-action" type="button" data-guide-action="lens" aria-label="Comparer les types sémantiques">
             <span class="diagram-guide-index" aria-hidden="true">04</span>
-            <span class="diagram-guide-action-copy"><strong>Compare semantic kinds</strong><small>Count roles, reveal their traffic, and compare direct authored links.</small></span>
+            <span class="diagram-guide-action-copy"><strong>Comparer les types sémantiques</strong><small>Comptez les rôles, révélez leur trafic et comparez les liens édités directs.</small></span>
             <kbd aria-hidden="true">L</kbd>
           </button>
-          <button class="diagram-guide-action" type="button" data-guide-action="present" aria-label="Enter presentation stage">
+          <button class="diagram-guide-action" type="button" data-guide-action="present" aria-label="Entrer en mode présentation">
             <span class="diagram-guide-index" aria-hidden="true">05</span>
-            <span class="diagram-guide-action-copy"><strong>Enter Presentation Stage</strong><small>Give the live diagram the viewport without changing export.</small></span>
+            <span class="diagram-guide-action-copy"><strong>Entrer en mode présentation</strong><small>Donnez tout le viewport au diagramme en direct sans modifier l&#39;export.</small></span>
             <kbd aria-hidden="true">F</kbd>
           </button>
         </div>
-        <div class="diagram-guide-shortcuts" aria-label="Additional keyboard shortcuts">
-          <span><kbd>E</kbd> Export</span><span><kbd>T</kbd> Theme</span><span><kbd>S</kbd> Style</span><span><kbd>0</kbd> Reset</span><span><kbd>+</kbd> Zoom in</span><span><kbd>-</kbd> Zoom out</span><span><kbd>Esc</kbd> Close</span>
+        <div class="diagram-guide-shortcuts" aria-label="Raccourcis clavier supplémentaires">
+          <span><kbd>E</kbd> Exporter</span><span><kbd>T</kbd> Thème</span><span><kbd>S</kbd> Style</span><span><kbd>0</kbd> Réinitialiser</span><span><kbd>+</kbd> Zoom avant</span><span><kbd>-</kbd> Zoom arrière</span><span><kbd>Esc</kbd> Fermer</span>
         </div>
         <p class="diagram-guide-feedback" id="diagram-guide-feedback" aria-live="polite"></p>
       </div>
       <div class="node-finder no-print" id="node-finder" hidden role="dialog" aria-modal="false" aria-labelledby="node-finder-title">
         <div class="node-finder-head">
-          <strong id="node-finder-title">Find a node</strong>
-          <button class="node-finder-close" id="node-finder-close" type="button" aria-label="Close node finder">&#215;</button>
+          <strong id="node-finder-title">Trouver un nœud</strong>
+          <button class="node-finder-close" id="node-finder-close" type="button" aria-label="Fermer le chercheur de nœuds">&#215;</button>
         </div>
         <div class="node-finder-search">
           <span aria-hidden="true">&#8981;</span>
-          <input class="node-finder-input" id="node-finder-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search labels or IDs" aria-label="Search diagram nodes" aria-describedby="node-finder-status">
+          <input class="node-finder-input" id="node-finder-input" type="search" autocomplete="off" spellcheck="false" placeholder="Rechercher par libellé ou identifiant" aria-label="Rechercher les nœuds du diagramme" aria-describedby="node-finder-status">
           <kbd aria-hidden="true">/</kbd>
         </div>
-        <div class="node-finder-results" id="node-finder-results" role="group" aria-label="Diagram nodes"></div>
-        <p class="node-finder-empty" id="node-finder-empty" hidden>No matching nodes</p>
+        <div class="node-finder-results" id="node-finder-results" role="group" aria-label="Nœuds du diagramme"></div>
+        <p class="node-finder-empty" id="node-finder-empty" hidden>Aucun nœud correspondant</p>
         <p class="node-finder-status" id="node-finder-status" aria-live="polite"></p>
       </div>
       <div class="focus-chip relationship-lens no-print" id="focus-chip" hidden role="region" aria-labelledby="relationship-lens-title">
         <div class="relationship-lens-head">
           <button class="relationship-lens-drag-handle" id="btn-focus-move" type="button" data-focus-drag-handle aria-label="Move semantic passport. Drag, use arrow keys, or press Home to reset." title="Move semantic passport. Drag, use arrow keys, or press Home to reset."></button>
           <div class="relationship-lens-copy">
-            <span class="relationship-lens-eyebrow">Semantic passport</span>
+            <span class="relationship-lens-eyebrow">Passeport sémantique</span>
             <strong class="relationship-lens-title" id="relationship-lens-title"><span id="focus-label"></span></strong>
             <span class="semantic-passport-detail" id="focus-detail" hidden></span>
-            <div class="semantic-passport-meta" id="focus-passport-meta" aria-label="Node metadata">
+            <div class="semantic-passport-meta" id="focus-passport-meta" aria-label="Métadonnées du nœud">
               <span id="focus-kind" data-passport="kind"></span>
               <span id="focus-context" data-passport="context" hidden></span>
               <span id="focus-tag" data-passport="tag" hidden></span>
               <span id="focus-brand" data-passport="brand" hidden></span>
               <code id="focus-id" data-passport="id"></code>
             </div>
-            <div class="semantic-passport-evidence" id="focus-evidence" hidden aria-label="Verified source evidence">
+            <div class="semantic-passport-evidence" id="focus-evidence" hidden aria-label="Preuve de source vérifiée">
               <div class="semantic-passport-evidence-head">
-                <span class="semantic-passport-evidence-status">Verified source</span>
+                <span class="semantic-passport-evidence-status">Source vérifiée</span>
                 <a class="semantic-passport-repository" id="focus-repository" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"></a>
               </div>
               <div class="semantic-passport-evidence-links" id="focus-evidence-links"></div>
             </div>
             <span class="relationship-lens-summary" id="focus-summary" aria-live="polite"></span>
             <div class="semantic-passport-reach" id="focus-reach" hidden>
-              <span class="semantic-passport-reach-label">Authored reach</span>
-              <div class="semantic-passport-reach-actions" role="group" aria-label="Trace authored reachability">
-                <button id="btn-reach-upstream" type="button" aria-label="Trace upstream authored reachability" aria-pressed="false">
-                  <span>Upstream</span><strong id="focus-reach-upstream-count">0</strong>
+              <span class="semantic-passport-reach-label">Portée éditée</span>
+              <div class="semantic-passport-reach-actions" role="group" aria-label="Tracer l&#39;accessibilité éditée">
+                <button id="btn-reach-upstream" type="button" aria-label="Tracer l&#39;accessibilité éditée en amont" aria-pressed="false">
+                  <span>Amont</span><strong id="focus-reach-upstream-count">0</strong>
                 </button>
-                <button id="btn-reach-downstream" type="button" aria-label="Trace downstream authored reachability" aria-pressed="false">
-                  <span>Downstream</span><strong id="focus-reach-downstream-count">0</strong>
+                <button id="btn-reach-downstream" type="button" aria-label="Tracer l&#39;accessibilité éditée en aval" aria-pressed="false">
+                  <span>Aval</span><strong id="focus-reach-downstream-count">0</strong>
                 </button>
               </div>
               <small class="semantic-passport-reach-status" id="focus-reach-status" hidden aria-live="polite"></small>
             </div>
           </div>
           <div class="relationship-lens-actions">
-            <button id="btn-focus-clear" type="button" aria-label="Close semantic passport" title="Close">&#215;</button>
-            <button id="btn-focus-copy" type="button" aria-label="Copy link to focused node">Copy link</button>
-            <button id="btn-focus-relations" type="button" aria-label="Show connected relationships" aria-expanded="false" aria-controls="relationship-lens-list">Relations</button>
+            <button id="btn-focus-clear" type="button" aria-label="Fermer le passeport sémantique" title="Fermer">&#215;</button>
+            <button id="btn-focus-copy" type="button" aria-label="Copier le lien du nœud centré">Copier le lien</button>
+            <button id="btn-focus-relations" type="button" aria-label="Afficher les relations connectées" aria-expanded="false" aria-controls="relationship-lens-list">Relations</button>
           </div>
         </div>
-        <div class="relationship-lens-list" id="relationship-lens-list" aria-label="Connected relationships"></div>
+        <div class="relationship-lens-list" id="relationship-lens-list" aria-label="Relations connectées"></div>
       </div>
       <div class="route-probe no-print" id="route-probe" hidden role="region" aria-labelledby="route-probe-title" data-state="idle">
         <div class="route-probe-head">
           <span class="route-probe-copy">
-            <span class="route-probe-eyebrow">Path</span>
-            <strong class="route-probe-title" id="route-probe-title">Click where the path starts</strong>
+            <span class="route-probe-eyebrow">Sonde d&#39;itinéraire</span>
+            <strong class="route-probe-title" id="route-probe-title">Choisir un nœud de départ</strong>
           </span>
           <span class="route-probe-actions">
-            <button class="route-probe-find" id="route-probe-find" type="button" aria-label="Find a route start" data-node-finder-trigger>Find start</button>
-            <button class="route-probe-copy-link" id="route-probe-copy" type="button" aria-label="Copy link to traced route" hidden>Copy link</button>
-            <button id="route-probe-clear" type="button" aria-label="Clear route probe">Clear</button>
+            <button class="route-probe-find" id="route-probe-find" type="button" aria-label="Trouver un départ d&#39;itinéraire" data-node-finder-trigger>Trouver le départ</button>
+            <button class="route-probe-copy-link" id="route-probe-copy" type="button" aria-label="Copier le lien de l&#39;itinéraire tracé" hidden>Copier le lien</button>
+            <button id="route-probe-clear" type="button" aria-label="Effacer la sonde d&#39;itinéraire">Effacer</button>
           </span>
         </div>
-        <div class="route-probe-path" id="route-probe-path" aria-label="Path">
-          <span class="route-probe-placeholder">Click two nodes on the diagram</span>
+        <div class="route-probe-path" id="route-probe-path" aria-label="Itinéraire tracé">
+          <span class="route-probe-placeholder">Choisissez deux nœuds sémantiques sur le diagramme</span>
         </div>
-        <div class="route-journey-controls" id="route-journey-controls" hidden role="group" aria-label="Route journey controls" data-playing="false">
-          <button id="route-journey-prev" type="button" aria-label="Previous route position" title="Previous route position">&#8592;</button>
-          <button class="route-journey-play" id="route-journey-play" type="button" aria-label="Play route journey" aria-pressed="false" title="Play route journey">
+        <div class="route-journey-controls" id="route-journey-controls" hidden role="group" aria-label="Contrôles du parcours d&#39;itinéraire" data-playing="false">
+          <button id="route-journey-prev" type="button" aria-label="Position précédente de l&#39;itinéraire" title="Position précédente de l&#39;itinéraire">&#8592;</button>
+          <button class="route-journey-play" id="route-journey-play" type="button" aria-label="Lire le parcours de l&#39;itinéraire" aria-pressed="false" title="Lire le parcours de l&#39;itinéraire">
             <span id="route-journey-play-icon" aria-hidden="true">&#9654;</span>
-            <span id="route-journey-play-label">Journey</span>
+            <span id="route-journey-play-label">Parcours</span>
           </button>
-          <button id="route-journey-next" type="button" aria-label="Next route position" title="Next route position">&#8594;</button>
-          <button class="route-journey-overview" id="route-journey-overview" type="button" aria-label="Show complete route overview" title="Show complete route overview">Overview</button>
+          <button id="route-journey-next" type="button" aria-label="Position suivante de l&#39;itinéraire" title="Position suivante de l&#39;itinéraire">&#8594;</button>
+          <button class="route-journey-overview" id="route-journey-overview" type="button" aria-label="Afficher la vue d&#39;ensemble complète de l&#39;itinéraire" title="Afficher la vue d&#39;ensemble complète de l&#39;itinéraire">Vue d&#39;ensemble</button>
         </div>
-        <small class="route-probe-status" id="route-probe-status" aria-live="polite">Click a start, then an end. Paths follow the arrows.</small>
+        <small class="route-probe-status" id="route-probe-status" aria-live="polite">Choisissez la source, puis la destination. Le sens compte.</small>
       </div>
       <div class="semantic-lens no-print" id="semantic-lens" hidden role="dialog" aria-modal="false" aria-labelledby="semantic-lens-title">
         <div class="semantic-lens-head">
           <span>
-            <span class="semantic-lens-eyebrow">Semantic lens</span>
-            <strong class="semantic-lens-title" id="semantic-lens-title">Compare system roles</strong>
+            <span class="semantic-lens-eyebrow">Lentille sémantique</span>
+            <strong class="semantic-lens-title" id="semantic-lens-title">Comparer les rôles du système</strong>
           </span>
-          <button class="semantic-lens-close" id="semantic-lens-close" type="button" aria-label="Close semantic lens">&#215;</button>
+          <button class="semantic-lens-close" id="semantic-lens-close" type="button" aria-label="Fermer la lentille sémantique">&#215;</button>
         </div>
-        <p class="semantic-lens-instruction">Choose up to two semantic kinds. One reveals its real traffic; two compare only direct authored relationships.</p>
-        <div class="semantic-lens-kinds" id="semantic-lens-kinds" role="group" aria-label="Semantic kinds"></div>
-        <p class="semantic-lens-status" id="semantic-lens-status" aria-live="polite">Choose a kind to inspect its nodes and touching relationships.</p>
+        <p class="semantic-lens-instruction">Choisissez jusqu&#39;à deux types sémantiques. Un seul révèle son trafic réel ; deux comparent uniquement les relations éditées directes.</p>
+        <div class="semantic-lens-kinds" id="semantic-lens-kinds" role="group" aria-label="Types sémantiques"></div>
+        <p class="semantic-lens-status" id="semantic-lens-status" aria-live="polite">Choisissez un type pour inspecter ses nœuds et relations associées.</p>
         <div class="semantic-lens-actions">
-          <button id="semantic-lens-copy" type="button" aria-label="Copy link to semantic lens" hidden>Copy link</button>
-          <button id="semantic-lens-clear" type="button" aria-label="Clear semantic lens">Clear</button>
+          <button id="semantic-lens-copy" type="button" aria-label="Copier le lien de la lentille sémantique" hidden>Copier le lien</button>
+          <button id="semantic-lens-clear" type="button" aria-label="Effacer la lentille sémantique">Effacer</button>
         </div>
       </div>
       <div class="overview-map no-print" id="overview-map" hidden role="region" aria-labelledby="overview-map-title">
         <div class="overview-map-head">
           <span class="overview-map-live" aria-hidden="true"></span>
           <span class="overview-map-copy">
-            <strong id="overview-map-title">Semantic radar</strong>
-            <small id="overview-map-status" aria-live="polite">Building overview</small>
+            <strong id="overview-map-title">Radar sémantique</strong>
+            <small id="overview-map-status" aria-live="polite">Construction de la vue d&#39;ensemble</small>
           </span>
-          <button class="overview-map-expand" id="overview-map-expand" type="button" aria-label="Open full semantic radar">Open radar</button>
-          <button class="overview-map-close" id="overview-map-close" type="button" aria-label="Close semantic radar">&#215;</button>
+          <button class="overview-map-expand" id="overview-map-expand" type="button" aria-label="Ouvrir le radar sémantique complet">Ouvrir le radar</button>
+          <button class="overview-map-close" id="overview-map-close" type="button" aria-label="Fermer le radar sémantique">&#215;</button>
         </div>
-        <div class="overview-map-surface" id="overview-map-surface" tabindex="0" role="group" aria-label="Diagram overview. Click a node to focus it, or use arrow keys to pan."></div>
-        <div class="overview-map-hint" aria-hidden="true"><span>Click node</span><span>Drag to pan</span></div>
+        <div class="overview-map-surface" id="overview-map-surface" tabindex="0" role="group" aria-label="Vue d&#39;ensemble du diagramme. Cliquez sur un nœud pour le centrer, ou utilisez les flèches pour vous déplacer."></div>
+        <div class="overview-map-hint" aria-hidden="true"><span>Cliquer sur le nœud</span><span>Glisser pour se déplacer</span></div>
       </div>
-      <p class="overview-map-feedback no-print" id="overview-map-feedback" role="status" aria-live="polite" hidden>Semantic radar needs more MAP space.</p>
+      <p class="overview-map-feedback no-print" id="overview-map-feedback" role="status" aria-live="polite" hidden>Le radar sémantique a besoin de plus d&#39;espace MAP.</p>
       <button class="rail-reveal no-print" id="rail-reveal" type="button" hidden aria-controls="reader-rail" aria-expanded="false"><span class="rail-reveal-icon" aria-hidden="true"></span><span>Notes &amp; index</span></button>
-      <div class="diagram-nav no-print" role="toolbar" aria-label="Diagram view controls">
-        <button id="btn-route-probe" type="button" aria-label="Trace a directed route" aria-pressed="false" aria-controls="route-probe" title="Trace route (R)">PATH</button>
-        <button id="btn-overview-map" type="button" aria-label="Open semantic radar" aria-expanded="false" aria-controls="overview-map" title="Semantic radar (M)">MAP</button>
-        <button id="btn-semantic-lens" type="button" aria-label="Open semantic lens" aria-haspopup="dialog" aria-expanded="false" aria-pressed="false" aria-controls="semantic-lens" title="Semantic lens (L)">LENS</button>
-        <button id="btn-node-finder" type="button" aria-label="Find a node" aria-haspopup="dialog" aria-expanded="false" aria-controls="node-finder" title="Find a node (/)" data-node-finder-trigger><span class="diagram-nav-icon find" aria-hidden="true"></span></button>
-        <button id="btn-diagram-guide" type="button" hidden aria-label="Open diagram guide" aria-haspopup="dialog" aria-expanded="false" aria-controls="diagram-guide" title="Diagram guide (?)"><span class="diagram-nav-icon guide" aria-hidden="true"></span></button>
-        <button data-view="out" type="button" aria-label="Zoom out" title="Zoom out (-)"><span class="diagram-nav-icon minus" aria-hidden="true"></span></button>
-        <button data-view="reset" type="button" aria-label="Reset diagram view" title="Reset view (0)"><span class="diagram-nav-detail" data-view-detail hidden>READ</span><span class="diagram-nav-percent" data-view-percent>100%</span></button>
-        <button data-view="in" type="button" aria-label="Zoom in" title="Zoom in (+)"><span class="diagram-nav-icon plus" aria-hidden="true"></span></button>
+      <div class="diagram-nav no-print" role="toolbar" aria-label="Contrôles de la vue du diagramme">
+        <button id="btn-route-probe" type="button" aria-label="Tracer un itinéraire orienté" aria-pressed="false" aria-controls="route-probe" title="Tracer l&#39;itinéraire (R)">ROUTE</button>
+        <button id="btn-overview-map" type="button" aria-label="Ouvrir le radar sémantique" aria-expanded="false" aria-controls="overview-map" title="Radar sémantique (M)">CARTE</button>
+        <button id="btn-semantic-lens" type="button" aria-label="Ouvrir la lentille sémantique" aria-haspopup="dialog" aria-expanded="false" aria-pressed="false" aria-controls="semantic-lens" title="Lentille sémantique (L)">LENTILLE</button>
+        <button id="btn-node-finder" type="button" aria-label="Trouver un nœud" aria-haspopup="dialog" aria-expanded="false" aria-controls="node-finder" title="Trouver un nœud (/)" data-node-finder-trigger><span class="diagram-nav-icon find" aria-hidden="true"></span></button>
+        <button id="btn-diagram-guide" type="button" hidden aria-label="Ouvrir le guide du diagramme" aria-haspopup="dialog" aria-expanded="false" aria-controls="diagram-guide" title="Guide du diagramme (?)"><span class="diagram-nav-icon guide" aria-hidden="true"></span></button>
+        <button data-view="out" type="button" aria-label="Zoom arrière" title="Zoom arrière (-)"><span class="diagram-nav-icon minus" aria-hidden="true"></span></button>
+        <button data-view="reset" type="button" aria-label="Réinitialiser la vue du diagramme" title="Réinitialiser la vue (0)"><span class="diagram-nav-detail" data-view-detail hidden>LIRE</span><span class="diagram-nav-percent" data-view-percent>100%</span></button>
+        <button data-view="in" type="button" aria-label="Zoom avant" title="Zoom avant (+)"><span class="diagram-nav-icon plus" aria-hidden="true"></span></button>
       </div>
     </div>
 
@@ -5507,12 +5532,12 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       <div class="card">
         <div class="card-header">
           <div class="card-dot rose"></div>
-          <h3>Strictement passif</h3>
+          <h3>Masses et sécurité</h3>
         </div>
         <ul>
-          <li>Aucune émission sur le bus, aucune pull-up, jamais le +15 V</li>
-          <li>Branchement hors tension par une personne habilitée</li>
-          <li>Aucun accès réseau au CM5 : les journaux sont un fichier</li>
+          <li>La sonde relie le 0 V de l&#39;hôte à celui de l&#39;armoire : hôte sur batterie, Wi-Fi seulement</li>
+          <li>Branchement hors tension par une personne habilitée, jamais le +15 V</li>
+          <li>Aucune émission sur le bus, aucun accès réseau au CM5</li>
         </ul>
       </div>
 
@@ -5535,7 +5560,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           <h3>À ne pas confondre</h3>
         </div>
         <ul>
-          <li>Action acquittée par le BP ≠ ordre reçu par le BA</li>
+          <li>/api/done part avant l&#39;I2C : action acquittée ≠ ordre reçu par le BA</li>
           <li>Trame validée CRC ≠ sortie physiquement commutée</li>
         </ul>
       </div>
