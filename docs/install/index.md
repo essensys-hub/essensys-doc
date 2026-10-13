@@ -169,5 +169,6 @@ Mode d'**accès à distance** pour l'utilisateur final : pilotage domotique depu
 | [Gateway CM5 (dual-NIC)](gateway-cm5.md) | Installation complète CM5, cloud, Traefik |
 | [HTTPS local utilisateur](https-local.md) | Certificat Essensys Local CA sur iPad/Mac/PC |
 | [Raspberry Pi (classique)](raspberry-pi.md) | Bootstrap installation Pi 4 |
+| [Ajouter ou remplacer un BP](ajout-bp.md) | Raccorder un boîtier principal SC944D neuf à une gateway CM5, contrôles de mise en service |
 
 > Sources canoniques : dépôts [`essensys-ansible`](https://github.com/essensys-hub/essensys-ansible) et [`essensys-raspberry-install`](https://github.com/essensys-hub/essensys-raspberry-install).
