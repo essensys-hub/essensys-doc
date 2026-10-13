@@ -65,6 +65,7 @@ nav:
     - Gateway CM5: install/gateway-cm5.md
     - HTTPS local: install/https-local.md
     - Raspberry Pi: install/raspberry-pi.md
+    - Ajouter ou remplacer un BP: install/ajout-bp.md
     - Protection contre les surtensions: install/protection-surtensions.md
     - Remise en service après surtension: install/remise-en-service-surtension.md
     - Module N2 ESP32: install/module-n2-esp32.md
