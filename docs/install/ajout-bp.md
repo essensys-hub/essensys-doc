@@ -172,7 +172,7 @@ docker logs --since 10m essensys-backend 2>&1 | grep -E "admin/inject|Sending Ac
 | Observation | Diagnostic |
 |---|---|
 | `admin/inject`, puis `Sending Actions` avec le GUID, puis `Action acknowledged`, et effet constaté | OK |
-| Même séquence, **sans effet**, et index 12 avec le bit du BA visé | BA muet sur l'I2C : bus, alimentation ou carte BA. Voir [Remise en service après surtension](remise-en-service-surtension.md) |
+| Même séquence, **sans effet**, et index 12 avec le bit du BA visé | BA muet sur l'I2C : bus, alimentation ou carte BA. Pour le confirmer sur le bus : [espion I2C passif](../debug/espion-i2c.md). Voir aussi [Remise en service après surtension](remise-en-service-surtension.md) |
 | Pas de `admin/inject` après la commande | La commande n'atteint pas la gateway : session LAN, mode test de l'interface, URL utilisée |
 | `Sending Actions` répété avec le même GUID, sans acquittement | Action refusée par le BP : le voyant SERVEUR devrait alors être rouge. Inspecter la file avec `docker exec essensys-redis redis-cli LRANGE essensys:global:actions 0 -1` |
 

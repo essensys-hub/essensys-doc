@@ -80,6 +80,9 @@ nav:
     - Materiel: architecture/hardware-overview.md
     - Diagrammes: architecture/diagrams.md
     - Client legacy: architecture/legacy-client.md
+  - Debug:
+    - debug/index.md
+    - Espion I2C passif: debug/espion-i2c.md
   - Retours d'expérience:
     - Présentation: retex/index.md
     - Foudre du 9 août 2026:

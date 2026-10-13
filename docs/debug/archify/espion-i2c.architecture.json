@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Espion I2C passif : chaîne de debug du bus BP / BA",
+    "output": "docs/debug/archify/espion-i2c.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "bp",
+      "type": "backend",
+      "label": "BP SC944D",
+      "sublabel": "maître I2C 0x10 · 099-37",
+      "pos": [
+        40,
+        140
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "bus",
+      "type": "messagebus",
+      "label": "Bus I2C 50 kHz",
+      "sublabel": "SDA · SCL · 0 V (5 V)",
+      "pos": [
+        380,
+        140
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "ba11",
+      "type": "frontend",
+      "label": "BA 0x11",
+      "sublabel": "pièces de vie · SC940D",
+      "pos": [
+        720,
+        40
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "ba12",
+      "type": "frontend",
+      "label": "BA 0x12",
+      "sublabel": "chambres · SC942C",
+      "pos": [
+        720,
+        140
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "ba13",
+      "type": "frontend",
+      "label": "BA 0x13",
+      "sublabel": "pièces d'eau · SC941C",
+      "pos": [
+        720,
+        240
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "sonde",
+      "type": "security",
+      "label": "Sonde passive",
+      "sublabel": "1 kΩ · TVS · 74LVC2G17",
+      "pos": [
+        380,
+        480
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "fx2",
+      "type": "backend",
+      "label": "Analyseur FX2",
+      "sublabel": "fx2lafw · ≥ 1 MHz",
+      "pos": [
+        720,
+        480
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "sigrok",
+      "type": "backend",
+      "label": "sigrok-cli",
+      "sublabel": "décodeur I2C (oracle)",
+      "pos": [
+        1060,
+        400
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "decoder",
+      "type": "backend",
+      "label": "essensys-i2c-sniff",
+      "sublabel": "trames · CRC · commandes",
+      "pos": [
+        1400,
+        480
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "capture",
+      "type": "database",
+      "label": "Capture",
+      "sublabel": "texte · NDJSON · .bin",
+      "pos": [
+        1400,
+        620
+      ],
+      "size": [
+        190,
+        64
+      ]
+    },
+    {
+      "id": "cm5",
+      "type": "cloud",
+      "label": "Gateway CM5",
+      "sublabel": "backend Go",
+      "pos": [
+        720,
+        760
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "logs",
+      "type": "database",
+      "label": "Journaux backend",
+      "sublabel": "Sending Actions · acknowledged",
+      "pos": [
+        1060,
+        760
+      ],
+      "size": [
+        200,
+        64
+      ]
+    },
+    {
+      "id": "rapport",
+      "type": "external",
+      "label": "Rapport de corrélation",
+      "sublabel": "action → trame → BA",
+      "pos": [
+        1400,
+        800
+      ],
+      "size": [
+        200,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Armoire · 0 V TBTS jamais relié au PE",
+      "wraps": [
+        "bp",
+        "bus",
+        "ba11",
+        "ba12",
+        "ba13"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Hôte sur batterie · Wi-Fi seulement",
+      "wraps": [
+        "fx2",
+        "sigrok",
+        "decoder",
+        "capture"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "bp-bus",
+      "from": "bp",
+      "to": "bus",
+      "label": "trames + réponses",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bus-ba11",
+      "from": "bus",
+      "to": "ba11",
+      "label": "ACK"
+    },
+    {
+      "id": "bus-ba12",
+      "from": "bus",
+      "to": "ba12",
+      "label": "NACK ?",
+      "variant": "dashed"
+    },
+    {
+      "id": "bus-ba13",
+      "from": "bus",
+      "to": "ba13",
+      "label": "NACK ?",
+      "variant": "dashed"
+    },
+    {
+      "id": "bus-sonde",
+      "from": "bus",
+      "to": "sonde",
+      "label": "écoute seule · 3 fils",
+      "variant": "security"
+    },
+    {
+      "id": "sonde-fx2",
+      "from": "sonde",
+      "to": "fx2",
+      "label": "D0 SCL · D1 SDA"
+    },
+    {
+      "id": "fx2-sigrok",
+      "from": "fx2",
+      "to": "sigrok",
+      "label": "flux brut"
+    },
+    {
+      "id": "fx2-decoder",
+      "from": "fx2",
+      "to": "decoder",
+      "label": "flux brut · lignes bloquées"
+    },
+    {
+      "id": "sigrok-decoder",
+      "from": "sigrok",
+      "to": "decoder",
+      "label": "annotations"
+    },
+    {
+      "id": "decoder-capture",
+      "from": "decoder",
+      "to": "capture",
+      "label": "enregistrements"
+    },
+    {
+      "id": "cm5-logs",
+      "from": "cm5",
+      "to": "logs",
+      "label": "docker logs"
+    },
+    {
+      "id": "logs-rapport",
+      "from": "logs",
+      "to": "rapport",
+      "label": "export fichier",
+      "variant": "dashed"
+    },
+    {
+      "id": "capture-rapport",
+      "from": "capture",
+      "to": "rapport",
+      "label": "correlate"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Strictement passif",
+      "items": [
+        "Aucune émission sur le bus, aucune pull-up, jamais le +15 V",
+        "Branchement hors tension par une personne habilitée",
+        "Aucun accès réseau au CM5 : les journaux sont un fichier"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Ce que l'outil distingue",
+      "items": [
+        "NACK d'adresse : BA absent",
+        "Écho CRC 00 00 : trame rejetée par le BA",
+        "Ligne SDA ou SCL bloquée au niveau bas",
+        "Répétitions puis abandon du maître"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "À ne pas confondre",
+      "items": [
+        "Action acquittée par le BP ≠ ordre reçu par le BA",
+        "Trame validée CRC ≠ sortie physiquement commutée"
+      ]
+    }
+  ]
+}

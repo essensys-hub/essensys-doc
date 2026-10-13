@@ -51,6 +51,9 @@ Référence des exigences : change OpenSpec `i2c-surge-protection-2026-10-007` (
 
 Relever aussi, avant expiration des historiques, les horodatages disponibles (journaux du réseau local, supervision des sources autonomes, dernière commande BA réussie côté serveur) et les conserver dans le dossier privé de l'installation.
 
+!!! tip "Voir ce qui passe réellement sur le bus"
+    L'index 12 dit qu'un BA ne répond pas, mais pas pourquoi. L'[espion I2C passif](../debug/espion-i2c.md) montre, sans rien émettre, si le BA est absent (NACK d'adresse), s'il rejette des trames corrompues, ou si une ligne du bus est bloquée.
+
 ## E1 / E2 : isoler la carte fautive par débranchement
 
 Le 230 V reste consigné ; le BP est sur l'alimentation de laboratoire flottante.
