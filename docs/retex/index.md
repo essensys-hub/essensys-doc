@@ -11,7 +11,11 @@ Les informations personnelles (lieu, personnes, prestataires, marques des équip
 
 ## Coup de foudre du 9 août 2026
 
-Après un orage et un coup de foudre rapporté sur une maison équipée de photovoltaïque, les trois boîtiers auxiliaires de l'armoire ne répondent plus. Deux lectures sont proposées :
+Après un orage et un coup de foudre rapporté sur une maison équipée de photovoltaïque, les trois boîtiers auxiliaires de l'armoire ne répondent plus.
+
+**Mise à jour du 14 octobre 2026.** Le boîtier principal et un boîtier auxiliaire ont été remplacés : le nouveau répond, les deux autres non. Le code des cartes a été analysé : pas d'appairage, une clé d'accès hors de cause, un acquittement qui ne prouve pas l'exécution. Voir [Où en est-on ?](foudre-2026/synthese.md#suivi).
+
+Deux lectures sont proposées :
 
 | Page | Pour qui | Contenu |
 |---|---|---|

@@ -23,6 +23,8 @@ Elle s'adresse aux électroniciens, aux contributeurs du projet open hardware et
 !!! warning "Statut de l'analyse (octobre 2026)"
     L'analyse a été faite sur dossier et sur photos. **Aucune mesure électrique n'a encore été faite sur les cartes.** Le BA en cause, s'il y en a un, n'est pas identifié, et l'origine de la surtension n'est pas établie. Une première version de l'analyse, écrite sans les photos du site, supposait une topologie fausse ; elle a été corrigée (voir [Méthode](#methode)).
 
+    **Mise à jour du 14 octobre 2026.** Le BP et le BA de bout de chaîne ont été remplacés. Ce BA répond ; les deux autres restent muets. Le code du BP et des BA a été analysé. Voir [Suivi du diagnostic](#suivi).
+
 ## Résumé { #resume }
 
 - **Symptôme** *[établi]*. Depuis le 9 août 2026, aucun des trois BA ne répond au BP. Le microcontrôleur du BP semble tourner : sa LED de téléinformation est allumée et son lien Ethernet est actif *[déduit d'une photo, à confirmer par une vidéo]*.
@@ -32,6 +34,70 @@ Elle s'adresse aux électroniciens, aux contributeurs du projet open hardware et
 - **Origine** *[hypothèse]*. Quatre hypothèses restent ouvertes : entrée côté photovoltaïque par l'Ethernet (H-PV), surtension du réseau en mode commun (H-RÉS), surtension temporaire ou défaut d'onduleur (H-TOV), événements indépendants (H-IND). L'arrêt du photovoltaïque en même temps que la coupure du disjoncteur de branchement (témoignage) est attendu, l'onduleur s'arrêtant dès que le réseau disparaît : il ne départage pas les hypothèses. Le parafoudre AC du coffret photovoltaïque a ses fenêtres noires, mais on ignore depuis quand.
 - **Court terme**. Sécuriser, faire un cycle complet d'alimentation des BA, puis, s'ils restent muets, isoler la carte fautive par débranchement. Passer R1/R2 de 0 à 47 Ω, protéger le +15 V (PTC puis TVS), remplacer le chaînage par une étoile du bus complet (seuil multiplié par 4 à 6) et isoler l'Ethernet du BP. Ne jamais poser de parafoudre RJ45 relié à la terre au BP.
 - **Long terme**. Dans un coffret unique : une carte d'interconnexion équipotentielle et des ports isolés à la frontière. Pour un BA déporté : un module d'isolement par BA. Pour la génération 3 : RS-485 isolé.
+
+## Suivi du diagnostic (14 octobre 2026) { #suivi }
+
+Cette section complète l'analyse initiale. Elle ne la remplace pas : les sections suivantes décrivent la situation d'août.
+
+### Ce qui a changé sur le site
+
+- **Remplacements** *[établi]*. Le BP (SC944D, image de production 099-37) et le BA pièces de vie (SC940D, firmware v1.7), en bout de chaîne, ont été remplacés par des cartes neuves. C'est le premier BP posé depuis la fermeture de la société Essensys. Il dialogue avec une passerelle locale qui remplace l'ancien serveur.
+- **Constat des 12 et 13 octobre** *[établi]* :
+  - le BP reçoit les ordres et les acquitte ;
+  - le SC940D exécute les siens : l'éclairage de l'entrée fonctionne ;
+  - le BA chambres (SC942C, adresse 0x12) et le BA pièces d'eau (SC941C, adresse 0x13) restent muets. L'index 12 vaut **0x18**.
+- **Le bus n'est plus bloqué** *[déduit]*. Le chaînage relevé sur les photos est BP → SC942C → SC941C → SC940D. Le SC940D, en bout de chaîne, reçoit SDA, SCL et +15 V à travers les connecteurs des deux autres BA. La cause « ligne tenue basse » du [§8](#bus-bloque) ne décrit plus l'état actuel : **le défaut est local au SC942C et au SC941C**.
+
+### Fausses pistes écartées *[établi, code]*
+
+- **La clé d'accès à distance du BP**, vide sur un BP neuf, n'y est pour rien. Elle ne sert qu'à l'authentification auprès de l'ancien serveur et au déchiffrement de l'ordre d'alarme distant. La passerelle locale ne l'exige pas.
+- **Un appairage des cartes neuves** n'existe pas. Rien ne permet à un BP et à un BA neufs de se « reconnaître » :
+  - le BP appelle chaque BA à une adresse fixe (`0x11 + n`, I2C à 50 kHz), sans présentation ni négociation de version ;
+  - le BA répond dès que son PIC tourne.
+
+### Ce que le code dit du démarrage et des ordres *[établi, code]*
+
+- **Démarrage du BP** :
+  - il alimente les BA (+15VSP) environ 1,6 s après son démarrage, et coupe ce +15 V en mode secouru ;
+  - il **n'envoie aucune configuration au démarrage** : le bus reste silencieux jusqu'au premier ordre ;
+  - un BA en panne n'apparaît donc en défaut qu'après un ordre qui le vise.
+- **Démarrage d'un BA** (PIC16F946) : il n'attend rien du BP et relit sa configuration en EEPROM. Il n'a pas de watchdog. Sa LED DL1 clignote une fois par seconde, sans lien avec l'I2C : elle prouve seulement que le PIC tourne à la bonne vitesse.
+- **Un ordre acquitté n'est pas un ordre exécuté.**
+  - Le BP acquitte chaque ordre auprès de la passerelle **avant** de l'envoyer sur le bus (`www.c`).
+  - Après 5 échecs, le BA est déclaré en défaut. Après 20, l'ordre est abandonné, puis il n'y a plus qu'un essai par nouvel ordre.
+  - Les configurations perdues ne sont pas renvoyées : il faudra les renvoyer après la réparation.
+
+### Le protocole dépend de la version du firmware des BA *[établi, décodage des fichiers de programmation]*
+
+| Firmware BA | Contrôle des trames | Avec le BP 099-37 |
+|---|---|---|
+| 1.10 (pièces de vie seulement) | aucun dialogue I2C | jamais de réponse |
+| 1.30 à 1.4 | somme de contrôle sur 8 bits | le BA acquitte son adresse, mais le BP rejette sa réponse et le BA n'exécute pas l'ordre |
+| 1.5 à 1.7 | CRC-16 | compatible |
+
+Tous les BP archivés, de 095-34 (octobre 2015) à 099-37 (janvier 2017), utilisent le CRC-16. L'adresse d'un type de BA est la même dans toutes les versions.
+
+### Causes restantes pour le SC942C et le SC941C *[hypothèse]*
+
+1. **Dégât de la foudre**, le plus probable. Ces deux BA « d'apparence saine » ont subi le même courant d'équilibrage que la carte remplacée. Composants en cause :
+   - broches RC6/RC7 du PIC, reliées au connecteur par 0 Ω ([§6.4](#mecanisme)) ;
+   - alimentation : U1, D3, C2, D6, FI1 ([§6.5](#mecanisme)) ;
+   - quartz : s'il est mort, le PIC bascule sur son oscillateur interne à 31 kHz et devient muet.
+2. **Firmware antérieur à la v1.5**. C'est peu probable si ces BA fonctionnaient avant la foudre avec un BP de 2015 ou plus récent, mais la version de l'ancien BP n'est pas connue.
+
+### Comment trancher
+
+| Observation | Où | Interprétation |
+|---|---|---|
+| LED DL1 éteinte | carte, fenêtre « ÉTAT » | alimentation du BA ([§9.2](#diagnostic)) |
+| LED DL1 figée ou très lente | carte | quartz ou plantage : faire un cycle du +15 V |
+| LED normale, code `0x0002` | console de diagnostic du BP (`ErreursDialogueBA`) | le BA ne répond pas à son adresse : PIC ou broches à remplacer |
+| LED normale, code `0x0100` | console de diagnostic du BP | ancien firmware : reflasher avec le fichier v1.7 du bon type |
+| NACK, ou réponse terminée par `55 55` | [espion I2C passif](../../debug/espion-i2c.md) | même partage, observé directement sur le bus |
+
+- **La console de diagnostic** est compilée dans le firmware du BP. Pour s'y brancher, il faut souder deux résistances et un connecteur sur l'UART2 (liaison série TTL 3,3 V, 9 600 bit/s).
+- **L'espion I2C passif** est en cours de fabrication.
+- **Avant toute remise en service**, l'essai d'isolement à 500 V continu reste obligatoire sur les deux BA ([§9.4](#diagnostic)).
 
 ## 1. Contexte { #contexte }
 
@@ -769,7 +835,7 @@ Pour la pré-qualification, on peut louer un générateur ESD, salves et onde de
 **Ce que l'analyse ne sait pas encore :**
 
 1. **La nature de la panne** : simple verrouillage du bus, levé par un cycle d'alimentation (§9.2), ou carte endommagée.
-2. **Quel BA est défaillant**, s'il y en a un. Il faut la vidéo des LED « ÉTAT », l'index 12 après une commande vers chaque BA, puis le débranchement (E1, E2).
+2. **Quel BA est défaillant**, s'il y en a un. Il faut la vidéo des LED « ÉTAT », l'index 12 après une commande vers chaque BA, puis le débranchement (E1, E2). *Mise à jour du 14 octobre : le SC940D remplacé répond, le SC942C et le SC941C restent muets (voir [Suivi](#suivi)).*
 3. **La chronologie croisée** : date à laquelle le parafoudre AC a été vu vert pour la dernière fois, export horodaté de la supervision (points réels ou interpolés après l'événement, reprise ou non de la production après le réarmement), journal du switch, dernière commande BA réussie, données de foudroiement.
 4. **L'état de l'onduleur et du dongle** : en marche ou non, journal (parafoudres internes, isolement, défaut de terre), câblage de la sortie de secours.
 5. **La notice du parafoudre AC** : architecture (1+1 ou deux varistances vers la terre), sens des fenêtres et du noir.

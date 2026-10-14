@@ -8,9 +8,10 @@ description: "Ce qu'il faut retenir d'un coup de foudre rapporté sur une instal
 !!! abstract "En bref"
     - **Les faits** : depuis un coup de foudre rapporté le 9 août 2026, le boîtier principal n'obtient plus de réponse de ses trois boîtiers auxiliaires.
     - **Le mécanisme calculé** : le câble entre les cartes aurait servi de pont au courant, jusqu'à des composants peu protégés. Un simple blocage, sans dégât, n'est pas exclu ; l'origine et le chemin du courant restent à confirmer.
+    - **Mise à jour du 14 octobre** : avec un boîtier principal neuf, le boîtier auxiliaire remplacé répond, les deux autres non. Le câble est sain ; la panne est propre à ces deux cartes.
     - **Peu fréquent, pas impossible** : environ neuf ans sans incident ici, sans statistique ; une fois un chemin ouvert, 11 à 20 ampères suffisent à atteindre les fils de données *(calculé)*.
 
-**Statut (octobre 2026)** : analyse sur dossier et photos, sans mesure. *Constaté* : vu sur place, sur photo, sur les schémas ou dans le code ; *calculé* : à confirmer par une mesure ; *hypothèse* : piste à vérifier.
+**Statut (14 octobre 2026)** : le boîtier principal et un boîtier auxiliaire ont été remplacés, et le code des cartes a été analysé. Les mesures sur les deux autres boîtiers restent à faire ([où en est-on ?](#suivi)). *Constaté* : vu sur place, sur photo, sur les schémas ou dans le code ; *calculé* : à confirmer par une mesure ; *hypothèse* : piste à vérifier.
 
 ??? info "Vocabulaire"
     - **BP, BA** : boîtier principal, boîtiers auxiliaires (les BA commandent les pièces).
@@ -67,6 +68,26 @@ Les trois BA partagent les mêmes fils de données *(constaté)* : une seule li
 
 Premier test, gratuit, après le contrôle de sécurité de l'électricien : un cycle complet d'alimentation des BA. S'ils répondent, la panne n'était qu'un blocage.
 
+## Où en est-on ? { #suivi }
+
+*Mise à jour du 14 octobre 2026.*
+
+- **Deux cartes neuves** *(constaté)*. Le boîtier principal (BP) et le BA des pièces de vie, placé en bout de chaîne, ont été remplacés. C'est le premier BP posé depuis la fermeture de la société Essensys. Il dialogue avec une passerelle locale qui remplace l'ancien serveur.
+- **Le BA neuf répond, les deux anciens non** *(constaté)*. L'éclairage de l'entrée fonctionne. Les BA des chambres et des pièces d'eau restent muets.
+- **Le câble est sain** *(déduit)*. Le BA neuf est au bout de la chaîne : ses signaux et son alimentation traversent les deux autres BA. La panne est donc propre à ces deux cartes, et non au bus.
+- **Ce n'est pas un problème d'appairage** *(constaté dans le code)*. Les cartes ne se « reconnaissent » pas : le BP appelle chaque BA à une adresse fixe, et un BA répond dès qu'il est alimenté et en état de marche. La clé d'accès à distance, vide sur un BP neuf, n'y est pour rien.
+- **Un ordre « reçu » n'est pas un ordre exécuté** *(constaté dans le code)*. Le BP confirme l'ordre à la passerelle avant de l'envoyer aux BA. L'application peut donc afficher une commande comme passée alors que rien ne s'est allumé.
+- **Deux causes restent possibles** *(hypothèse)* :
+  - le plus probable, les deux anciens BA ont été abîmés par le même courant que la carte remplacée ;
+  - moins probable, ils utilisent une très ancienne version de leur programme, incompatible avec celle du BP.
+- **Prochaines vérifications** :
+  - la petite LED de chaque BA : éteinte, figée ou clignotante ;
+  - le code d'erreur lu sur la console de diagnostic du BP ;
+  - l'[espion I2C passif](../../debug/espion-i2c.md), en cours de fabrication, qui écoute le bus sans y toucher ;
+  - l'essai d'isolement des deux cartes, avant toute remise en service.
+
+Le détail est dans l'[analyse experte](analyse-experte.md#suivi).
+
 ## À confirmer { #a-confirmer }
 
 Si les historiques ont expiré, l'origine pourrait rester incertaine.
@@ -75,7 +96,7 @@ Si les historiques ont expiré, l'origine pourrait rester incertaine.
 |---|---|---|
 | **L'origine** | Hypothèses non classées : réseau électrique ; photovoltaïque puis Ethernet (suppose une étincelle à travers les isolants des ports, sinon 0,3 à 1,7 A seulement, *calculé*) ; surtension temporaire, ou défaut de l'onduleur ou du parafoudre photovoltaïque ; événements indépendants | Journaux de l'onduleur, du switch et de la supervision |
 | **Le chemin** | Isolant franchi ou boucle refermée : non identifié | Essais d'isolement, traces sur les ports Ethernet |
-| **La carte en cause** | Un ou plusieurs BA, le BP, ou aucune (simple verrouillage) | Cycle d'alimentation, puis BA débranchés un par un, mesures à l'établi |
+| **La carte en cause** | Le BA neuf en bout de chaîne répond : le bus est sain. Les BA des chambres et des pièces d'eau restent muets *(constaté, 14 octobre)* | LED de chaque BA, console de diagnostic du BP, espion I2C, mesures à l'établi |
 | **L'isolement des BA** | 230 V à environ 2 à 3 mm de la très basse tension (estimation sur plan) : conformité à vérifier | Essai d'isolement de chaque carte, fichiers de fabrication |
 
 <figure markdown="span">
