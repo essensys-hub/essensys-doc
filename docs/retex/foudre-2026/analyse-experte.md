@@ -23,7 +23,7 @@ Elle s'adresse aux électroniciens, aux contributeurs du projet open hardware et
 !!! warning "Statut de l'analyse (octobre 2026)"
     L'analyse a été faite sur dossier et sur photos. **Aucune mesure électrique n'a encore été faite sur les cartes.** Le BA en cause, s'il y en a un, n'est pas identifié, et l'origine de la surtension n'est pas établie. Une première version de l'analyse, écrite sans les photos du site, supposait une topologie fausse ; elle a été corrigée (voir [Méthode](#methode)).
 
-    **Mise à jour du 14 octobre 2026.** Le BP et le BA de bout de chaîne ont été remplacés. Ce BA répond ; les deux autres restent muets. Le code du BP et des BA a été analysé. Au banc, l'ancien BP tient la ligne SCL à 0 : sa diode de protection D33 est en court-circuit. Voir [Suivi du diagnostic](#suivi).
+    **Mise à jour du 14 octobre 2026.** Le BP et le BA de bout de chaîne ont été remplacés. Ce BA répond ; les deux autres restent muets. Le code du BP et des BA a été analysé. Au banc, l'ancien BP tient la ligne SCL à 0 : sa diode de protection D33 est en court-circuit. Une fois D33 déposée, il émet de nouveau des trames correctes. Voir [Suivi du diagnostic](#suivi).
 
 ## Résumé { #resume }
 
@@ -47,7 +47,7 @@ Cette section complète l'analyse initiale. Elle ne la remplace pas : les secti
     - le SC940D exécute les siens : l'éclairage de l'entrée fonctionne ;
     - le BA chambres (SC942C, adresse 0x12) et le BA pièces d'eau (SC941C, adresse 0x13) restent muets. L'index 12 vaut **0x18**.
 - **Le bus n'est plus bloqué** *[déduit]*. Le chaînage relevé sur les photos est BP → SC942C → SC941C → SC940D. Le SC940D, en bout de chaîne, reçoit SDA, SCL et +15 V à travers les connecteurs des deux autres BA. La cause « ligne tenue basse » du [§8](#bus-bloque) ne décrit plus l'état actuel : **le défaut est local au SC942C et au SC941C**.
-- **L'ancien BP tenait le bus bloqué** *[établi, banc]*. Au banc, seul et sans BA, il garde SCL à 0 en permanence : D33, la diode de protection de SCL, est en court-circuit. SDA est saine. Voir [Banc du 14 octobre](#banc-bp).
+- **L'ancien BP tenait le bus bloqué** *[établi, banc]*. Au banc, seul et sans BA, il garde SCL à 0 en permanence : D33, la diode de protection de SCL, est en court-circuit. SDA est saine. Une fois D33 déposée, il appelle de nouveau les trois BA, en trames correctes. Voir [Banc du 14 octobre](#banc-bp).
 
 ### Fausses pistes écartées *[établi, code]*
 
@@ -155,6 +155,38 @@ Les mesures se font sur les fils du câble, jamais à pointe nue sur J31, où la
   ![Gros plan du coin du BP autour du connecteur J31. Les composants des lignes I2C sont entourés et nommés : D33 à gauche du connecteur, marquée en rouge « court-circuit », L30 juste en dessous, D34 en bas à droite, R155 et R156 sous le connecteur, U19 plus bas, L31 au-dessus. Les quatre broches de J31 sont repérées : 1 SDA, 2 SCL, 3 0 V, 4 +15 V. Un encadré à droite résume le constat et les quatre étapes de la réparation.](img/banc-bp-points-de-mesure.jpg){ loading=lazy }
   <figcaption>Les composants de SDA et de SCL sur l'ancien BP, avec leurs positions tirées du fichier PCB. Les deux résistances marquées « 01B » font 1 kΩ (R155 pour SDA, R156 pour SCL).</figcaption>
 </figure>
+
+#### Après la dépose de D33 : le BP appelle de nouveau les BA { #banc-bp-apres-d33 }
+
+Le même soir, D33 a été déposée. L'étape 4 de la réparation a ensuite été faite : envoyer des ordres au BP et capturer le bus.
+
+**Montage** *[établi]* :
+
+- l'ancien BP est toujours seul sur l'établi, sans BA, **D33 déposée** ;
+- un ordinateur portable joue le rôle de la passerelle sur le port Ethernet du BP. Il fournit le DHCP et un DNS qui fait pointer `mon.essensys.fr` vers lui, comme le rôle Ansible `raspberry_gateway_dhcp`. Il fait aussi tourner le serveur `essensys-server-backend`, qui reçoit les ordres par `POST /api/admin/inject` ;
+- le BP obtient son adresse, s'annonce en image 099-37 et interroge le serveur toutes les 2 s environ. Son diagnostic réseau indique « câble OK, IP OK, DNS OK, serveur joignable » ;
+- l'analyseur échantillonne à 2 MHz : CH1 = SCL, CH3 = SDA.
+
+**Résultat** *[établi]* :
+
+- **SCL est revenue à 1 au repos.** Sans D33, plus rien ne tient la ligne à la masse sous tension.
+- Trois ordres d'allumage ont été envoyés : l'entrée (pièces de vie), l'escalier (chambres) et la cuisine (pièces d'eau). Le BP acquitte chaque ordre auprès du serveur, **puis** l'envoie sur le bus, conformément au code.
+- Pour chaque ordre, il émet l'adresse du BA visé en écriture (0x22, 0x24 puis 0x26, soit les BA 0x11, 0x12 et 0x13), reçoit un **NACK** et recommence. Il fait 21 tentatives, une toutes les 100 ms environ, puis abandonne. C'est exactement le comportement attendu sans BA.
+- L'horloge est régulière, à environ 44 kHz (période de 22 µs).
+- L'index 12 passe à « BA PDV, BA CHB, BA PDE » en défaut. C'est normal, puisqu'aucun BA n'est raccordé.
+
+**Conclusion** *[déduit]* : la partie maître du bus de l'ancien BP fonctionne jusqu'à J31 (microcontrôleur, U19, ferrites L30 et L32, résistances de rappel). Seule D33 était en cause. Il reste à remplacer D33 et D34, ainsi que U19 par précaution, comme le prévoit l'étape 3 de la réparation.
+
+**Observation à expliquer** *[établi]* :
+
+- Pendant une coupure au disjoncteur, **SCL est retombée à 0 seule pendant 63 s**, alors que SDA restait à 1.
+- Plus tard, les deux lignes sont tombées à 0 ensemble à trois reprises (5,6 s, 2 s et 21 s). Ces épisodes ressemblent aux coupures d'alimentation déjà observées sur SDA *[hypothèse]*.
+- *[hypothèse]* Quand la résistance de rappel n'est plus alimentée, une fuite résiduelle sur SCL peut suffire à tirer la ligne vers 0. Elle pourrait venir de la zone noircie entre D33 et L30, ou de U19. À vérifier hors tension : comparer la résistance SCL ↔ 0 V à SDA ↔ 0 V (points 32 et 33 de la [fiche de contrôle du BP](controle-bp-multimetre.md)), puis inspecter la zone à la loupe après nettoyage.
+
+**Prochaine capture** : avec un BA sain raccordé, on doit voir l'ACK de l'adresse, la trame de l'ordre, puis la réponse du BA terminée par son CRC.
+
+!!! note "Masse de l'analyseur"
+    Au banc, l'analyseur relie le 0 V du BP à la masse de l'ordinateur. C'est acceptable avec une alimentation de banc flottante. Sur un site, l'ordinateur doit être sur batterie, sans chargeur ni écran raccordé : voir l'[espion I2C passif](../../debug/espion-i2c.md).
 
 ## 1. Contexte { #contexte }
 
