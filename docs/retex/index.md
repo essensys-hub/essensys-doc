@@ -21,3 +21,4 @@ Deux lectures sont proposées :
 |---|---|---|
 | **[Synthèse](foudre-2026/synthese.md)** | Tout le monde : membres de l'association, utilisateurs, décideurs | Le récit, les idées clés de l'analyse, ce qui reste à confirmer, nos actions et les recommandations pour toute installation |
 | **[Analyse experte](foudre-2026/analyse-experte.md)** | Électroniciens, installateurs, contributeurs du matériel | Schémas, calculs, hypothèses et tests, méthode de diagnostic, protections à court et long terme, plan d'essais |
+| **[Contrôle du BP au multimètre](foudre-2026/controle-bp-multimetre.md)** | Électroniciens, réparateurs | Fiche d'atelier illustrée : 39 points numérotés sur photo, mesures hors tension puis sous alimentation de laboratoire, valeurs attendues et interprétation |

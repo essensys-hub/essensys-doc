@@ -522,6 +522,8 @@ Le +5 V réel varie de 4,83 à 5,03 V selon la tolérance du régulateur : le
 
 === "BP (SC944D)"
 
+    La [fiche illustrée de contrôle du BP](controle-bp-multimetre.md) reprend ces mesures sur photo, avec des points numérotés, et y ajoute toute la chaîne d'alimentation.
+
     **Hors tension, batterie débranchée**
 
     | Mesure | Valeur saine | En cas d'écart |

@@ -88,6 +88,7 @@ nav:
     - Foudre du 9 août 2026:
       - Synthèse: retex/foudre-2026/synthese.md
       - Analyse experte: retex/foudre-2026/analyse-experte.md
+      - Contrôle du BP au multimètre: retex/foudre-2026/controle-bp-multimetre.md
 
 extra:
   generator: false
