@@ -23,7 +23,7 @@ Elle s'adresse aux électroniciens, aux contributeurs du projet open hardware et
 !!! warning "Statut de l'analyse (octobre 2026)"
     L'analyse a été faite sur dossier et sur photos. **Aucune mesure électrique n'a encore été faite sur les cartes.** Le BA en cause, s'il y en a un, n'est pas identifié, et l'origine de la surtension n'est pas établie. Une première version de l'analyse, écrite sans les photos du site, supposait une topologie fausse ; elle a été corrigée (voir [Méthode](#methode)).
 
-    **Mise à jour du 14 octobre 2026.** Le BP et le BA de bout de chaîne ont été remplacés. Ce BA répond ; les deux autres restent muets. Le code du BP et des BA a été analysé. Au banc, l'ancien BP tient la ligne SDA à 0 en permanence. Voir [Suivi du diagnostic](#suivi).
+    **Mise à jour du 14 octobre 2026.** Le BP et le BA de bout de chaîne ont été remplacés. Ce BA répond ; les deux autres restent muets. Le code du BP et des BA a été analysé. Au banc, l'ancien BP tient la ligne SCL à 0 : sa diode de protection D33 est en court-circuit. Voir [Suivi du diagnostic](#suivi).
 
 ## Résumé { #resume }
 
@@ -47,7 +47,7 @@ Cette section complète l'analyse initiale. Elle ne la remplace pas : les secti
     - le SC940D exécute les siens : l'éclairage de l'entrée fonctionne ;
     - le BA chambres (SC942C, adresse 0x12) et le BA pièces d'eau (SC941C, adresse 0x13) restent muets. L'index 12 vaut **0x18**.
 - **Le bus n'est plus bloqué** *[déduit]*. Le chaînage relevé sur les photos est BP → SC942C → SC941C → SC940D. Le SC940D, en bout de chaîne, reçoit SDA, SCL et +15 V à travers les connecteurs des deux autres BA. La cause « ligne tenue basse » du [§8](#bus-bloque) ne décrit plus l'état actuel : **le défaut est local au SC942C et au SC941C**.
-- **L'ancien BP tenait le bus bloqué** *[établi, banc]*. Au banc, seul et sans BA, il garde SDA à 0 en permanence ; SCL est saine. Voir [Banc du 14 octobre](#banc-bp).
+- **L'ancien BP tenait le bus bloqué** *[établi, banc]*. Au banc, seul et sans BA, il garde SCL à 0 en permanence : D33, la diode de protection de SCL, est en court-circuit. SDA est saine. Voir [Banc du 14 octobre](#banc-bp).
 
 ### Fausses pistes écartées *[établi, code]*
 
@@ -100,7 +100,7 @@ Tous les BP archivés, de 095-34 (octobre 2015) à 099-37 (janvier 2017), utilis
 - **L'espion I2C passif** est en cours de fabrication.
 - **Avant toute remise en service**, l'essai d'isolement à 500 V continu reste obligatoire sur les deux BA ([§9.4](#diagnostic)).
 
-### Banc du 14 octobre : l'ancien BP tient SDA à 0 { #banc-bp }
+### Banc du 14 octobre : l'ancien BP tient SCL à 0, D33 en court-circuit { #banc-bp }
 
 **Montage** *[établi]* :
 
@@ -108,43 +108,52 @@ Tous les BP archivés, de 095-34 (octobre 2015) à 099-37 (janvier 2017), utilis
 - un analyseur logique USB à puce FX2, piloté par sigrok et échantillonnant à 1 MHz, est branché sur J31 : SDA (J31-1), SCL (J31-2) et 0 V (J31-3). La broche 4 (+15 V) reste libre ;
 - le BP est alimenté par une alimentation de banc de 12 V, puis de 15 V. BA_ALIM mesure alors environ 10 V, puis 12 V. C'est attendu : le convertisseur 24 V → 15 V du BP (U12, LM3150) demande 16,5 à 40 V en entrée. Pour retrouver 15 V sur J31-4, alimenter le BP en 22 à 24 V flottant.
 
+!!! warning "Couleurs du câble de banc inversées"
+    Au premier relevé, la voie de l'analyseur collée à 0 était notée SDA. Le court-circuit de D33, la diode de SCL, a montré que les deux fils étaient inversés. Un connecteur vu côté fils se lit en miroir : repérer chaque broche au multimètre avant de câbler.
+
 **Capture de 3 minutes, avec deux coupures du BP** *[établi]* :
 
-- **SCL** est à 1 sous tension et tombe à 0 pendant les deux coupures (environ 12 s, puis 0,85 s). Elle remonte à chaque remise sous tension : la ligne est saine, et sa résistance de rappel R156 fonctionne ;
-- **SDA est à 0 pendant toute la capture**, BP allumé ou éteint, malgré les deux redémarrages. Elle ne montre que 18 impulsions de 1 à 3 µs, irrégulières, sur 2 ms ;
+- **SCL est à 0 pendant toute la capture**, BP allumé ou éteint, malgré les deux redémarrages. On n'y voit que 18 impulsions de 1 à 3 µs, irrégulières, sur 2 ms, sans doute des parasites ;
+- **SDA** est à 1 sous tension et tombe à 0 pendant les deux coupures (environ 12 s, puis 0,85 s). Elle remonte à chaque remise sous tension : la ligne est saine, et sa résistance de rappel R155 fonctionne ;
 - aucune trame I2C n'apparaît, ce qui est attendu : le BP n'envoie rien tant qu'il n'a pas d'ordre à transmettre.
 
 <figure markdown="span">
-  ![Chronogrammes de trois voies d'analyseur logique sur 180 secondes, puis trois agrandissements. CH1 (SDA) reste au niveau bas pendant toute la capture, avec quelques impulsions très brèves vers 99 secondes. CH3 (SCL) est au niveau haut, sauf pendant deux coupures de l'alimentation, de 1 à 13 secondes puis vers 87 secondes. CH2, non raccordée, reste au niveau haut.](img/banc-bp-traces-sda-scl.png){ loading=lazy }
-  <figcaption>Ancien BP au banc, sans BA. CH1 = SDA, collée à 0. CH3 = SCL, qui suit l'alimentation du BP. CH2 n'est pas raccordée : une entrée libre de cet analyseur lit 1.</figcaption>
+  ![Chronogrammes de trois voies d'analyseur logique sur 180 secondes, puis trois agrandissements. CH1, raccordée à SCL, reste au niveau bas pendant toute la capture, avec quelques impulsions très brèves vers 99 secondes. CH3, raccordée à SDA, est au niveau haut, sauf pendant deux coupures de l'alimentation, de 1 à 13 secondes puis vers 87 secondes. CH2, non raccordée, reste au niveau haut.](img/banc-bp-traces-sda-scl.png){ loading=lazy }
+  <figcaption>Ancien BP au banc, sans BA. CH1 = SCL, collée à 0. CH3 = SDA, qui suit l'alimentation du BP. CH2 n'est pas raccordée : une entrée libre de cet analyseur lit 1.</figcaption>
+</figure>
+
+**Le composant en cause** *[établi, mesure]* : D33, la diode de protection de SCL (SMF5V0A, cathode sur `BA_SCL`, anode au 0 V, entre J31 et la prise RJ45), **conduit dans les deux sens**. Elle tient SCL à la masse. La zone entre D33 et la ferrite L30 paraît noircie *[établi, photo]*.
+
+<figure markdown="span">
+  ![Gros plan entre le connecteur J31 à gauche et la prise RJ45 à droite. Une diode noire rectangulaire, D33, est encadrée en rouge avec la mention « diode de SCL en court-circuit ». Au-dessus, une petite ferrite, L30, est entourée en orange. Entre les deux, une zone sombre est signalée comme « zone noircie ».](img/banc-bp-d33-gros-plan.jpg){ loading=lazy }
+  <figcaption>D33, entre J31 et la prise RJ45, conduit dans les deux sens. Au-dessus, la ferrite L30 de SCL, à contrôler. La zone entre les deux paraît noircie.</figcaption>
 </figure>
 
 **Interprétation** :
 
-- *[déduit]* Sans BA, R155 (1 kΩ vers +5VS) doit tirer SDA à environ 5 V. Quelque chose la tient à la masse, sur le BP ou sur le câble du banc, qui reste à écarter.
+- *[établi]* Une diode de protection qui a absorbé trop d'énergie finit d'ordinaire en court-circuit. D33 a joué son rôle, puis elle a mis la ligne SCL à la masse.
 - *[déduit]* C'est le mécanisme du [§8](#bus-bloque) : une seule ligne tenue basse fait taire les trois BA. **Le BP d'origine faisait donc partie des cartes en cause.** Le SC942C et le SC941C, toujours muets avec un BP neuf, ont leur propre défaut.
-- *[hypothèse]* Les impulsions brèves font penser à une ligne proche du seuil, donc à une fuite, plutôt qu'à un court-circuit franc.
+- *[déduit]* La diode a pris l'impulsion côté connecteur. U19 (PCA9306), juste derrière, a pu en recevoir une partie ([§10](#court-terme)).
 
-**Suspects, dans l'ordre** :
+**Réparation**, d'après la note « retouche foudre » du SC944D (tâche 3.2) :
 
-1. D34, la diode de protection de SDA (SMF5V0A, près de J31). Ce type de diode finit d'ordinaire en court-circuit.
-2. U19 (PCA9306), côté 5 V.
-3. Le câble du banc.
+1. **Déposer D33.** Sous tension, SCL doit remonter à environ 5 V. Une nouvelle capture doit montrer la voie SCL à 1.
+2. **Contrôler avant de remonter :**
 
-**Mesures en cours.** Elles se font sur les fils du câble, jamais à pointe nue sur J31, où la broche 4 (+15 V) touche presque la broche 2 :
+    | Mesure | Valeur saine |
+    |---|---|
+    | L30, ferrite de SCL | moins de 1 Ω |
+    | R156, de la ligne SCL au +5 V | environ 1 kΩ |
+    | D34, diode de SDA, en mode diode (+ sur le 0 V) | 0,55 à 0,70 V |
 
-| | Conditions | Mesure | Valeur saine |
-|---|---|---|---|
-| A | hors tension, mode diode, + sur le 0 V | − sur SDA, puis sur SCL | 0,55 à 0,70 V pour les deux |
-| B | hors tension, ohmmètre | SDA–0 V, puis SCL–0 V | valeurs à comparer |
-| C | sous tension, 22 à 24 V | tension SDA–0 V, puis SCL–0 V | environ 5 V pour les deux |
+3. **Remplacer D33 et D34** par des SMF5V0A-E3-08, et **U19** par un PCA9306 identique. La note demande de changer U19 dès que D33 ou D34 a claqué.
+4. **Vérifier en fonctionnement** : envoyer un ordre, puis capturer. Sans BA, on doit voir START, l'adresse 0x22 (BA 0x11 en écriture), un NACK et un STOP, répétés environ toutes les 100 ms.
 
-- **Si SDA lit presque 0 en A ou en B** : lever une patte de D34 et refaire la mesure A. Si SDA redevient normale, D34 est morte : c'est une réparation simple. Sinon, le défaut est dans U19.
-- **Pour écarter le câble** : refaire la mesure C directement sur J31, câble débranché.
+Les mesures se font sur les fils du câble, jamais à pointe nue sur J31, où la broche 4 (+15 V) touche presque la broche 2.
 
 <figure markdown="span">
-  ![Gros plan du coin du BP autour du connecteur J31. Les composants de la ligne I2C sont entourés et nommés : L31 au-dessus du connecteur, D33 à gauche, D34 en bas à droite, R155 et R156 sous le connecteur, U19 plus bas, R157 et R158 en bas à gauche. Les quatre broches de J31 sont repérées : 1 SDA, 2 SCL, 3 0 V, 4 +15 V. Un encadré à droite rappelle les trois mesures et leurs valeurs saines.](img/banc-bp-points-de-mesure.jpg){ loading=lazy }
-  <figcaption>Les composants de SDA et de SCL sur l'ancien BP, avec leurs positions tirées du fichier PCB. Les deux résistances marquées « 01B » font 1 kΩ (R155, R156), les deux marquées « 472 » font 4,7 kΩ (R157, R158). Aucune trace visible de dégât : seule la mesure tranchera.</figcaption>
+  ![Gros plan du coin du BP autour du connecteur J31. Les composants des lignes I2C sont entourés et nommés : D33 à gauche du connecteur, marquée en rouge « court-circuit », L30 juste en dessous, D34 en bas à droite, R155 et R156 sous le connecteur, U19 plus bas, L31 au-dessus. Les quatre broches de J31 sont repérées : 1 SDA, 2 SCL, 3 0 V, 4 +15 V. Un encadré à droite résume le constat et les quatre étapes de la réparation.](img/banc-bp-points-de-mesure.jpg){ loading=lazy }
+  <figcaption>Les composants de SDA et de SCL sur l'ancien BP, avec leurs positions tirées du fichier PCB. Les deux résistances marquées « 01B » font 1 kΩ (R155 pour SDA, R156 pour SCL).</figcaption>
 </figure>
 
 ## 1. Contexte { #contexte }
