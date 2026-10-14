@@ -78,13 +78,13 @@ Premier test, gratuit, après le contrôle de sécurité de l'électricien : un
 - **Ce n'est pas un problème d'appairage** *(constaté dans le code)*. Les cartes ne se « reconnaissent » pas : le BP appelle chaque BA à une adresse fixe, et un BA répond dès qu'il est alimenté et en état de marche. La clé d'accès à distance, vide sur un BP neuf, n'y est pour rien.
 - **Un ordre « reçu » n'est pas un ordre exécuté** *(constaté dans le code)*. Le BP confirme l'ordre à la passerelle avant de l'envoyer aux BA. L'application peut donc afficher une commande comme passée alors que rien ne s'est allumé.
 - **Deux causes restent possibles** *(hypothèse)* :
-  - le plus probable, les deux anciens BA ont été abîmés par le même courant que la carte remplacée ;
-  - moins probable, ils utilisent une très ancienne version de leur programme, incompatible avec celle du BP.
+    - le plus probable, les deux anciens BA ont été abîmés par le même courant que la carte remplacée ;
+    - moins probable, ils utilisent une très ancienne version de leur programme, incompatible avec celle du BP.
 - **Prochaines vérifications** :
-  - la petite LED de chaque BA : éteinte, figée ou clignotante ;
-  - le code d'erreur lu sur la console de diagnostic du BP ;
-  - l'[espion I2C passif](../../debug/espion-i2c.md), en cours de fabrication, qui écoute le bus sans y toucher ;
-  - l'essai d'isolement des deux cartes, avant toute remise en service.
+    - la petite LED de chaque BA : éteinte, figée ou clignotante ;
+    - le code d'erreur lu sur la console de diagnostic du BP ;
+    - l'[espion I2C passif](../../debug/espion-i2c.md), en cours de fabrication, qui écoute le bus sans y toucher ;
+    - l'essai d'isolement des deux cartes, avant toute remise en service.
 
 Le détail est dans l'[analyse experte](analyse-experte.md#suivi).
 
