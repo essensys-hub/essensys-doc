@@ -43,29 +43,29 @@ Cette section complète l'analyse initiale. Elle ne la remplace pas : les secti
 
 - **Remplacements** *[établi]*. Le BP (SC944D, image de production 099-37) et le BA pièces de vie (SC940D, firmware v1.7), en bout de chaîne, ont été remplacés par des cartes neuves. C'est le premier BP posé depuis la fermeture de la société Essensys. Il dialogue avec une passerelle locale qui remplace l'ancien serveur.
 - **Constat des 12 et 13 octobre** *[établi]* :
-  - le BP reçoit les ordres et les acquitte ;
-  - le SC940D exécute les siens : l'éclairage de l'entrée fonctionne ;
-  - le BA chambres (SC942C, adresse 0x12) et le BA pièces d'eau (SC941C, adresse 0x13) restent muets. L'index 12 vaut **0x18**.
+    - le BP reçoit les ordres et les acquitte ;
+    - le SC940D exécute les siens : l'éclairage de l'entrée fonctionne ;
+    - le BA chambres (SC942C, adresse 0x12) et le BA pièces d'eau (SC941C, adresse 0x13) restent muets. L'index 12 vaut **0x18**.
 - **Le bus n'est plus bloqué** *[déduit]*. Le chaînage relevé sur les photos est BP → SC942C → SC941C → SC940D. Le SC940D, en bout de chaîne, reçoit SDA, SCL et +15 V à travers les connecteurs des deux autres BA. La cause « ligne tenue basse » du [§8](#bus-bloque) ne décrit plus l'état actuel : **le défaut est local au SC942C et au SC941C**.
 
 ### Fausses pistes écartées *[établi, code]*
 
 - **La clé d'accès à distance du BP**, vide sur un BP neuf, n'y est pour rien. Elle ne sert qu'à l'authentification auprès de l'ancien serveur et au déchiffrement de l'ordre d'alarme distant. La passerelle locale ne l'exige pas.
 - **Un appairage des cartes neuves** n'existe pas. Rien ne permet à un BP et à un BA neufs de se « reconnaître » :
-  - le BP appelle chaque BA à une adresse fixe (`0x11 + n`, I2C à 50 kHz), sans présentation ni négociation de version ;
-  - le BA répond dès que son PIC tourne.
+    - le BP appelle chaque BA à une adresse fixe (`0x11 + n`, I2C à 50 kHz), sans présentation ni négociation de version ;
+    - le BA répond dès que son PIC tourne.
 
 ### Ce que le code dit du démarrage et des ordres *[établi, code]*
 
 - **Démarrage du BP** :
-  - il alimente les BA (+15VSP) environ 1,6 s après son démarrage, et coupe ce +15 V en mode secouru ;
-  - il **n'envoie aucune configuration au démarrage** : le bus reste silencieux jusqu'au premier ordre ;
-  - un BA en panne n'apparaît donc en défaut qu'après un ordre qui le vise.
+    - il alimente les BA (+15VSP) environ 1,6 s après son démarrage, et coupe ce +15 V en mode secouru ;
+    - il **n'envoie aucune configuration au démarrage** : le bus reste silencieux jusqu'au premier ordre ;
+    - un BA en panne n'apparaît donc en défaut qu'après un ordre qui le vise.
 - **Démarrage d'un BA** (PIC16F946) : il n'attend rien du BP et relit sa configuration en EEPROM. Il n'a pas de watchdog. Sa LED DL1 clignote une fois par seconde, sans lien avec l'I2C : elle prouve seulement que le PIC tourne à la bonne vitesse.
 - **Un ordre acquitté n'est pas un ordre exécuté.**
-  - Le BP acquitte chaque ordre auprès de la passerelle **avant** de l'envoyer sur le bus (`www.c`).
-  - Après 5 échecs, le BA est déclaré en défaut. Après 20, l'ordre est abandonné, puis il n'y a plus qu'un essai par nouvel ordre.
-  - Les configurations perdues ne sont pas renvoyées : il faudra les renvoyer après la réparation.
+    - Le BP acquitte chaque ordre auprès de la passerelle **avant** de l'envoyer sur le bus (`www.c`).
+    - Après 5 échecs, le BA est déclaré en défaut. Après 20, l'ordre est abandonné, puis il n'y a plus qu'un essai par nouvel ordre.
+    - Les configurations perdues ne sont pas renvoyées : il faudra les renvoyer après la réparation.
 
 ### Le protocole dépend de la version du firmware des BA *[établi, décodage des fichiers de programmation]*
 
@@ -80,9 +80,9 @@ Tous les BP archivés, de 095-34 (octobre 2015) à 099-37 (janvier 2017), utilis
 ### Causes restantes pour le SC942C et le SC941C *[hypothèse]*
 
 1. **Dégât de la foudre**, le plus probable. Ces deux BA « d'apparence saine » ont subi le même courant d'équilibrage que la carte remplacée. Composants en cause :
-   - broches RC6/RC7 du PIC, reliées au connecteur par 0 Ω ([§6.4](#mecanisme)) ;
-   - alimentation : U1, D3, C2, D6, FI1 ([§6.5](#mecanisme)) ;
-   - quartz : s'il est mort, le PIC bascule sur son oscillateur interne à 31 kHz et devient muet.
+    - broches RC6/RC7 du PIC, reliées au connecteur par 0 Ω ([§6.4](#mecanisme)) ;
+    - alimentation : U1, D3, C2, D6, FI1 ([§6.5](#mecanisme)) ;
+    - quartz : s'il est mort, le PIC bascule sur son oscillateur interne à 31 kHz et devient muet.
 2. **Firmware antérieur à la v1.5**. C'est peu probable si ces BA fonctionnaient avant la foudre avec un BP de 2015 ou plus récent, mais la version de l'ancien BP n'est pas connue.
 
 ### Comment trancher
