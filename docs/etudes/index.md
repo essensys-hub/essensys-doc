@@ -13,8 +13,8 @@ L'armoire repose sur quatre cartes propriétaires : un boîtier principal (SC944
 
 | Étude | Principe | Matériel, par armoire |
 |---|---|---|
-| **[Revolution Pi](remplacement-armoire/revolution-pi.md)** | Un contrôleur industriel Linux, des modules d'entrées-sorties, des relais d'interface | environ 5 350 € HT |
-| **[Arduino Opta](remplacement-armoire/arduino-opta.md)** | Quatre automates Opta répartis, avec extensions | environ 5 500 € HT |
-| **[Raspberry Pi et Ethernet](remplacement-armoire/raspberry-pi-ethernet.md)** | Refonte maison : quatre cartes nœuds Pico 2 en Ethernet, un Pi de gestion | environ 3 090 € HT |
+| **[Revolution Pi](remplacement-armoire/revolution-pi.md)** | Un contrôleur industriel Linux, des modules d'entrées-sorties, des relais d'interface | environ 5 450 € HT |
+| **[Arduino Opta](remplacement-armoire/arduino-opta.md)** | Quatre automates Opta répartis, avec extensions | environ 5 600 € HT |
+| **[Raspberry Pi et Ethernet](remplacement-armoire/raspberry-pi-ethernet.md)** | Refonte maison : quatre cartes nœuds Pico 2 en Ethernet, un Pi de gestion | environ 3 160 € HT |
 
-Les trois études partagent le même câblage de migration (répartiteur 230 V, jonctions des nappes, plan de bornage) et la même méthode : prix relevés en octobre 2026, simulation 3D indicative, implantation à confirmer au relevé de P0.
+Les trois études partagent le même câblage de migration (répartiteur 230 V, blocs de phase Wago pour repiquer une phase sur plusieurs relais, jonctions des nappes, plan de bornage) et la même méthode : prix relevés en octobre 2026, simulation 3D indicative, implantation à confirmer au relevé de P0.

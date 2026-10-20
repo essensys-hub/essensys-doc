@@ -9,7 +9,7 @@ Oct 19, 2026 · @Nicolas
 
 ## Synthèse
 
-Remplacer l'armoire ESSENSYS par une Revolution Pi est faisable, et le remplacement complet (scénario B) est recommandé. Une Connect 5, 7 modules DIO, 1 AIO, 68 relais d'interface et 8 variateurs Eltako y remplacent les quatre cartes propriétaires. Il faut compter environ 5 350 € HT de matériel, câblage de migration compris, et 13 à 16 semaines-personne de logiciel.
+Remplacer l'armoire ESSENSYS par une Revolution Pi est faisable, et le remplacement complet (scénario B) est recommandé. Une Connect 5, 7 modules DIO, 1 AIO, 68 relais d'interface et 8 variateurs Eltako y remplacent les quatre cartes propriétaires. Il faut compter environ 5 450 € HT de matériel, câblage de migration compris, et 13 à 16 semaines-personne de logiciel.
 
 Ce que cela apporte :
 
@@ -18,7 +18,7 @@ Ce que cela apporte :
 - **Une identité matérielle et des pièces suivies** : la Connect 5 intègre le TPM 2.0 que recommande la conception PKI de la passerelle, et elle est garantie jusqu'en 2036.
 - **Un câblage prêt pour la suite** : les fils passent par un répartiteur et des jonctions repérés, avec 25 % de réserve. La bascule et le retour arrière ne déplacent que des ponts, et 22 entrées et 13 sorties restent libres.
 
-Ce que cela coûte : environ 5 350 € HT de matériel par armoire, dont 42 % pour la RevPi. Le logiciel demande 13 à 16 semaines à temps plein, soit 5 à 7 mois à 20 h par semaine. S'y ajoutent 2 à 3 jours de pré-câblage, l'armoire restant en service, 3 à 4 jours de câblage du panneau et une journée de bascule.
+Ce que cela coûte : environ 5 450 € HT de matériel par armoire, dont 42 % pour la RevPi. Le logiciel demande 13 à 16 semaines à temps plein, soit 5 à 7 mois à 20 h par semaine. S'y ajoutent 2 à 3 jours de pré-câblage, l'armoire restant en service, 3 à 4 jours de câblage du panneau et une journée de bascule.
 
 Ce qu'il faut accepter : un seul contrôleur commande tous les circuits. Une panne de la RevPi, de son alimentation ou du service Go prive 25 éclairages et 15 moteurs de volets de leurs boutons. Les parades sont décrites dans la section Modes dégradés.
 
@@ -160,7 +160,7 @@ Sources : [HDR-150](https://www.meanwell.com/Upload/PDF/HDR-150/HDR-150-SPEC.PDF
 
 ## Architectures cibles
 
-Le scénario B est recommandé : c'est le seul qui supprime à la fois les BA défaillants, le PIC16F946 et le bus I2C. Le scénario A coûte environ 3 200 € de moins en matériel, mais garde les BA et leurs faiblesses : PIC16F946, bus I2C non isolé, isolement non démontré.
+Le scénario B est recommandé : c'est le seul qui supprime à la fois les BA défaillants, le PIC16F946 et le bus I2C. Le scénario A coûte environ 3 300 € de moins en matériel, mais garde les BA et leurs faiblesses : PIC16F946, bus I2C non isolé, isolement non démontré.
 
 A ne se défend donc que comme étape, sur une armoire aux BA sains et risques acceptés. Il demande un pont USB-I2C isolé, par exemple un MCP2221A suivi d'un ISO1640, et la réparation des BA. La taille du parc à équiper, qui amortit le logiciel, reste à préciser.
 
@@ -169,9 +169,9 @@ A ne se défend donc que comme étape, sur une armoire aux BA sains et risques a
 | Périmètre | La Connect 5 remplace le SC944D ; les 3 BA restent, derrière un pont USB-I2C isolé | Connect 5, 7 DIO, 1 AIO, relais et variateurs remplacent les 4 cartes | Comme B, et la Connect 5 porte aussi la pile de la passerelle |
 | Panne des BA CHB et PDE | Non résolue | Résolue | Résolue |
 | PIC16F946 et bus I2C | Conservés | Supprimés | Supprimés |
-| Recâblage | Côté BP seulement | 83 circuits 230 V par le répartiteur, 4 nappes par des jonctions | Comme B |
+| Recâblage | Côté BP seulement | 90 fils 230 V par le répartiteur, 4 nappes par des jonctions | Comme B |
 | Logiciel | Logique BP et maître I2C à écrire | Logiques BP et BA | Comme B, plus la pile NixOS à refaire sur RevPi OS |
-| Matériel HT | ≈ 2 140 €, plus la réparation des BA | ≈ 5 350 € | ≈ 5 350 €, sans passerelle à fournir |
+| Matériel HT | ≈ 2 140 €, plus la réparation des BA | ≈ 5 450 € | ≈ 5 450 €, sans passerelle à fournir |
 | Verdict | Étape possible sur des BA sains, risques acceptés | **Recommandé pour cette armoire** | Plus tard, pour une installation neuve |
 
 ![Architecture cible du scénario B, schéma Archify](img/architecture-revpi-cible.png){ loading=lazy }
@@ -190,26 +190,26 @@ Lecture : les fils 230 V arrivent sur un répartiteur, sur le côté droit ; les
 
 Ce qu'il faut poser :
 
-- **Répartiteur 230 V, à droite (coffret ajouté, ou côté droit du coffret actuel si le relevé de P0 le permet)** : chaque fil existant quitte sa carte pour une borne repérée. Cela concerne les 63 départs des BA, les 8 départs du BP et une douzaine de phases d'alimentation, soit environ 83 circuits. Les fils en place sont en H07V-U 1,5 mm² rigide, que des bornes à poussoir reçoivent tels quels.
+- **Répartiteur 230 V, à droite (coffret ajouté, ou côté droit du coffret actuel si le relevé de P0 le permet)** : chaque fil existant quitte sa carte pour une borne repérée. Cela concerne les 63 départs des BA, les 8 départs du BP, une douzaine de phases d'alimentation et jusqu'à 7 neutres du BP, soit environ 90 fils. Les fils en place sont en H07V-U 1,5 mm² rigide, que des bornes à poussoir reçoivent tels quels. La phase de chaque disjoncteur est ensuite répartie vers les relais par un bloc de phase (voir plus bas).
 - **Jonctions des nappes, en haut** : les quatre nappes IDC 26 arrivent par le haut, sur les J3 des trois BA et du BP. Un second connecteur, serti sur chaque nappe, la relie à une interface IDC 26 vers bornes. L'ancienne carte reste branchée sur le connecteur d'origine jusqu'à la bascule.
 - **Tensions séparées** : la TBT en haut, le 230 V sur le côté droit, avec des goulottes distinctes. L'analyse experte demande aussi, en priorité 1, d'éloigner les nappes des bornes de phase.
-- **Réserve** : 25 % de bornes libres au répartiteur, soit une vingtaine de circuits, et 24 bornes TBT libres près des jonctions. Les conducteurs inutilisés des nappes arrivent aussi sur bornes.
+- **Réserve** : 25 % de bornes libres au répartiteur, soit une vingtaine de circuits, et 12 bornes TBT à deux étages libres près des jonctions, soit 24 circuits. Les conducteurs inutilisés des nappes arrivent aussi sur bornes.
 - **Repérage** : chaque fil, borne et pont porte le même repère, reporté dans un plan de bornage tenu à jour dans essensys-doc.
 
 | Élément | Quantité | Place sur rail | Prix HT |
 | --- | --- | --- | --- |
-| Bornes à poussoir à deux étages, 2,5 mm² (Wago 2002-2201) : 83 circuits et 25 % de réserve | 52 | ≈ 0,3 m, côté droit | ≈ 92 € |
+| Bornes à poussoir à deux étages, 2,5 mm² (Wago 2002-2201) : 90 fils et 25 % de réserve | 56 | ≈ 0,3 m, côté droit | ≈ 99 € |
 | Interfaces IDC 26 vers bornes, 50 V et 1 A (RS PRO) | 4 | ≈ 0,3 m, en haut | 256 € |
 | Bornes TBT à deux étages, en réserve | 12 | ≈ 6 cm, en haut | ≈ 21 € |
-| Embouts, cloisons, butées, repères, connecteurs IDC à sertir | — | — | ≈ 50 € (estimation) |
+| Embouts, cloisons, butées, repères, connecteurs IDC à sertir, contacts de pontage bleus des neutres (/000-006) | — | — | ≈ 55 € (estimation) |
 | Fil H07V-K 1,5 mm² et embouts de câblage pour les ponts | — | — | ≈ 40 € (estimation) |
-| Total |  | ≈ 0,65 m | ≈ 460 € |
+| Total |  | ≈ 0,65 m | ≈ 470 € |
 
 Connecteurs retenus, les mêmes dans les trois études :
 
 | Connecteur | Rôle | Référence |
 | --- | --- | --- |
-| Borne de passage à deux étages, à poussoir, 2,5 mm², 5,2 mm de large | Répartiteur : chaque étage reçoit un circuit, le fil du logement d'un côté, le pont repéré de l'autre. 52 bornes, soit 104 circuits | [Wago 2002-2201](https://buerklin.com/en/p/wago/series-terminals/2002-2201/09H4322) |
+| Borne de passage à deux étages, à poussoir, 2,5 mm², 5,2 mm de large | Répartiteur : chaque étage reçoit un circuit, le fil du logement d'un côté, le pont repéré de l'autre. 56 bornes, soit 112 circuits | [Wago 2002-2201](https://buerklin.com/en/p/wago/series-terminals/2002-2201/09H4322) |
 | Interface IDC 26 vers bornes à vis, sur rail DIN, 50 V et 1 A | Jonction : reçoit la nappe des boutons d'une zone et ramène ses 26 conducteurs sur bornes. Une par nappe, soit 4 | [RS PRO 403-320](https://befr.rs-online.com/web/p/interface-modules/0403320) |
 | Connecteur IDC 26 femelle, pas de 2,54 mm, pour nappe au pas de 1,27 mm, avec serre-câble | Second connecteur serti sur chaque nappe : l'interface se branche sans débrancher l'ancienne carte | [3M 3399-6026](https://fr.rs-online.com/web/p/connecteurs-idc/8280403) |
 
@@ -219,36 +219,80 @@ Connecteurs retenus, les mêmes dans les trois études :
 
 Lecture : les deux vues rapprochées montrent les connecteurs retenus en place, en haut du coffret actuel pour les nappes et à gauche du coffret ajouté pour le répartiteur ; les ponts et les repères sont ceux du plan de bornage.
 
+### Repiquer une phase sur plusieurs relais
+
+Un disjoncteur du tableau alimente toujours plusieurs relais. Sur les BA, les relais d'un même groupe ont leur commun relié sur le circuit imprimé, et ce commun sort sur deux bornes P : la phase arrive sur l'une et repart vers le groupe suivant par l'autre, avec un fil rouge. C'est le repiquage. Les schémas « Borniers » des cartes comptent 10 groupes sur le BA PDV, 13 sur le BA CHB et 14 sur le BA PDE, pour 63 sorties ; le BP reçoit trois phases (alimentation, fil pilote, arrosage) et jusqu'à sept neutres, reliés sur sa carte.
+
+![Repiquage de la phase sur une carte BA, photo annotée](img/photo-repiquage-ba.jpg){ loading=lazy }
+
+Lecture : chaque groupe a deux bornes P reliées sur la carte, ici J14 et J15 ; le trait sérigraphié montre le commun des deux relais du groupe. Les fils rouges repiquent la phase d'un groupe au suivant, et le groupe des volets reçoit la sienne par un autre fil, blanc. Les fils orange et violets partent vers les luminaires, la prise commandée et le volet.
+
+Avec la Revolution Pi, aucune carte ne relie plus les communs : chaque relais d'interface a sa propre borne COM (11), et les peignes Finder des supports 93.01 ne relient que les bornes de bobine A1 ou A2. Des bornes Wago pontées répartissent donc la phase, dans un bloc de phase par disjoncteur, noté X3, au début des rangées de relais.
+
+![Repiquage de la phase, aujourd'hui et demain, schéma Archify](img/repiquage-phase.png){ loading=lazy }
+
+Lecture : à gauche, la phase passe d'une borne P à l'autre sur les cartes. À droite, elle arrive sur son étage du répartiteur X1 ; un pont la mène à son bloc X3, où un contact de pontage relie quelques bornes à quatre points, et chaque point donne un fil à un seul relais. La version interactive du schéma, générée par Archify, accompagne l'étude.
+
+Comment un bloc Wago repique la phase :
+
+1. **Un bloc par disjoncteur** : la phase garde son étage au répartiteur X1, repéré PH-03 par exemple. Un pont la conduit au bloc PH-03 du panneau.
+2. **Un contact de pontage** : le bloc réunit quelques bornes de passage à quatre points, Wago 2002-1401, de la même série que le répartiteur mais à un seul étage. Un contact de pontage Wago de 2 à 10 raccords (2002-402 à 2002-410, 25 A, en rouge avec le suffixe /000-005) s'enfonce dans leur fente de pontage : toutes portent la phase.
+3. **Un fil par point** : chaque borne a quatre points à poussoir, deux en haut et deux en bas. Le pont venu de X1 prend le premier ; chaque autre point reçoit un seul fil, vers la borne COM d'un relais 38.51 ou 48.P6, ou l'entrée L d'un variateur ou du bloc 24 V. Au moins un point reste libre pour un ajout.
+4. **Un repère par fil** : « PH-03.2 → K12:11 » se lit « bloc PH-03, point 2, vers la borne 11 du relais K12 ». Le plan de bornage tient ces listes.
+
+Un fil par relais, plutôt qu'un repiquage de relais en relais, permet de retirer un relais sans couper les suivants et d'essayer chaque fil seul. Aucune borne de relais ne porte plus le courant de tout le groupe.
+
+Règles, à faire valider par l'électricien :
+
+- **Jamais deux disjoncteurs dans un bloc** : relier deux blocs mettrait deux disjoncteurs en parallèle ; un fil du bloc pourrait alors porter la somme de leurs calibres sans qu'aucun ne déclenche, et couper l'un ne mettrait plus le bloc hors tension. Un bloc ne sert que les circuits de son disjoncteur actuel, relevés en P0.
+- **Courants** : les fils en place et les ponts sont en 1,5 mm², que la NF C 15-100 protège par un disjoncteur de 16 A au plus, sous les 24 A de la borne et les 25 A du contact de pontage. Le calibre de chaque disjoncteur qui alimente l'armoire est à vérifier en P0 : un circuit en 20 A demanderait du 2,5 mm² de bout en bout.
+- **Même disjoncteur** : un circuit prend sa phase et son neutre sur le même disjoncteur phase-neutre, donc sous le même interrupteur différentiel. Un neutre pris sur un autre circuit fait déclencher le différentiel, ou n'est plus coupé avec sa phase.
+- **Neutres** : les neutres du BP arrivent sur X1, chacun avec la phase de son circuit : N\_ALIM (alimentation et bobines des contacteurs, quatre bornes), N\_FP (fil pilote) et N\_EV (électrovanne, deux bornes). Un contact de pontage bleu (suffixe /000-006) ne relie que les bornes d'un même neutre ; ces trois neutres restent séparés. Le bloc 24 V prend sa phase sur PH\_ALIM et son neutre sur N\_ALIM. Les BA n'ont pas de borne de neutre : si la notice des Eltako demande le neutre, il faudra l'amener de la borne N du disjoncteur de chaque circuit concerné.
+
+Pendant la migration :
+
+- **Pré-câblage** : le fil du disjoncteur quitte la borne P de la carte pour son étage de X1, et un pont le ramène sur la même borne P. Les repiquages des cartes ne bougent pas.
+- **Bascule** : un seul pont par disjoncteur passe de la carte au bloc X3, câblé vers les relais avec le panneau et resté hors tension jusque-là.
+- **Retour arrière** : ces ponts reviennent sur les cartes.
+
+![Vue rapprochée d'un bloc de phase, rendu 3D](img/detail-phases-revpi.jpg){ loading=lazy }
+
+Lecture : le pont rouge arrive de X1, le contact de pontage relie cinq bornes à quatre points, trois fils partent vers les premiers relais, et des points restent libres ; les autres blocs suivent, et leurs fils passent par la goulotte. Vue simulée en 3D, à confirmer au relevé de P0.
+
+Pour la Revolution Pi, cela fait 61 fils de phase : 25 relais d'éclairage, 15 relais de marche des volets, 8 relais de fil pilote, 4 relais d'options, 8 variateurs et le bloc 24 V. Les relais de sens prennent la phase sur la marche de leur volet. Avec une douzaine de blocs, il faut environ 24 bornes à quatre points et 12 contacts de pontage : environ 90 € HT et 13 cm de rail.
+
+Sources : [schémas des BA, feuille Borniers](https://github.com/essensys-hub/essensys-board-SC940), [schéma du BP](https://github.com/essensys-hub/essensys-board-SC944D), [fiche Wago 2002-2201 et ses accessoires](https://www.alldataresource.com/assets/Wago_Corporation/Wago-Corporation-2002-2201-Double-Deck-Terminal-Block-Specification-Sheet.pdf), [borne à quatre points Wago 2002-1401](https://buerklin.com/en/p/wago/series-terminals/2002-1401/09H4219), [contact de pontage Wago 2002-410](https://www.wago.com/ch-fr/bornes-sur-rail/contact-de-pontage/p/2002-410), [contacts de pontage pour la série 2002](https://uk.rs-online.com/web/p/din-rail-terminal-accessories/5076591), [version rouge 2002-410/000-005](https://www.rowse-automation.co.uk/wago-2002-410-000-005), [version bleue 2002-402/000-006](https://uk.rs-online.com/web/p/din-rail-terminal-accessories/2783244), [peigne Finder 093.20.1, bornes A1 ou A2](https://buerklin.com/en/p/finder/relays-accessories/093-20-1/34G1079), [notice Eltako EUD12D, entrées séparées du 230 V](https://www.eltako.com/fileadmin/downloads/de/_bedienung/EUD12D_21100905-3_dt.pdf), [calibres de la NF C 15-100](https://hager.com/fr/normes/nfc-15-100/disjoncteur).
+
 ![Coffret aujourd'hui et après le pré-câblage, schéma Archify](img/coffret-precablage.png){ loading=lazy }
 
 Lecture : à gauche, le coffret tel qu'il est. Chaque carte reçoit sa nappe par le haut et ses fils 230 V par le bas, et le côté droit n'a qu'environ 4 cm libres. À droite, le même coffret après le pré-câblage : les jonctions occupent le haut, les fils passent par le répartiteur du coffret accolé, et des ponts les ramènent aux cartes, toujours en service. La version interactive du schéma, générée par Archify, accompagne l'étude.
 
-Le coffret supplémentaire, accolé à droite du coffret actuel, reçoit le répartiteur et le panneau, soit environ 1,5 m de rail : quatre rangées de 24 modules suffisent. Les jonctions restent en haut du coffret actuel, et les cartes en place jusqu'à G3 ; leur dépose libère ensuite ce coffret pour les ajouts. Le relevé de P0 dit si le côté droit du coffret actuel peut recevoir le répartiteur.
+Le coffret supplémentaire, accolé à droite du coffret actuel, reçoit le répartiteur, les blocs de phase et le panneau, soit environ 1,65 m de rail : quatre rangées de 24 modules suffisent, avec peu de marge. Les jonctions restent en haut du coffret actuel, et les cartes en place jusqu'à G3 ; leur dépose libère ensuite ce coffret pour les ajouts. Le relevé de P0 dit si le côté droit du coffret actuel peut recevoir le répartiteur.
 
 ![Implantation Revolution Pi, schéma Archify](img/implantation-revpi.png){ loading=lazy }
 
-Lecture : le coffret ajouté reçoit le répartiteur contre le coffret actuel, puis les rangées de la RevPi, des relais, des variateurs et des alimentations ; une réserve reste libre. Le coffret actuel garde les jonctions en haut et les quatre cartes jusqu'à G3. Les batteries vont dans un boîtier accolé. Implantation indicative, à confirmer au relevé de P0.
+Lecture : le coffret ajouté reçoit le répartiteur contre le coffret actuel, puis les rangées de la RevPi, des blocs de phase et des relais, des variateurs et des alimentations ; une petite réserve reste libre. Le coffret actuel garde les jonctions en haut et les quatre cartes jusqu'à G3. Les batteries vont dans un boîtier accolé. Implantation indicative, à confirmer au relevé de P0.
 
 ![Simulation visuelle du coffret Revolution Pi, rendu 3D](img/simulation-revpi.jpg){ loading=lazy }
 
-Lecture : simulation 3D d'après les photos du coffret et les dimensions des produits, après la pose du panneau. Les anciennes cartes restent en place jusqu'à G3 ; l'implantation exacte sera fixée au relevé de P0.
+Lecture : simulation 3D d'après les photos du coffret et les dimensions des produits, après la pose du panneau ; les fils rouges partent des blocs de phase vers chaque relais. Les anciennes cartes restent en place jusqu'à G3 ; l'implantation exacte sera fixée au relevé de P0.
 
 Déroulement :
 
 1. **Relevé et plan, en P0** : place libre sur le côté droit et en haut, longueur des fils, plan de bornage.
-2. **Pré-câblage, 2 à 3 jours d'électricien, armoire en service** : chaque fil passe sur sa borne, un pont le relie à l'ancienne carte, et le circuit est essayé. Le second connecteur des nappes est serti et branché sur sa jonction.
-3. **Bascule, une journée** : les ponts passent sur les relais de la Revolution Pi, les nappes quittent les anciennes cartes, et les bornes des jonctions, déjà câblées vers les entrées DIO pendant le câblage du panneau, sont mises en service en fermant le commun des boutons, resté ouvert jusque-là. Pendant cette journée, le logement n'a ni boutons, ni écran, ni alarme, ni fil pilote : prévenir les occupants, choisir une journée hors période de chauffe, prévoir un éclairage d'appoint.
-4. **Retour arrière, une demi-journée** : les ponts reviennent sur les anciennes cartes, qui restent en place jusqu'à G3, et les nappes se rebranchent.
+2. **Pré-câblage, 2 à 3 jours d'électricien, armoire en service** : chaque fil passe sur sa borne, un pont le relie à l'ancienne carte, et le circuit est essayé. La phase de chaque disjoncteur revient par un pont sur la borne P qu'elle quittait ; les repiquages des cartes ne bougent pas. Le second connecteur des nappes est serti et branché sur sa jonction.
+3. **Bascule, une journée** : les ponts passent sur les relais de la Revolution Pi, chaque phase sur son bloc de phase, les nappes quittent les anciennes cartes, et les bornes des jonctions, déjà câblées vers les entrées DIO pendant le câblage du panneau, sont mises en service en fermant le commun des boutons, resté ouvert jusque-là. Pendant cette journée, le logement n'a ni boutons, ni écran, ni alarme, ni fil pilote : prévenir les occupants, choisir une journée hors période de chauffe, prévoir un éclairage d'appoint.
+4. **Retour arrière, une demi-journée** : les ponts reviennent sur les anciennes cartes, qui restent en place jusqu'à G3, et les nappes se rebranchent une fois rouvert le commun des boutons.
 
-![Plan de bornage du répartiteur et des jonctions, schéma Archify](img/plan-de-bornage.png){ loading=lazy }
+![Plan de bornage du répartiteur, des jonctions et d'un bloc de phase, schéma Archify](img/plan-de-bornage.png){ loading=lazy }
 
-Lecture : chaque circuit a un seul repère, porté par sa borne 230 V au répartiteur X1 et par la borne de son bouton à la jonction X2. Les tables suivent l'ordre éclairages, variateurs, volets ; les phases d'alimentation et la réserve complètent les 104 points du répartiteur. Le brochage J3 de chaque bouton et les phases restent à relever en P0. La version interactive du schéma, générée par Archify, accompagne l'étude.
+Lecture : chaque circuit a un seul repère, porté par sa borne 230 V au répartiteur X1 et par la borne de son bouton à la jonction X2. Les tables suivent l'ordre éclairages, variateurs, volets ; les phases, les neutres du BP et la réserve complètent les 112 circuits du répartiteur ; chaque bloc de phase a sa table, comme l'exemple PH-03. Le brochage J3 de chaque bouton et les phases restent à relever en P0. La version interactive du schéma, générée par Archify, accompagne l'étude.
 
-Évolutivité : aujourd'hui, le brochage des BA est figé dans le code (881 lignes de hard.h), le bus I2C ne connaît que trois BA, et chaque ajout demande de reprendre une carte. Avec la Revolution Pi et ce câblage, un ajout se résume à une borne, un pont et une ligne de configuration :
+Évolutivité : aujourd'hui, le brochage des BA est figé dans le code (881 lignes de hard.h), le bus I2C ne connaît que trois BA, et chaque ajout demande de reprendre une carte. Avec la Revolution Pi et ce câblage, un ajout se résume à une borne, un pont, un fil de phase et une ligne de configuration. Le neutre d'un nouveau départ se prend sur son circuit, hors de l'armoire, dans la limite de 8 points d'éclairage par circuit.
 
 | Ajout | Comment | Capacité libre |
 | --- | --- | --- |
-| Un éclairage ou un volet | Relais d'interface sur le rail, sortie DIO libre, pont au répartiteur | 13 sorties ; 2 emplacements pour des DIO de plus, de 14 entrées et 14 sorties chacun |
+| Un éclairage ou un volet | Relais d'interface sur le rail, sortie DIO libre, pont au répartiteur, fil de phase sur un point libre de son bloc | 13 sorties ; 2 emplacements pour des DIO de plus, de 14 entrées et 14 sorties chacun |
 | Un bouton ou un capteur | Borne TBT de réserve vers une entrée DIO libre | 22 entrées |
 | Une zone ou un bâtiment | Modules déportés en Modbus TCP, ou seconde base, derrière un isolateur | Au-delà des 10 modules de la Connect 5 |
 | Une commande à distance | Table de correspondance du service Go, modifiée sans recompiler ; MQTT et Home Assistant en phase P4 | — |
@@ -338,7 +382,7 @@ Sources : [fiche Connect 5](https://revolutionpi.com/fileadmin/downloads/datashe
 
 ## Nomenclature et budget
 
-Le scénario B demande environ 5 350 € HT de matériel par armoire, soit 6 420 € TTC, câblage de migration compris. La RevPi en représente 42 % (2 270 €) et les relais d'interface 24 % (1 261 €).
+Le scénario B demande environ 5 450 € HT de matériel par armoire, soit 6 540 € TTC, câblage de migration compris. La RevPi en représente 42 % (2 270 €) et les relais d'interface 23 % (1 261 €).
 
 | Poste | Qté | Prix unitaire HT | Total HT | Source |
 | --- | --- | --- | --- | --- |
@@ -355,10 +399,11 @@ Le scénario B demande environ 5 350 € HT de matériel par armoire, soit 6 420
 | Isolateur Ethernet Phoenix FL ISOLATOR 100-RJ/RJ | 1 | 204,97 € | 205 € | [RS France](https://fr.rs-online.com/web/p/modules-dinterface/7511392) |
 | Adaptateur TIC Micro Teleinfo V3 | 1 | ≈ 20 € | 20 € | [Lectronz](https://lectronz.com/products/utinfo), 22,39 $ |
 | Interfaces isolées des lignes extérieures et leur alimentation | 1 | ≈ 150 € | 150 € | estimation |
-| Câblage de migration : 52 bornes à deux étages, 4 interfaces IDC 26, bornes de réserve, ponts, repérage | 1 | ≈ 460 € | 460 € | section Câblage de migration |
+| Câblage de migration : 56 bornes à deux étages, 4 interfaces IDC 26, bornes de réserve, ponts, repérage | 1 | ≈ 470 € | 470 € | section Câblage de migration |
+| Blocs de phase : 24 bornes à quatre points 2002-1401, 12 contacts de pontage rouges (/000-005), fils de phase | 1 | ≈ 90 € | 90 € | section Câblage de migration |
 | Petit matériel : peignes, goulottes TBT et 230 V séparées, fusibles, fils du panneau | 1 | ≈ 250 € | 250 € | estimation |
 | Coffret supplémentaire à droite, quatre rangées de 24 modules : répartiteur et panneau | 1 | ≈ 200 € | 200 € | estimation |
-| Total matériel |  |  | ≈ 5 350 € |  |
+| Total matériel |  |  | ≈ 5 450 € |  |
 
 Le HDR-150-24 est de classe II, sans borne de terre : il se pose dans le coffret, et son isolement de 4 kV tient la frontière de l'alimentation. Les prix sont relevés les 19 et 20 octobre 2026, hors port ; les relais sont au prix unitaire de détail et se négocient par lots. Pour les éclairages à LED, prévoir la variante à contacts AgSnO2 de la série 38, qui tient mieux le courant d'appel ; référence et prix à confirmer. Le FL ISOLATOR est à déduire s'il a déjà été acheté au titre des mesures de priorité 1. Le prix du DUPS40 et celui du 48.P6 sont à confirmer au devis.
 
@@ -367,11 +412,11 @@ Le HDR-150-24 est de classe II, sans borne de terre : il se pose dans le coffret
 - **Kit de banc de la phase P0** : Connect 5, 1 DIO, 1 AIO et l'alimentation Mean Well MDR-60-24 vendue par KUNBUS (27,50 €), soit environ 1 120 € HT, réutilisés ensuite dans l'armoire, sauf l'alimentation.
 - **Scénario A** : environ 2 140 € HT (Connect 5, 1 DIO, 1 AIO, 13 relais, alimentation et secours, convertisseurs 12 et 15 V, isolateurs Ethernet et I2C, interfaces extérieures, TIC), hors réparation des BA.
 - **Génération 3 maison** (ADR 0001) : 25 à 50 € de composants par nœud, mais une nouvelle génération de cartes et une couche liaison à réécrire dans deux firmwares. C'est l'option la moins chère en matériel et la plus lourde en ingénierie.
-- **Main-d'œuvre** : 13 à 16 semaines-personne de logiciel, réalisées en interne et non valorisées dans le budget ; à 500 € par jour, elles vaudraient 32 000 à 40 000 € HT. L'électricien pose le répartiteur en 2 à 3 jours, l'armoire restant en service, puis câble le panneau en 3 à 4 jours : environ 2 000 à 2 800 € HT (estimation). La bascule demande une journée.
+- **Main-d'œuvre** : 13 à 16 semaines-personne de logiciel, réalisées en interne et non valorisées dans le budget ; à 500 € par jour, elles vaudraient 32 500 à 40 000 € HT. L'électricien pose le répartiteur en 2 à 3 jours, l'armoire restant en service, puis câble le panneau en 3 à 4 jours : environ 2 000 à 2 800 € HT (estimation). La bascule demande une journée.
 
 ## Risques et points ouverts
 
-Aucun risque ne bloque le scénario B à ce stade, mais huit points sont à lever en P0, avant de commander le reste du kit. Cinq d'entre eux et l'avis de l'électricien forment les six critères de la porte G1 : l'écran, la sirène, les détecteurs de fuite, l'essai CEM, la place dans le coffret et l'avis de l'électricien.
+Aucun risque ne bloque le scénario B à ce stade, mais neuf points sont à lever en P0, avant de commander le reste du kit. Cinq d'entre eux et l'avis de l'électricien forment les six critères de la porte G1 : l'écran, la sirène, les détecteurs de fuite, l'essai CEM, la place dans le coffret et l'avis de l'électricien.
 
 | Risque | Conséquence | Parade | Quand |
 | --- | --- | --- | --- |
@@ -379,18 +424,20 @@ Aucun risque ne bloque le scénario B à ce stade, mais huit points sont à leve
 | Commande de la sirène SC946D : PWM d'environ 1,7 kHz (calcul d'après Hard.c, à confirmer), au-delà des 400 Hz du DIO | Sirène muette ou mal pilotée | Caractériser l'entrée ; sortie analogique de l'AIO si elle lit un niveau filtré, sinon sirène autonome | P0 |
 | Sortie des détecteurs de fuite SC947 inconnue : le BP la lit sur ADC | Fuite non signalée | Mesure sur banc ; entrée TOR si le niveau le permet, sinon AIO | P0 |
 | Classe d'émission industrielle des bases (IEC 61000-6-4), borne FE laissée libre | Perturbations radio dans le logement, immunité réduite | Câblage court, essai DAB, DECT et Wi-Fi sur banc ; KUNBUS ne dit rien de l'usage résidentiel | P0 |
-| Place non démontrée : environ 1,2 m de rail pour les appareils et 0,65 m pour le répartiteur et les jonctions, cartes gardées jusqu'à G3 | Panneau impossible à loger | Relever la longueur utile de chaque rangée, le côté droit et le haut du coffret ; coffret supplémentaire à droite, goulottes TBT et 230 V séparées | P0 |
+| Place non démontrée : environ 1,35 m de rail pour les appareils et les blocs de phase, et 0,65 m pour le répartiteur et les jonctions, cartes gardées jusqu'à G3 | Panneau impossible à loger | Relever la longueur utile de chaque rangée, le côté droit et le haut du coffret ; coffret supplémentaire à droite, goulottes TBT et 230 V séparées | P0 |
 | Pire cas d'alimentation à 150 W, la limite du HDR-150-24 | Coupure en surcharge | Mouvements groupés de volets différés pendant une alarme ou une recharge ; mesure sur banc | P0 |
 | Puissance des 15 moteurs de volets non relevée | Relais « marche » sous-dimensionné | Relevé avant commande ; le 48.P6 tient 0,55 kW | P0 |
-| Entrées locales des Eltako peut-être non isolées du 230 V | Bouton mural exposé au secteur | Vérifier la fiche ; sinon relais de couplage entre bouton et variateur | P0 |
-| Environ 170 points de connexion ajoutés : bornes et ponts | Faux contact | Bornes à poussoir de marque, essai de chaque circuit à la pose, repère sur chaque pont | PC |
+| Entrées locales des Eltako séparées du 230 V, sans isolation renforcée déclarée | TBT des boutons non garantie : bouton mural exposé au secteur en cas de défaut | Faire confirmer l'isolation par Eltako ; sinon relais de couplage entre bouton et variateur | P0 |
+| Neutre peut-être demandé par les variateurs Eltako : les BA n'ont pas de borne de neutre | Neutres d'éclairage à amener à l'armoire, depuis le différentiel de chaque circuit | Lire la notice ; sinon prévoir ces neutres au répartiteur, ou un variateur sans neutre | P0 |
+| Environ 250 points de connexion ajoutés : bornes, ponts et blocs de phase | Faux contact | Bornes à poussoir de marque, essai de chaque circuit à la pose, repère sur chaque pont | PC |
 | Fils existants trop courts pour rejoindre le côté droit | Rallonges dans les goulottes | Bornes de passage repérées ; répartiteur placé au plus près de l'arrivée des fils, décidé au relevé | PC |
+| Repiquage : deux disjoncteurs reliés par un bloc, ou un relais sur le mauvais bloc | Protection faussée, déclenchements intempestifs | Un bloc par disjoncteur, relevé en P0 et repéré ; à la mise en service, ouvrir chaque disjoncteur et vérifier que seul son bloc tombe | PC |
 | Boutons en 24 V dans les volumes 1 et 2 (NF C 15-100, §701) | Non-conformité | Avis de l'électricien avant tout câblage | G1 |
 | Contrôleur unique : sorties à 0 sans bus après 50 ou 500 ms, figées si seul le service Go se bloque | Boutons de 25 éclairages et 15 volets inopérants | Modes dégradés : chien de garde applicatif, secours des éclairages, Connect 5 de rechange, matrice de repli | G1 |
 | Fil pilote : hors-gel forcé de 500 ms aux transitions ECO, propre à Essensys | Radiateurs mal pilotés | Reprendre FilPilote.c à l'identique, essai d'un radiateur par zone | P1 |
 | Portage de 13 à 16 semaines-personne, sans bibliothèque Go officielle | Bascule retardée | Lots livrables, tests de parité automatisés, réparation provisoire des BA | P1 |
 | Eltako : un double appui éteint progressivement en 60 min | Usage modifié | Validation avec les occupants ; option Shelly Pro Dimmer 2PM | P2 |
-| ≈ 5 350 € HT de matériel par armoire | Frein pour le reste du parc, dont la taille reste à préciser | Comparaison avec l'ADR 0001 ; scénario A seulement comme étape, risques des BA acceptés | Décision |
+| ≈ 5 450 € HT de matériel par armoire | Frein pour le reste du parc, dont la taille reste à préciser | Comparaison avec l'ADR 0001 ; scénario A seulement comme étape, risques des BA acceptés | Décision |
 | Fin du support de RevPi OS Trixie le 30 juin 2030 | Migration d'OS à prévoir | Déploiement reproductible par Ansible, version suivante essayée sur banc | 2029 |
 
 ## Feuille de route
@@ -462,6 +509,10 @@ Le retour arrière reste possible jusqu'à G3 : les quatre cartes restent en pla
 | Archify | Outil qui génère les schémas interactifs joints à l'étude |
 | Ansible | Outil de déploiement reproductible d'un système Linux |
 | Prometheus, Alertmanager | Collecte de métriques et envoi d'alertes, déjà en place sur la passerelle |
+| Bloc de phase (X3) | Bornes Wago à quatre points (2002-1401) voisines, reliées par un contact de pontage : elles répartissent la phase d'un disjoncteur vers plusieurs relais |
+| Contact de pontage | Barrette Wago enfoncée dans les fentes de bornes voisines pour les relier |
+| Repiquage | Reprise d'une phase d'une borne à une autre pour alimenter plusieurs appareils |
+| Borne P | Borne de phase d'un groupe de relais sur une carte BA : les relais du groupe partagent ce commun |
 
 ## Sources
 

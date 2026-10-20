@@ -9,7 +9,7 @@ Oct 20, 2026 · @Nicolas
 
 ## Synthèse
 
-Remplacer l'armoire ESSENSYS par des Arduino Opta est faisable. Quatre Opta reprennent les rôles actuels, un pour le BP et un par BA, avec douze extensions pour les 76 entrées et 85 sorties. Le matériel coûte environ 5 500 € HT, câblage de migration compris. Le logiciel demande 11 à 16 semaines-personne avant la bascule, puis 2,5 à 4 pour MQTT et le démarrage signé.
+Remplacer l'armoire ESSENSYS par des Arduino Opta est faisable. Quatre Opta reprennent les rôles actuels, un pour le BP et un par BA, avec douze extensions pour les 76 entrées et 85 sorties. Le matériel coûte environ 5 600 € HT, câblage de migration compris. Le logiciel demande 11 à 16 semaines-personne avant la bascule, puis 2,5 à 4 pour MQTT et le démarrage signé.
 
 Ce que l'Opta apporte face à la Revolution Pi :
 
@@ -20,14 +20,14 @@ Ce que l'Opta apporte face à la Revolution Pi :
 
 Ce qu'il faut accepter :
 
-- **Environ 3 m de rail**, répartiteur et jonctions compris, dont 1,12 m pour les seize modules Opta : il faut deux coffrets de plus, accolés à droite du coffret actuel.
+- **Environ 3,1 m de rail**, répartiteur, blocs de phase et jonctions compris, dont 1,12 m pour les seize modules Opta : il faut deux coffrets de plus, accolés à droite du coffret actuel.
 - **Une plateforme logicielle en transition** : Mbed OS est arrêté, et le cœur Arduino sous Zephyr n'est déclaré stable que depuis fin juillet 2026.
 - **Des extensions sur un bus I2C interne**, chacune avec son alimentation et son firmware, sans signal de vie : c'est le premier point à tester.
 - **Des entrées non isolées**, alors que celles des modules DIO de la Revolution Pi le sont.
 - **Un élément sécurisé au lieu d'un TPM**, et un démarrage signé à construire ; la Revolution Pi n'a pas non plus de démarrage sécurisé actif.
 - **Aucun engagement de disponibilité publié**, contre 2036 pour la Connect 5 ; Arduino appartient désormais à Qualcomm.
 
-Ce que cela coûte : environ 5 500 € HT de matériel par armoire, dont 37 % pour les Opta et leurs extensions et 23 % pour les relais d'interface. Les 11 à 16 semaines de logiciel font 4,5 à 6,5 mois à 20 h par semaine. S'y ajoutent 2 à 3 jours de pré-câblage, l'armoire restant en service, 3 à 4 jours de câblage du panneau et une journée de bascule.
+Ce que cela coûte : environ 5 600 € HT de matériel par armoire, dont 37 % pour les Opta et leurs extensions et 23 % pour les relais d'interface. Les 11 à 16 semaines de logiciel font 4,5 à 6,5 mois à 20 h par semaine. S'y ajoutent 2 à 3 jours de pré-câblage, l'armoire restant en service, 3 à 4 jours de câblage du panneau et une journée de bascule.
 
 Recommandation : fixer d'abord l'exigence de durée de vie. Si une disponibilité garantie de dix ans est requise, la Revolution Pi s'impose. Sinon, monter le banc étendu : la porte G1 retient l'architecture par zone si trois de ses onze critères, décisifs, sont validés. Ce sont le bus des extensions, leur repli quand un Opta se tait, et le cœur logiciel. Si l'un d'eux échoue, la Revolution Pi reste le choix.
 
@@ -183,15 +183,15 @@ Lecture : l'Opta « BP » lit la TIC et dialogue avec l'écran et la passerelle 
 
 En phase 1, la passerelle CM5 ne change pas si l'Opta « BP » lit la TIC. Celui-ci reprend le client HTTP legacy du BP et son adresse sur eth1. La réservation DHCP passe sur l'adresse MAC de l'Opta, qui reprend aussi la clé d'accès distant de 16 octets. Si la lecture locale de la TIC échoue, la passerelle évolue dès la phase 1 : elle lit la TIC et écrit l'index ADPS que le BP écrit aujourd'hui.
 
-Le panneau occupe environ 3 m de rail, répartiteur et jonctions compris. Les cartes restent en place jusqu'à G3 : il faut donc deux coffrets de plus, de quatre rangées de 24 modules, accolés à droite du coffret actuel. Le premier reçoit le répartiteur, les relais d'interface et les variateurs ; le second, les automates, le commutateur et les alimentations. Les liaisons entre coffrets font 0,5 m au plus, et un conducteur relie leurs 0 V. Si les coffrets ne peuvent pas être accolés, chaque liaison qui les relie doit être isolée à 4 kV.
+Le panneau occupe environ 3,1 m de rail, répartiteur, blocs de phase et jonctions compris. Les cartes restent en place jusqu'à G3 : il faut donc deux coffrets de plus, de quatre rangées de 24 modules, accolés à droite du coffret actuel. Le premier reçoit le répartiteur, les blocs de phase, les relais d'interface et les variateurs ; le second, les automates, le commutateur et les alimentations. Les liaisons entre coffrets font 0,5 m au plus, et un conducteur relie leurs 0 V. Si les coffrets ne peuvent pas être accolés, chaque liaison qui les relie doit être isolée à 4 kV.
 
 ![Implantation Opta, schéma Archify](img/implantation-opta.png){ loading=lazy }
 
-Lecture : le premier coffret ajouté, contre le coffret actuel, reçoit le répartiteur, les relais et les variateurs ; le second, les quatre Opta, leurs extensions et les alimentations. Les Opta commandent les bobines des relais du premier coffret. Le coffret actuel garde les jonctions et les quatre cartes jusqu'à G3, et les batteries vont dans un boîtier accolé. Implantation indicative, à confirmer au relevé de P0.
+Lecture : le premier coffret ajouté, contre le coffret actuel, reçoit le répartiteur, les blocs de phase, les relais et les variateurs ; le second, les quatre Opta, leurs extensions et les alimentations. Les Opta commandent les bobines des relais du premier coffret. Le coffret actuel garde les jonctions et les quatre cartes jusqu'à G3, et les batteries vont dans un boîtier accolé. Implantation indicative, à confirmer au relevé de P0.
 
 ![Simulation visuelle des coffrets Opta, rendu 3D](img/simulation-opta.jpg){ loading=lazy }
 
-Lecture : simulation 3D d'après les photos du coffret et les dimensions des produits, après la pose du panneau. Le coffret 1 reçoit le répartiteur et les relais, le coffret 2 les automates ; l'implantation exacte sera fixée au relevé de P0.
+Lecture : simulation 3D d'après les photos du coffret et les dimensions des produits, après la pose du panneau ; les fils rouges partent des blocs de phase vers chaque relais. Le coffret 1 reçoit le répartiteur, les blocs de phase et les relais, le coffret 2 les automates ; l'implantation exacte sera fixée au relevé de P0.
 
 Une combinaison Revolution Pi pour le rôle de BP et Opta pour les zones reste possible, mais elle cumule deux chaînes logicielles.
 
@@ -205,26 +205,26 @@ Lecture : les fils 230 V arrivent sur un répartiteur, sur le côté droit ; les
 
 Ce qu'il faut poser :
 
-- **Répartiteur 230 V, à droite (coffret 1, ou côté droit du coffret actuel si le relevé de P0 le permet)** : chaque fil existant quitte sa carte pour une borne repérée. Cela concerne les 63 départs des BA, les 8 départs du BP et une douzaine de phases d'alimentation, soit environ 83 circuits. Les fils en place sont en H07V-U 1,5 mm² rigide, que des bornes à poussoir reçoivent tels quels.
+- **Répartiteur 230 V, à droite (coffret 1, ou côté droit du coffret actuel si le relevé de P0 le permet)** : chaque fil existant quitte sa carte pour une borne repérée. Cela concerne les 63 départs des BA, les 8 départs du BP, une douzaine de phases d'alimentation et jusqu'à 7 neutres du BP, soit environ 90 fils. Les fils en place sont en H07V-U 1,5 mm² rigide, que des bornes à poussoir reçoivent tels quels. La phase de chaque disjoncteur est ensuite répartie vers les relais par un bloc de phase (voir plus bas).
 - **Jonctions des nappes, en haut** : les quatre nappes IDC 26 arrivent par le haut, sur les J3 des trois BA et du BP. Un second connecteur, serti sur chaque nappe, la relie à une interface IDC 26 vers bornes. L'ancienne carte reste branchée sur le connecteur d'origine jusqu'à la bascule.
 - **Tensions séparées** : la TBT en haut, le 230 V sur le côté droit, avec des goulottes distinctes. L'analyse experte demande aussi, en priorité 1, d'éloigner les nappes des bornes de phase.
-- **Réserve** : 25 % de bornes libres au répartiteur, soit une vingtaine de circuits, et 24 bornes TBT libres près des jonctions. Les conducteurs inutilisés des nappes arrivent aussi sur bornes.
+- **Réserve** : 25 % de bornes libres au répartiteur, soit une vingtaine de circuits, et 12 bornes TBT à deux étages libres près des jonctions, soit 24 circuits. Les conducteurs inutilisés des nappes arrivent aussi sur bornes.
 - **Repérage** : chaque fil, borne et pont porte le même repère, reporté dans un plan de bornage tenu à jour dans essensys-doc.
 
 | Élément | Quantité | Place sur rail | Prix HT |
 | --- | --- | --- | --- |
-| Bornes à poussoir à deux étages, 2,5 mm² (Wago 2002-2201) : 83 circuits et 25 % de réserve | 52 | ≈ 0,3 m, côté droit | ≈ 92 € |
+| Bornes à poussoir à deux étages, 2,5 mm² (Wago 2002-2201) : 90 fils et 25 % de réserve | 56 | ≈ 0,3 m, côté droit | ≈ 99 € |
 | Interfaces IDC 26 vers bornes, 50 V et 1 A (RS PRO) | 4 | ≈ 0,3 m, en haut | 256 € |
 | Bornes TBT à deux étages, en réserve | 12 | ≈ 6 cm, en haut | ≈ 21 € |
-| Embouts, cloisons, butées, repères, connecteurs IDC à sertir | — | — | ≈ 50 € (estimation) |
+| Embouts, cloisons, butées, repères, connecteurs IDC à sertir, contacts de pontage bleus des neutres (/000-006) | — | — | ≈ 55 € (estimation) |
 | Fil H07V-K 1,5 mm² et embouts de câblage pour les ponts | — | — | ≈ 40 € (estimation) |
-| Total |  | ≈ 0,65 m | ≈ 460 € |
+| Total |  | ≈ 0,65 m | ≈ 470 € |
 
 Connecteurs retenus, les mêmes dans les trois études :
 
 | Connecteur | Rôle | Référence |
 | --- | --- | --- |
-| Borne de passage à deux étages, à poussoir, 2,5 mm², 5,2 mm de large | Répartiteur : chaque étage reçoit un circuit, le fil du logement d'un côté, le pont repéré de l'autre. 52 bornes, soit 104 circuits | [Wago 2002-2201](https://buerklin.com/en/p/wago/series-terminals/2002-2201/09H4322) |
+| Borne de passage à deux étages, à poussoir, 2,5 mm², 5,2 mm de large | Répartiteur : chaque étage reçoit un circuit, le fil du logement d'un côté, le pont repéré de l'autre. 56 bornes, soit 112 circuits | [Wago 2002-2201](https://buerklin.com/en/p/wago/series-terminals/2002-2201/09H4322) |
 | Interface IDC 26 vers bornes à vis, sur rail DIN, 50 V et 1 A | Jonction : reçoit la nappe des boutons d'une zone et ramène ses 26 conducteurs sur bornes. Une par nappe, soit 4 | [RS PRO 403-320](https://befr.rs-online.com/web/p/interface-modules/0403320) |
 | Connecteur IDC 26 femelle, pas de 2,54 mm, pour nappe au pas de 1,27 mm, avec serre-câble | Second connecteur serti sur chaque nappe : l'interface se branche sans débrancher l'ancienne carte | [3M 3399-6026](https://fr.rs-online.com/web/p/connecteurs-idc/8280403) |
 
@@ -234,28 +234,72 @@ Connecteurs retenus, les mêmes dans les trois études :
 
 Lecture : les deux vues rapprochées montrent les connecteurs retenus en place, en haut du coffret actuel pour les nappes et à gauche du coffret 1 pour le répartiteur ; les ponts et les repères sont ceux du plan de bornage.
 
+### Repiquer une phase sur plusieurs relais
+
+Un disjoncteur du tableau alimente toujours plusieurs relais. Sur les BA, les relais d'un même groupe ont leur commun relié sur le circuit imprimé, et ce commun sort sur deux bornes P : la phase arrive sur l'une et repart vers le groupe suivant par l'autre, avec un fil rouge. C'est le repiquage. Les schémas « Borniers » des cartes comptent 10 groupes sur le BA PDV, 13 sur le BA CHB et 14 sur le BA PDE, pour 63 sorties ; le BP reçoit trois phases (alimentation, fil pilote, arrosage) et jusqu'à sept neutres, reliés sur sa carte.
+
+![Repiquage de la phase sur une carte BA, photo annotée](img/photo-repiquage-ba.jpg){ loading=lazy }
+
+Lecture : chaque groupe a deux bornes P reliées sur la carte, ici J14 et J15 ; le trait sérigraphié montre le commun des deux relais du groupe. Les fils rouges repiquent la phase d'un groupe au suivant, et le groupe des volets reçoit la sienne par un autre fil, blanc. Les fils orange et violets partent vers les luminaires, la prise commandée et le volet.
+
+Avec les Opta, aucune carte ne relie plus les communs : chaque relais d'interface a sa propre borne COM (11), et les peignes Finder des supports 93.01 ne relient que les bornes de bobine A1 ou A2. Des bornes Wago pontées répartissent donc la phase, dans un bloc de phase par disjoncteur, noté X3, au début des rangées de relais du coffret 1.
+
+![Repiquage de la phase, aujourd'hui et demain, schéma Archify](img/repiquage-phase.png){ loading=lazy }
+
+Lecture : à gauche, la phase passe d'une borne P à l'autre sur les cartes. À droite, elle arrive sur son étage du répartiteur X1 ; un pont la mène à son bloc X3, où un contact de pontage relie quelques bornes à quatre points, et chaque point donne un fil à un seul relais. La version interactive du schéma, générée par Archify, accompagne l'étude.
+
+Comment un bloc Wago repique la phase :
+
+1. **Un bloc par disjoncteur** : la phase garde son étage au répartiteur X1, repéré PH-03 par exemple. Un pont la conduit au bloc PH-03 du panneau.
+2. **Un contact de pontage** : le bloc réunit quelques bornes de passage à quatre points, Wago 2002-1401, de la même série que le répartiteur mais à un seul étage. Un contact de pontage Wago de 2 à 10 raccords (2002-402 à 2002-410, 25 A, en rouge avec le suffixe /000-005) s'enfonce dans leur fente de pontage : toutes portent la phase.
+3. **Un fil par point** : chaque borne a quatre points à poussoir, deux en haut et deux en bas. Le pont venu de X1 prend le premier ; chaque autre point reçoit un seul fil, vers la borne COM d'un relais 38.51 ou 48.P6, ou l'entrée L d'un variateur ou d'un bloc 24 V. Au moins un point reste libre pour un ajout.
+4. **Un repère par fil** : « PH-03.2 → K12:11 » se lit « bloc PH-03, point 2, vers la borne 11 du relais K12 ». Le plan de bornage tient ces listes.
+
+Un fil par relais, plutôt qu'un repiquage de relais en relais, permet de retirer un relais sans couper les suivants et d'essayer chaque fil seul. Aucune borne de relais ne porte plus le courant de tout le groupe.
+
+Règles, à faire valider par l'électricien :
+
+- **Jamais deux disjoncteurs dans un bloc** : relier deux blocs mettrait deux disjoncteurs en parallèle ; un fil du bloc pourrait alors porter la somme de leurs calibres sans qu'aucun ne déclenche, et couper l'un ne mettrait plus le bloc hors tension. Un bloc ne sert que les circuits de son disjoncteur actuel, relevés en P0.
+- **Courants** : les fils en place et les ponts sont en 1,5 mm², que la NF C 15-100 protège par un disjoncteur de 16 A au plus, sous les 24 A de la borne et les 25 A du contact de pontage. Le calibre de chaque disjoncteur qui alimente l'armoire est à vérifier en P0 : un circuit en 20 A demanderait du 2,5 mm² de bout en bout.
+- **Même disjoncteur** : un circuit prend sa phase et son neutre sur le même disjoncteur phase-neutre, donc sous le même interrupteur différentiel. Un neutre pris sur un autre circuit fait déclencher le différentiel, ou n'est plus coupé avec sa phase.
+- **Neutres** : les neutres du BP arrivent sur X1, chacun avec la phase de son circuit : N\_ALIM (alimentation et bobines des contacteurs, quatre bornes), N\_FP (fil pilote) et N\_EV (électrovanne, deux bornes). Un contact de pontage bleu (suffixe /000-006) ne relie que les bornes d'un même neutre ; ces trois neutres restent séparés. Les blocs 24 V prennent leur phase sur PH\_ALIM et leur neutre sur N\_ALIM. Les BA n'ont pas de borne de neutre : si la notice des Eltako demande le neutre, il faudra l'amener de la borne N du disjoncteur de chaque circuit concerné.
+
+Pendant la migration :
+
+- **Pré-câblage** : le fil du disjoncteur quitte la borne P de la carte pour son étage de X1, et un pont le ramène sur la même borne P. Les repiquages des cartes ne bougent pas.
+- **Bascule** : un seul pont par disjoncteur passe de la carte au bloc X3, câblé vers les relais avec le panneau et resté hors tension jusque-là.
+- **Retour arrière** : ces ponts reviennent sur les cartes.
+
+![Vue rapprochée d'un bloc de phase, rendu 3D](img/detail-phases-opta.jpg){ loading=lazy }
+
+Lecture : le pont rouge arrive de X1, le contact de pontage relie quatre bornes à quatre points, deux fils partent vers les premiers relais de marche des volets, et des points restent libres ; les autres blocs suivent, et leurs fils passent par la goulotte. Vue simulée en 3D, à confirmer au relevé de P0.
+
+Pour l'Opta, cela fait 62 fils de phase : 25 relais d'éclairage, 15 relais de marche des volets, 8 relais de fil pilote, 4 relais d'options, 8 variateurs et les deux blocs 24 V. Les relais de sens prennent la phase sur la marche de leur volet. Avec une douzaine de blocs, il faut environ 24 bornes à quatre points et 12 contacts de pontage : environ 90 € HT et 13 cm de rail.
+
+Sources : [schémas des BA, feuille Borniers](https://github.com/essensys-hub/essensys-board-SC940), [schéma du BP](https://github.com/essensys-hub/essensys-board-SC944D), [fiche Wago 2002-2201 et ses accessoires](https://www.alldataresource.com/assets/Wago_Corporation/Wago-Corporation-2002-2201-Double-Deck-Terminal-Block-Specification-Sheet.pdf), [borne à quatre points Wago 2002-1401](https://buerklin.com/en/p/wago/series-terminals/2002-1401/09H4219), [contact de pontage Wago 2002-410](https://www.wago.com/ch-fr/bornes-sur-rail/contact-de-pontage/p/2002-410), [contacts de pontage pour la série 2002](https://uk.rs-online.com/web/p/din-rail-terminal-accessories/5076591), [version rouge 2002-410/000-005](https://www.rowse-automation.co.uk/wago-2002-410-000-005), [version bleue 2002-402/000-006](https://uk.rs-online.com/web/p/din-rail-terminal-accessories/2783244), [peigne Finder 093.20.1, bornes A1 ou A2](https://buerklin.com/en/p/finder/relays-accessories/093-20-1/34G1079), [notice Eltako EUD12D, entrées séparées du 230 V](https://www.eltako.com/fileadmin/downloads/de/_bedienung/EUD12D_21100905-3_dt.pdf), [calibres de la NF C 15-100](https://hager.com/fr/normes/nfc-15-100/disjoncteur).
+
 ![Coffret aujourd'hui et après le pré-câblage, schéma Archify](img/coffret-precablage.png){ loading=lazy }
 
 Lecture : à gauche, le coffret tel qu'il est. Chaque carte reçoit sa nappe par le haut et ses fils 230 V par le bas, et le côté droit n'a qu'environ 4 cm libres. À droite, le même coffret après le pré-câblage : les jonctions occupent le haut, les fils passent par le répartiteur du premier coffret ajouté, et des ponts les ramènent aux cartes, toujours en service. La version interactive du schéma, générée par Archify, accompagne l'étude.
 
-Le répartiteur prend place dans le premier des deux coffrets ajoutés à droite, avec les relais d'interface et les variateurs ; les jonctions restent en haut du coffret actuel. Le relevé de P0 dit si le côté droit du coffret actuel peut recevoir le répartiteur.
+Le répartiteur prend place dans le premier des deux coffrets ajoutés à droite, avec les blocs de phase, les relais d'interface et les variateurs ; les jonctions restent en haut du coffret actuel. Le relevé de P0 dit si le côté droit du coffret actuel peut recevoir le répartiteur.
 
 Déroulement :
 
 1. **Relevé et plan, en P0** : place libre sur le côté droit et en haut, longueur des fils, plan de bornage.
-2. **Pré-câblage, 2 à 3 jours d'électricien, armoire en service** : chaque fil passe sur sa borne, un pont le relie à l'ancienne carte, et le circuit est essayé. Le second connecteur des nappes est serti et branché sur sa jonction.
-3. **Bascule, une journée** : les ponts passent sur les relais d'interface et les variateurs que pilotent les Opta, les nappes quittent les anciennes cartes, et les bornes des jonctions, déjà câblées vers les entrées des D1608S pendant le câblage du panneau, sont mises en service en fermant le commun des boutons de chaque zone, resté ouvert jusque-là. Pendant cette journée, le logement n'a ni boutons, ni écran, ni alarme, ni fil pilote : prévenir les occupants, choisir une journée hors période de chauffe, prévoir un éclairage d'appoint.
-4. **Retour arrière, une demi-journée** : les ponts reviennent sur les anciennes cartes, qui restent en place jusqu'à G3, et les nappes se rebranchent.
+2. **Pré-câblage, 2 à 3 jours d'électricien, armoire en service** : chaque fil passe sur sa borne, un pont le relie à l'ancienne carte, et le circuit est essayé. La phase de chaque disjoncteur revient par un pont sur la borne P qu'elle quittait ; les repiquages des cartes ne bougent pas. Le second connecteur des nappes est serti et branché sur sa jonction.
+3. **Bascule, une journée** : les ponts passent sur les relais d'interface et les variateurs que pilotent les Opta, chaque phase sur son bloc de phase, les nappes quittent les anciennes cartes, et les bornes des jonctions, déjà câblées vers les entrées des D1608S pendant le câblage du panneau, sont mises en service en fermant le commun des boutons de chaque zone, resté ouvert jusque-là. Pendant cette journée, le logement n'a ni boutons, ni écran, ni alarme, ni fil pilote : prévenir les occupants, choisir une journée hors période de chauffe, prévoir un éclairage d'appoint.
+4. **Retour arrière, une demi-journée** : les ponts reviennent sur les anciennes cartes, qui restent en place jusqu'à G3, et les nappes se rebranchent une fois rouverts les communs des boutons de chaque zone.
 
-![Plan de bornage du répartiteur et des jonctions, schéma Archify](img/plan-de-bornage.png){ loading=lazy }
+![Plan de bornage du répartiteur, des jonctions et d'un bloc de phase, schéma Archify](img/plan-de-bornage.png){ loading=lazy }
 
-Lecture : chaque circuit a un seul repère, porté par sa borne 230 V au répartiteur X1 et par la borne de son bouton à la jonction X2. Les tables suivent l'ordre éclairages, variateurs, volets ; les phases d'alimentation et la réserve complètent les 104 points du répartiteur. Le brochage J3 de chaque bouton et les phases restent à relever en P0. La version interactive du schéma, générée par Archify, accompagne l'étude.
+Lecture : chaque circuit a un seul repère, porté par sa borne 230 V au répartiteur X1 et par la borne de son bouton à la jonction X2. Les tables suivent l'ordre éclairages, variateurs, volets ; les phases, les neutres du BP et la réserve complètent les 112 circuits du répartiteur ; chaque bloc de phase a sa table, comme l'exemple PH-03. Le brochage J3 de chaque bouton et les phases restent à relever en P0. La version interactive du schéma, générée par Archify, accompagne l'étude.
 
-Évolutivité : aujourd'hui, le brochage des BA est figé dans le code (881 lignes de hard.h), le bus I2C ne connaît que trois BA, et chaque ajout demande de reprendre une carte. Avec les Opta et ce câblage, un ajout se résume à une borne, un pont et une ligne de configuration :
+Évolutivité : aujourd'hui, le brochage des BA est figé dans le code (881 lignes de hard.h), le bus I2C ne connaît que trois BA, et chaque ajout demande de reprendre une carte. Avec les Opta et ce câblage, un ajout se résume à une borne, un pont, un fil de phase et une ligne de configuration. Le neutre d'un nouveau départ se prend sur son circuit, hors de l'armoire, dans la limite de 8 points d'éclairage par circuit.
 
 | Ajout | Comment | Capacité libre |
 | --- | --- | --- |
-| Un éclairage ou un volet | Relais d'interface dans le premier coffret, sortie libre d'une extension, pont au répartiteur | 20 sorties ; 8 emplacements d'extension, de 16 entrées et 8 sorties chacun |
+| Un éclairage ou un volet | Relais d'interface dans le premier coffret, sortie libre d'une extension, pont au répartiteur, fil de phase sur un point libre de son bloc | 20 sorties ; 8 emplacements d'extension, de 16 entrées et 8 sorties chacun |
 | Un bouton ou un capteur | Borne TBT de réserve vers une entrée libre de la zone | Plus de 130 entrées |
 | Une zone ou un bâtiment | Opta de plus sur un port libre du commutateur, avec son commun et son fusible | 2 zones, le troisième port libre restant à la maintenance |
 | Une commande à distance | Table de correspondance en flash, chargée sans recompiler ; MQTT et Home Assistant en phase P4 | — |
@@ -363,7 +407,7 @@ Sources : [modèle de sécurité Arduino](https://docs.arduino.cc/tutorials/secu
 
 ## Nomenclature et budget
 
-L'architecture à quatre Opta demande environ 5 500 € HT de matériel par armoire, soit 6 600 € TTC, câblage de migration compris. Les automates en représentent 37 % (2 052 €) et les relais d'interface 23 % (1 261 €).
+L'architecture à quatre Opta demande environ 5 600 € HT de matériel par armoire, soit 6 720 € TTC, câblage de migration compris. Les automates en représentent 37 % (2 052 €) et les relais d'interface 23 % (1 261 €).
 
 | Poste | Qté | Prix unitaire HT | Total HT | Source |
 | --- | --- | --- | --- | --- |
@@ -382,10 +426,11 @@ L'architecture à quatre Opta demande environ 5 500 € HT de matériel par armo
 | Isolateur Ethernet Phoenix FL ISOLATOR 100-RJ/RJ | 1 | 204,97 € | 205 € | [RS France](https://fr.rs-online.com/web/p/modules-dinterface/7511392) |
 | Démodulateur TIC à optocoupleur, sur une entrée de l'Opta « BP » | 1 | ≈ 15 € | 15 € | estimation |
 | Interfaces isolées des lignes extérieures et leur alimentation | 1 | ≈ 150 € | 150 € | estimation |
-| Câblage de migration : 52 bornes à deux étages, 4 interfaces IDC 26, bornes de réserve, ponts, repérage | 1 | ≈ 460 € | 460 € | section Câblage de migration |
+| Câblage de migration : 56 bornes à deux étages, 4 interfaces IDC 26, bornes de réserve, ponts, repérage | 1 | ≈ 470 € | 470 € | section Câblage de migration |
+| Blocs de phase : 24 bornes à quatre points 2002-1401, 12 contacts de pontage rouges (/000-005), fils de phase | 1 | ≈ 90 € | 90 € | section Câblage de migration |
 | Petit matériel : fusibles par zone, peignes, goulottes TBT et 230 V séparées, fils du panneau | 1 | ≈ 250 € | 250 € | estimation |
 | Coffrets de quatre rangées de 24 modules, accolés à droite : répartiteur et relais, puis automates | 2 | ≈ 200 € | 400 € | estimation |
-| Total matériel |  |  | ≈ 5 500 € |  |
+| Total matériel |  |  | ≈ 5 600 € |  |
 
 Les prix sont relevés les 19 et 20 octobre 2026, hors port. Ceux des extensions sont déduits des pages par pays de la boutique Arduino ; les grossistes Finder n'affichent les prix de la série 8A qu'après connexion. Pour les éclairages à LED, prévoir la variante à contacts AgSnO2 de la série 38, qui tient mieux le courant d'appel ; référence et prix à confirmer. Le FL ISOLATOR est à déduire s'il a déjà été acheté au titre des mesures de priorité 1.
 
@@ -393,7 +438,7 @@ Les prix sont relevés les 19 et 20 octobre 2026, hors port. Ceux des extensions
 
 - **Banc étendu P0** : un Opta RS485 avec l'A0602, un Opta Lite avec trois D1608S, soit une zone complète, et une alimentation Mean Well MDR-60-24 à 27,50 €. Il coûte environ 845 € HT, et tout sauf l'alimentation sert ensuite dans l'armoire.
 - **Rechanges conseillées** : un Opta RS485, qui peut tenir les quatre rôles, une D1608S et un HDR-150-24, soit environ 290 € HT. L'A0602 n'a pas de rechange.
-- **Revolution Pi, scénario B** : environ 5 350 € HT, câblage de migration compris, avec un kit de banc à 1 120 €.
+- **Revolution Pi, scénario B** : environ 5 450 € HT, câblage de migration compris, avec un kit de banc à 1 120 €.
 - **Main-d'œuvre** : 11 à 16 semaines-personne de logiciel avant la bascule, puis 2,5 à 4 ; ce travail interne n'est pas valorisé dans le budget et vaudrait, à 500 € par jour, 27 500 à 40 000 € HT avant la bascule. L'électricien pose le répartiteur en 2 à 3 jours, l'armoire restant en service, puis câble le panneau en 3 à 4 jours : environ 2 000 à 2 800 € HT (estimation). La bascule demande une journée.
 
 ## Comparaison avec la Revolution Pi
@@ -416,17 +461,17 @@ Lecture : les trois solutions gardent la passerelle, l'isolateur de 4 kV et le c
 | Sirène à 1,7 kHz | PWM du DIO limitée à 400 Hz ; sortie analogique de l'AIO, sinon sirène autonome | PWM de l'A0602, jusqu'à 10 kHz selon Finder |
 | Émission radio | Classe industrielle (IEC 61000-6-4) | Classe A selon Arduino, classe B selon Finder |
 | Rail occupé par les automates | 225 mm | 1 120 mm |
-| Rail total, répartiteur et jonctions compris | ≈ 1,9 m : un coffret de plus | ≈ 3 m : deux coffrets de plus |
+| Rail total, répartiteur et jonctions compris | ≈ 2 m : un coffret de plus | ≈ 3,1 m : deux coffrets de plus |
 | Capacité libre | 22 entrées et 13 sorties ; 2 emplacements de module | Plus de 130 entrées et 20 sorties ; 8 emplacements d'extension ; 3 ports du commutateur |
-| Matériel HT | ≈ 5 350 € | ≈ 5 500 € |
+| Matériel HT | ≈ 5 450 € | ≈ 5 600 € |
 | Kit de banc P0 | ≈ 1 120 € | ≈ 845 €, une zone complète |
-| Logiciel interne, valorisé à 500 € par jour | 32 000 à 40 000 € HT | 27 500 à 40 000 € HT avant la bascule |
+| Logiciel interne, valorisé à 500 € par jour | 32 500 à 40 000 € HT | 27 500 à 40 000 € HT avant la bascule |
 
 Critère de décision : la durée de vie garantie se tranche d'abord, car aucun banc ne la teste. Si elle est exigée, la Revolution Pi l'emporte. Sinon, l'Opta l'emporte si G1 valide le bus des extensions, leur repli et le cœur logiciel : les boutons survivent alors à la panne d'un automate. Si l'un de ces points échoue, la Revolution Pi reprend l'avantage. La sirène ne départage pas : le SC946D a son propre microcontrôleur, et les deux plateformes peuvent produire son signal.
 
 ## Risques et points ouverts
 
-Aucun risque ne bloque l'Opta à ce stade, mais onze points sont à lever sur le banc P0. Neuf d'entre eux, l'avis de l'électricien et la déclaration CE forment les onze critères de la porte G1. Le plus lourd est le bus des extensions, avec leur comportement en panne.
+Aucun risque ne bloque l'Opta à ce stade, mais douze points sont à lever sur le banc P0. Neuf d'entre eux, l'avis de l'électricien et la déclaration CE forment les onze critères de la porte G1. Le plus lourd est le bus des extensions, avec leur comportement en panne.
 
 | Risque | Conséquence | Parade | Quand |
 | --- | --- | --- | --- |
@@ -438,11 +483,13 @@ Aucun risque ne bloque l'Opta à ce stade, mais onze points sont à lever sur le
 | Sirène SC946D : signal attendu inconnu, PWM d'environ 1,7 kHz à confirmer | Sirène muette ou mal pilotée | Caractériser l'entrée ; PWM de l'A0602 sur le rail 12 V, sinon sirène autonome | P0 |
 | Détecteurs SC947 : niveau de sortie inconnu | Fuite non signalée | Mesure sur banc ; entrée analogique ou TOR | P0 |
 | Classe d'émission contradictoire : A selon Arduino, B selon Finder | Perturbations radio dans le logement | Essai DAB, DECT et Wi-Fi sur banc | P0 |
-| Place : environ 3 m de rail, répartiteur et jonctions compris, dont 2,6 m hors du coffret actuel tant que les cartes restent en place | Panneau impossible à loger | Relever chaque rangée, le côté droit et le haut du coffret ; deux coffrets de plus au budget ; goulottes TBT et 230 V séparées | P0 |
+| Place : environ 3,1 m de rail, répartiteur, blocs de phase et jonctions compris, dont 2,75 m hors du coffret actuel tant que les cartes restent en place | Panneau impossible à loger | Relever chaque rangée, le côté droit et le haut du coffret ; deux coffrets de plus au budget ; goulottes TBT et 230 V séparées | P0 |
 | Extensions limitées à 27,5 V selon Finder, bus secouru à 27,0 V | Extensions du BP hors tolérance pendant la charge | Seuls l'Opta « BP » et ses extensions sur ce bus ; mesure sur banc | P0 |
-| Entrées locales des Eltako peut-être non isolées du 230 V | Bouton mural exposé au secteur | Vérifier la fiche ; sinon relais de couplage entre bouton et variateur | P0 |
-| Environ 170 points de connexion ajoutés : bornes et ponts | Faux contact | Bornes à poussoir de marque, essai de chaque circuit à la pose, repère sur chaque pont | PC |
+| Entrées locales des Eltako séparées du 230 V, sans isolation renforcée déclarée | TBT des boutons non garantie : bouton mural exposé au secteur en cas de défaut | Faire confirmer l'isolation par Eltako ; sinon relais de couplage entre bouton et variateur | P0 |
+| Neutre peut-être demandé par les variateurs Eltako : les BA n'ont pas de borne de neutre | Neutres d'éclairage à amener à l'armoire, depuis le différentiel de chaque circuit | Lire la notice ; sinon prévoir ces neutres au répartiteur, ou un variateur sans neutre | P0 |
+| Environ 250 points de connexion ajoutés : bornes, ponts et blocs de phase | Faux contact | Bornes à poussoir de marque, essai de chaque circuit à la pose, repère sur chaque pont | PC |
 | Fils existants trop courts pour rejoindre le côté droit | Rallonges dans les goulottes | Bornes de passage repérées ; répartiteur placé au plus près de l'arrivée des fils, décidé au relevé | PC |
+| Repiquage : deux disjoncteurs reliés par un bloc, ou un relais sur le mauvais bloc | Protection faussée, déclenchements intempestifs | Un bloc par disjoncteur, relevé en P0 et repéré ; à la mise en service, ouvrir chaque disjoncteur et vérifier que seul son bloc tombe | PC |
 | Boutons en 24 V dans les volumes 1 et 2 (NF C 15-100, §701) | Non-conformité | Avis de l'électricien avant tout câblage | G1 |
 | Directive Basse Tension absente des déclarations CE publiées | Doute sur la conformité | Demander la déclaration complète à Arduino ou à Finder | G1 |
 | Écart entre le source et le binaire 099-37, sans build qualifié | Parité fausse ou impossible | Parité mesurée contre le BP en service, traces à l'appui | P1 |
@@ -536,6 +583,10 @@ Le retour arrière reste possible jusqu'à G3 : les quatre cartes restent en pla
 | Archify | Outil qui génère les schémas interactifs joints à l'étude |
 | Unity | Cadre de tests unitaires en C, utilisé par essensys-gcc |
 | Ansible | Outil de déploiement reproductible d'un système Linux |
+| Bloc de phase (X3) | Bornes Wago à quatre points (2002-1401) voisines, reliées par un contact de pontage : elles répartissent la phase d'un disjoncteur vers plusieurs relais |
+| Contact de pontage | Barrette Wago enfoncée dans les fentes de bornes voisines pour les relier |
+| Repiquage | Reprise d'une phase d'une borne à une autre pour alimenter plusieurs appareils |
+| Borne P | Borne de phase d'un groupe de relais sur une carte BA : les relais du groupe partagent ce commun |
 
 ## Sources
 
