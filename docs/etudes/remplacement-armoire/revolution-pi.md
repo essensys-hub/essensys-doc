@@ -5,7 +5,8 @@ description: "Étude du remplacement des cartes de l'armoire ESSENSYS (Revolutio
 
 # Étude de remplacement : ESSENSYS → Revolution Pi
 
-Oct 19, 2026 · @Nicolas
+!!! warning "Version V1 du 19 octobre 2026, figée le 21 octobre 2026"
+    Cette étude ne tient pas l'exigence de résilience posée après la foudre : si son calculateur meurt, des boutons perdent leur charge. Le conseil d'autocritique dit pourquoi dans l'[autocritique des études V1](v2/autocritique-v1.md#revolution-pi). L'architecture recommandée est désormais l'[étude V2 « filaire d'abord »](v2/filaire-d-abord.md) ; voir aussi [Répondre à l'exigence de résilience](../resilience.md). Le texte ci-dessous est conservé tel quel.
 
 ## Synthèse
 
