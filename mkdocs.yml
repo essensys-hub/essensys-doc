@@ -89,6 +89,19 @@ nav:
       - Synthèse: retex/foudre-2026/synthese.md
       - Analyse experte: retex/foudre-2026/analyse-experte.md
       - Contrôle du BP au multimètre: retex/foudre-2026/controle-bp-multimetre.md
+  - Études:
+    - Présentation: etudes/index.md
+    - Répondre à l'exigence de résilience: etudes/resilience.md
+    - Remplacement des cartes de l'armoire:
+      - "V2 : filaire d'abord (recommandée)": etudes/remplacement-armoire/v2/filaire-d-abord.md
+      - Conseil d'autocritique: etudes/remplacement-armoire/v2/conseil.md
+      - Autocritique des études V1: etudes/remplacement-armoire/v2/autocritique-v1.md
+      - Banc deux lumières: etudes/banc-deux-lumieres.md
+      - Sections de câbles: etudes/remplacement-armoire/v2/sections-de-cables.md
+      - "V1 figées (21 octobre 2026)":
+        - Revolution Pi: etudes/remplacement-armoire/revolution-pi.md
+        - Arduino Opta: etudes/remplacement-armoire/arduino-opta.md
+        - Raspberry Pi et Ethernet: etudes/remplacement-armoire/raspberry-pi-ethernet.md
 
 extra:
   generator: false

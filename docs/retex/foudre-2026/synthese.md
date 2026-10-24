@@ -123,6 +123,7 @@ Si les historiques ont expiré, l'origine pourrait rester incertaine.
 - **Module d'isolement** pour un BA dans un autre coffret ou bâtiment.
 - **Logiciel** : déblocage automatique du bus, alerte quand un BA se tait.
 - **Essais sur banc** pour mesurer les seuils calculés.
+- **Remplacement des cartes de l'armoire** : une armoire où chaque bouton commande son circuit sans calculateur, la domotique s'ajoutant en parallèle. Voir [Répondre à l'exigence de résilience](../../etudes/resilience.md).
 
 ## Recommandations pour toute installation { #recommandations }
 
@@ -135,4 +136,4 @@ Si les historiques ont expiré, l'origine pourrait rester incertaine.
 
 ## Pour aller plus loin { #aller-plus-loin }
 
-L'[analyse experte](analyse-experte.md) détaille les calculs, les [hypothèses](analyse-experte.md#hypotheses), le [diagnostic](analyse-experte.md#diagnostic) et les [protections](analyse-experte.md#court-terme).
+L'[analyse experte](analyse-experte.md) détaille les calculs, les [hypothèses](analyse-experte.md#hypotheses), le [diagnostic](analyse-experte.md#diagnostic) et les [protections](analyse-experte.md#court-terme). La suite pour l'armoire est dans les [études de remplacement des cartes](../../etudes/index.md).

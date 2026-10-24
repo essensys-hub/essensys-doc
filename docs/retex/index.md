@@ -22,3 +22,5 @@ Deux lectures sont proposées :
 | **[Synthèse](foudre-2026/synthese.md)** | Tout le monde : membres de l'association, utilisateurs, décideurs | Le récit, les idées clés de l'analyse, ce qui reste à confirmer, nos actions et les recommandations pour toute installation |
 | **[Analyse experte](foudre-2026/analyse-experte.md)** | Électroniciens, installateurs, contributeurs du matériel | Schémas, calculs, hypothèses et tests, méthode de diagnostic, protections à court et long terme, plan d'essais |
 | **[Contrôle du BP au multimètre](foudre-2026/controle-bp-multimetre.md)** | Électroniciens, réparateurs | Fiche d'atelier illustrée : 39 points numérotés sur photo, mesures hors tension puis sous alimentation de laboratoire, valeurs attendues et interprétation |
+
+**Et après ?** La foudre a posé une exigence nouvelle pour l'armoire : si son électronique grille, les boutons muraux doivent toujours commander les lumières et les volets. Les études de remplacement des cartes y répondent : voir [Répondre à l'exigence de résilience](../etudes/resilience.md).
