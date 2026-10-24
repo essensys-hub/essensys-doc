@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Loxone seul : du poussoir à la charge, un Miniserver par zone",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/loxone-seule.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs, charges, secteur"},
+        "frontend": {"label": "Entrées et autres zones"},
+        "messagebus": {"label": "Link de la zone, réseau local"},
+        "backend": {"label": "Miniserver et Extensions de sortie"},
+        "security": {"label": "Alimentation 24 V"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "others", "type": "frontend", "label": "Deux autres zones", "sublabel": "un Miniserver chacune", "pos": [290, 40], "size": [160, 64]},
+    {"id": "lan", "type": "messagebus", "label": "Réseau local", "sublabel": "commutateur ou routeur", "pos": [540, 40], "size": [170, 64]},
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [800, 40], "size": [160, 64]},
+    {"id": "ms", "type": "backend", "label": "Miniserver Compact", "sublabel": "100512, logique, microSD", "pos": [540, 190], "size": [170, 64]},
+    {"id": "push", "type": "external", "label": "63 poussoirs muraux", "sublabel": "contacts secs sous 24 V", "pos": [40, 340], "size": [160, 64]},
+    {"id": "di", "type": "frontend", "label": "DI Extension", "sublabel": "100283, 20 entrées", "pos": [290, 340], "size": [160, 64]},
+    {"id": "link", "type": "messagebus", "label": "Link de la zone", "sublabel": "bus d'armoire, chaîne stricte", "pos": [540, 340], "size": [170, 64]},
+    {"id": "out", "type": "backend", "label": "Extensions de sortie", "sublabel": "Relay 100038, Dimmer 100029", "pos": [800, 340], "size": [170, 64]},
+    {"id": "load", "type": "external", "label": "Charges de la zone", "sublabel": "éclairages, volets, variateurs", "pos": [1060, 340], "size": [170, 64]},
+    {"id": "ps", "type": "security", "label": "Alimentation 24 V", "sublabel": "4,2 A, une par zone", "pos": [540, 490], "size": [170, 64]},
+    {"id": "sec", "type": "external", "label": "Secteur 230 V", "sublabel": "disjoncteur de zone", "pos": [800, 490], "size": [170, 64]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Armoire d'une zone : le Link ne sort pas du coffret", "wraps": ["ms", "di", "link", "out", "ps", "sec"]}
+  ],
+  "connections": [
+    {"id": "push-di", "from": "push", "to": "di", "label": "contact sec", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "di-link", "from": "di", "to": "link", "label": "état", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "link-ms", "from": "link", "to": "ms", "label": "état", "variant": "emphasis"},
+    {"id": "ms-link", "from": "ms", "to": "link", "label": "ordre", "variant": "emphasis"},
+    {"id": "link-out", "from": "link", "to": "out", "label": "ordre", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "out-load", "from": "out", "to": "load", "label": "230 V", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "ps-link", "from": "ps", "to": "link", "label": "24 V", "variant": "security"},
+    {"id": "sec-out", "from": "sec", "to": "out", "label": "230 V", "variant": "security"},
+    {"id": "ms-lan", "from": "ms", "to": "lan", "label": "LAN"},
+    {"id": "others-lan", "from": "others", "to": "lan", "label": "LAN"},
+    {"id": "lan-gw", "from": "lan", "to": "gw", "label": "WebSocket", "variant": "dashed"}
+  ],
+  "cards": [
+    {"dot": "rose", "title": "Règle 1 : non tenue", "items": [
+      "Le poussoir attaque une entrée d'Extension, le programme du Miniserver commande le relais d'une autre Extension",
+      "Aucune logique locale dans les Extensions, aucune commande manuelle en face avant : sans Miniserver, aucun bouton n'agit"]},
+    {"dot": "amber", "title": "Si le Miniserver, l'alimentation ou le Link d'une zone tombe", "items": [
+      "Les deux autres zones restent ; dans la zone, aucun bouton ne répond et aucune manette ne permet d'allumer",
+      "Alimentation : Miniserver, Extensions et boucles des poussoirs sans tension, relais ouverts s'ils sont monostables, par déduction, donc lumières éteintes",
+      "Miniserver ou Link : l'état des relais et des variateurs n'est pas documenté par Loxone",
+      "Une Extension : ses voies seulement, mais au-delà de 40 °C ambiants la coupure thermique ouvre toutes les sorties de la carte"]},
+    {"dot": "emerald", "title": "Causes communes", "items": [
+      "Par zone : 0 défaillance unique prive toute la maison, 6 privent une zone",
+      "Alimentation, Link, Miniserver, logiciel figé, mise à jour et foudre ; la licence et le commutateur ne privent de rien",
+      "Un seul Miniserver, configuration minimale : 6 privent toute la maison"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, le fabricant et des essais"]}
+  ]
+}

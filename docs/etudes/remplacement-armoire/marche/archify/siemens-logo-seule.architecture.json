@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Siemens LOGO! 8 seul, version 230 V hors contrainte : du poussoir à la charge, une ou deux unités par zone",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/siemens-logo-seule.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs, charges, secteur"},
+        "frontend": {"label": "Entrées des unités"},
+        "messagebus": {"label": "Commutateur Ethernet"},
+        "backend": {"label": "Programme et relais des unités"},
+        "security": {"label": "Disjoncteur de zone"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "push", "type": "external", "label": "63 poussoirs", "sublabel": "nappes à 230 V, commun = phase", "pos": [40, 190], "size": [150, 64]},
+    {"id": "in", "type": "frontend", "label": "Entrées des unités", "sublabel": "8 par module, non isolées", "pos": [290, 190], "size": [160, 64]},
+    {"id": "cpu", "type": "backend", "label": "Programme de l'unité", "sublabel": "LOGO! 230RCE, 20 à 24 boutons", "pos": [540, 190], "size": [170, 64]},
+    {"id": "out", "type": "backend", "label": "Relais de l'unité", "sublabel": "monostables, ouverts à l'arrêt", "pos": [800, 190], "size": [160, 64]},
+    {"id": "load", "type": "external", "label": "Charges de la zone", "sublabel": "éclairages, volets, prises", "pos": [1060, 190], "size": [170, 64]},
+    {"id": "disj", "type": "security", "label": "Disjoncteur de zone", "sublabel": "alimente l'unité", "pos": [540, 350], "size": [170, 64]},
+    {"id": "sec", "type": "external", "label": "Secteur 230 V", "sublabel": "contacts des relais", "pos": [800, 350], "size": [160, 64]},
+    {"id": "others", "type": "backend", "label": "Quatre autres unités", "sublabel": "même schéma, programme propre", "pos": [290, 40], "size": [160, 64]},
+    {"id": "sw", "type": "messagebus", "label": "Commutateur Ethernet", "sublabel": "commandes centrales", "pos": [540, 40], "size": [170, 64]},
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [1060, 40], "size": [170, 64]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Armoire : version 230 V, nappes de poussoirs sous secteur, hors contrainte", "wraps": ["in", "cpu", "out", "disj", "sec", "others", "sw"]}
+  ],
+  "connections": [
+    {"id": "push-in", "from": "push", "to": "in", "label": "phase 230 V", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "in-cpu", "from": "in", "to": "cpu", "label": "lecture", "variant": "emphasis"},
+    {"id": "cpu-out", "from": "cpu", "to": "out", "label": "ordre", "variant": "emphasis"},
+    {"id": "out-load", "from": "out", "to": "load", "label": "230 V", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "disj-cpu", "from": "disj", "to": "cpu", "label": "230 V", "variant": "security"},
+    {"id": "sec-out", "from": "sec", "to": "out", "label": "230 V", "variant": "security"},
+    {"id": "cpu-sw", "from": "cpu", "to": "sw", "label": "Ethernet"},
+    {"id": "others-sw", "from": "others", "to": "sw", "label": "Ethernet"},
+    {"id": "sw-gw", "from": "sw", "to": "gw", "label": "Modbus TCP, MQTT", "variant": "dashed", "fromSide": "right", "toSide": "left"}
+  ],
+  "cards": [
+    {"dot": "rose", "title": "Règle 1 : non tenue, version 230 V hors contrainte", "items": [
+      "Le poussoir est lu par le programme de l'unité, qui commande le relais ; en STOP, les entrées ne sont plus lues et les relais sont ouverts",
+      "Exception : les 8 variateurs EUD12D-UC à entrée locale, dont le poussoir reste câblé en parallèle",
+      "En 230 V, les nappes portent le secteur dans toute la maison, hors des îlots TBTS de la V2 : hors contrainte ; la version 24 V est la référence mais n'est pas chiffrable"]},
+    {"dot": "amber", "title": "Ce qui reste, panne par panne", "items": [
+      "Unité hors tension ou en STOP : lumières éteintes, volets arrêtés, aucun bouton, les autres unités restent",
+      "Au retour, RUN en ≈ 1,6 s et états rémanents réappliqués : des lumières se rallument par logiciel",
+      "Réseau ou commutateur : le local de chaque unité reste, les commandes centrales et l'application sont perdues",
+      "Passerelle Essensys : tout le local reste, l'application est perdue",
+      "Relais soudé : pour un volet, les deux sens peuvent être alimentés ensemble, faute de verrouillage câblé",
+      "Foudre par une ligne de poussoirs : l'unité touchée au moins, par ses entrées non isolées"]},
+    {"dot": "emerald", "title": "Causes communes", "items": [
+      "Cinq unités autonomes : 0 défaillance unique sur 8 prive toute la maison, 2 privent une zone, 4 une unité",
+      "Configuration minimale en maître-esclaves : 5 privent toute la maison"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

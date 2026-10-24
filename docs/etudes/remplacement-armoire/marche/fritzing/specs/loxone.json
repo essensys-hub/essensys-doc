@@ -1,0 +1,27 @@
+{
+  "title": "Loxone : d'un poussoir à une lampe, un Miniserver par zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural sous 24 V, alimentation Loxone 24 V, Miniserver Compact 100512, DI Extension 100283 et Relay Extension 100038 sur le Link, passerelle Essensys par le réseau local.",
+  "notes": ["Le Link ne sort pas de l'armoire : seules les nappes des poussoirs parcourent la maison, sous 24 V au lieu de 5 V. Le Link et le 24 V passent d'une carte à la suivante par les pontets Shunting Wire. Les contacts du Relay Extension sont secs : le 230 V arrive du secteur de la zone."],
+  "blocks": [
+    {"id": "alim", "kind": "alim", "label": "Power Supply 100617", "sublabel": "alimentation 24 V 4,2 A, une par zone", "col": 0, "row": 0, "width": 170, "right": ["24 V +", "0 V"], "notes": ["Alimente le Miniserver, les Extensions et les boucles des poussoirs de la zone."]},
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec qui commute le +24 V", "col": 1, "row": 0, "width": 170, "left": ["24 V +"], "right": ["contact"]},
+    {"id": "miniserver", "kind": "controleur", "label": "Miniserver Compact 100512", "sublabel": "toute la logique, programme sur microSD", "col": 1, "row": 1, "width": 190, "left": ["24 V +", "0 V"], "right": ["Link", "LAN"], "notes": ["Un Miniserver, un Link, une alimentation par zone."]},
+    {"id": "entrees", "kind": "entrees", "label": "Loxone DI Extension 100283", "sublabel": "20 entrées pour contacts secs", "col": 2, "row": 0, "width": 190, "left": ["entrée 1", "Link"], "right": ["Link suite"], "notes": ["Aucune logique locale : l'état remonte par le Link."]},
+    {"id": "sortie", "kind": "actionneur", "label": "Loxone Relay Extension 100038", "sublabel": "14 relais 16 A, contacts secs", "col": 3, "row": 0, "width": 190, "left": ["Link", "entrée phase"], "right": ["relais 1"], "notes": ["Pas de commande manuelle en face avant. État à la perte du Link non documenté."]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "disjoncteur de zone", "col": 2, "row": 2, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 1, "width": 170, "left": ["Ethernet"], "notes": ["API WebSocket du Miniserver, avec son authentification par jeton : à écrire côté passerelle."]}
+  ],
+  "wires": [
+    ["tbts", "alim.24 V +", "poussoir.24 V +"],
+    ["tbts", "alim.24 V +", "miniserver.24 V +"],
+    ["0v", "alim.0 V", "miniserver.0 V"],
+    ["bouton", "poussoir.contact", "entrees.entrée 1"],
+    ["bus", "miniserver.Link", "entrees.Link"],
+    ["bus", "entrees.Link suite", "sortie.Link"],
+    ["reseau", "miniserver.LAN", "passerelle.Ethernet"],
+    ["phase", "secteur.phase", "sortie.entrée phase"],
+    ["phase", "sortie.relais 1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

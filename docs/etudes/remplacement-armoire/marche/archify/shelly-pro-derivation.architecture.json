@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Shelly Pro en dérivation sur le filaire V2 : une couche bon marché, mal taillée",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/shelly-pro-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Modules Shelly de la couche"},
+        "messagebus": {"label": "Réseau de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "net", "type": "messagebus", "label": "Commutateur Ethernet", "sublabel": "22 ports au moins", "pos": [290, 40], "size": [150, 64]},
+    {"id": "rel", "type": "frontend", "label": "Pro 4PM, relais", "sublabel": "88 relais 16 A, phase", "pos": [540, 40], "size": [150, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "tenu par un script local", "pos": [790, 40], "size": [150, 64]},
+    {"id": "cp", "type": "backend", "label": "Relais de couplage", "sublabel": "38.51, bobine 230 V", "pos": [540, 190], "size": [150, 64]},
+    {"id": "inp", "type": "frontend", "label": "Pro 4PM, entrées S", "sublabel": "88 entrées, mêmes modules", "pos": [290, 190], "size": [150, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "2e contact du télérupteur", "pos": [290, 340], "size": [150, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "alimente les boutons", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [290, 490], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [540, 490], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [790, 490], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique Shelly : peut tomber sans rien couper", "wraps": ["net", "rel", "garde", "cp", "inp", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["src", "push", "tele", "load"]}
+  ],
+  "connections": [
+    {"id": "gw-net", "from": "gw", "to": "net", "label": "MQTT ou RPC", "variant": "dashed"},
+    {"id": "net-rel", "from": "net", "to": "rel", "label": "Ethernet"},
+    {"id": "rel-garde", "from": "rel", "to": "garde", "label": "battement", "variant": "security"},
+    {"id": "rel-cp", "from": "rel", "to": "cp", "label": "bobine 230 V"},
+    {"id": "garde-cp", "from": "garde", "to": "cp", "label": "commun", "variant": "security", "fromSide": "bottom", "toSide": "right"},
+    {"id": "cp-tele", "from": "cp", "to": "tele", "label": "contact sec en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed"},
+    {"id": "copie-inp", "from": "copie", "to": "inp", "label": "recopie"},
+    {"id": "inp-net", "from": "inp", "to": "net", "label": "état"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si la couche tombe, se fige ou se trompe", "items": [
+      "Le relais de garde retombe : les poussoirs commandent toujours leurs charges par le filaire",
+      "La passerelle réarme le chien de garde : un ordre RPC périodique fait fermer un relais pendant une durée bornée, par un script local ; si elle se tait, le relais retombe",
+      "Un script qui battrait seul tiendrait la couche armée sans personne pour la piloter : à éviter. Aucun chien de garde matériel n'est documenté sur les modules"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "Un prix bas, aucune licence, aucun compte",
+      "Une API documentée que Home Assistant et openHAB parlent déjà, Modbus TCP ou MQTT pour la passerelle"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 1 940 € HT, 22 modules de trois unités, ≈ 1,2 m de rail en plus de la couche filaire",
+      "Les relais commutent la phase, ils ne ferment pas un contact sec : 88 relais 16 A commandent des bobines 230 V, et non 24 V",
+      "22 adresses IP et 22 micrologiciels à suivre, aucune donnée d'isolement, 2 à 4 semaines-personne de logiciel, estimation sans source"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

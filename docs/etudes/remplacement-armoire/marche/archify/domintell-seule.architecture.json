@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Domintell seul : du poussoir à la charge, un Master, trois coffrets, hors contrainte",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/domintell-seule.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs, charges, secteur"},
+        "frontend": {"label": "Modules d'entrées DISM"},
+        "messagebus": {"label": "Bus RS-485 15 V"},
+        "backend": {"label": "Master et cartes de sortie"},
+        "security": {"label": "Alimentations DALI05"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "push", "type": "external", "label": "63 poussoirs muraux", "sublabel": "contacts secs, nappes de 30 m", "pos": [40, 190], "size": [160, 64]},
+    {"id": "be", "type": "frontend", "label": "Entrées DISM20", "sublabel": "10 m au plus : hors contrainte", "pos": [330, 190], "size": [170, 64]},
+    {"id": "bus", "type": "messagebus", "label": "Bus RS-485 15 V", "sublabel": "une paire de données, 3 coffrets", "pos": [560, 190], "size": [170, 64]},
+    {"id": "act", "type": "backend", "label": "Cartes de sortie", "sublabel": "DMR02, DTRV01, DDIM01", "pos": [830, 190], "size": [160, 64]},
+    {"id": "load", "type": "external", "label": "Charges des 3 coffrets", "sublabel": "éclairages, volets, variateurs", "pos": [1070, 190], "size": [170, 64]},
+    {"id": "dali", "type": "security", "label": "Alimentations DALI05", "sublabel": "une par coffret, trois", "pos": [560, 350], "size": [170, 64]},
+    {"id": "sec", "type": "external", "label": "Secteur 230 V", "sublabel": "alimente les cartes de sortie", "pos": [830, 350], "size": [160, 64]},
+    {"id": "master", "type": "backend", "label": "Master DGQG04", "sublabel": "unique, alimenté par le bus", "pos": [560, 40], "size": [170, 64]},
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [1070, 40], "size": [170, 64]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Armoire : un Master, un bus, trois coffrets", "wraps": ["be", "bus", "act", "dali", "sec", "master"]}
+  ],
+  "connections": [
+    {"id": "push-be", "from": "push", "to": "be", "label": "hors contrainte", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "be-bus", "from": "be", "to": "bus", "label": "appui", "variant": "emphasis"},
+    {"id": "bus-act", "from": "bus", "to": "act", "label": "ordre Master", "variant": "emphasis"},
+    {"id": "act-load", "from": "act", "to": "load", "label": "230 V", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "dali-bus", "from": "dali", "to": "bus", "label": "15 V", "variant": "security"},
+    {"id": "sec-act", "from": "sec", "to": "act", "label": "230 V", "variant": "security"},
+    {"id": "bus-master", "from": "bus", "to": "master", "label": "appui"},
+    {"id": "master-bus", "from": "master", "to": "bus", "label": "ordre"},
+    {"id": "master-gw", "from": "master", "to": "gw", "label": "Light Protocol", "variant": "dashed"}
+  ],
+  "cards": [
+    {"dot": "rose", "title": "Règle 1 : non tenue, et hors contrainte", "items": [
+      "Le poussoir attaque un DISM, qui parle au Master, qui commande la carte de sortie : aucune information n'est directement échangée entre les modules",
+      "Les entrées DISM admettent 10 m entre le module et le contact, les nappes vont jusqu'à 30 m : hors contrainte sans tolérance écrite du fabricant"]},
+    {"dot": "amber", "title": "Si le Master ou le bus tombe", "items": [
+      "Aucun bouton, que le Master soit arrêté, en redémarrage de 2 à 3 min ou en mise à jour de 20 à 30 min, ou que la paire de données soit en court-circuit",
+      "Dans l'armoire seulement : DIP switches des DMR02 relais par relais, deux contacts du DTRV01 pour les 4 montées ou les 4 descentes, DIP du DDIM01 en tout ou rien",
+      "Alimentation d'un autre coffret : sa zone sans boutons, les deux autres fonctionnent",
+      "État des relais DMR02 et DTRV01 à la perte du bus : non trouvé"]},
+    {"dot": "orange", "title": "Causes communes", "items": [
+      "6 des 8 défaillances uniques privent toute la maison de ses boutons, par coffret comme en configuration minimale",
+      "Une seule paire de données et un seul Master, sans coupleur : le découpage par coffret n'achète que le confinement d'une panne d'alimentation hors du coffret du Master"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

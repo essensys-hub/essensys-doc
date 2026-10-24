@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Domintell en dérivation sur le filaire V2 : la couche la plus chère du comparatif",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/domintell-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Master, sorties et entrées de la couche"},
+        "messagebus": {"label": "Bus RS-485 de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "master", "type": "frontend", "label": "Master DGQG04", "sublabel": "unique, sur le chemin", "pos": [320, 40], "size": [150, 64]},
+    {"id": "bus", "type": "messagebus", "label": "Bus RS-485", "sublabel": "couche domotique", "pos": [580, 40], "size": [150, 64]},
+    {"id": "dmr", "type": "frontend", "label": "Onze DMR02", "sublabel": "88 relais 16 A", "pos": [830, 40], "size": [150, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "chien de garde, borne", "pos": [1070, 40], "size": [150, 64]},
+    {"id": "cpl", "type": "backend", "label": "Relais de couplage", "sublabel": "Finder 38.51, 6 kV", "pos": [1070, 190], "size": [150, 64]},
+    {"id": "be", "type": "frontend", "label": "Quatre DISM20", "sublabel": "80 entrées, recopies", "pos": [580, 190], "size": [150, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "Finder 38.51, 2e contact", "pos": [580, 340], "size": [150, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "F1 1 A pour les boutons", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [320, 490], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [830, 490], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [1070, 490], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique Domintell : le filaire V2 reste si elle tombe", "wraps": ["master", "bus", "dmr", "garde", "cpl", "be", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["src", "push", "tele", "load"]}
+  ],
+  "connections": [
+    {"id": "gw-master", "from": "gw", "to": "master", "label": "Light Protocol", "variant": "dashed"},
+    {"id": "master-bus", "from": "master", "to": "bus"},
+    {"id": "bus-dmr", "from": "bus", "to": "dmr", "label": "ordre"},
+    {"id": "dmr-garde", "from": "dmr", "to": "garde", "label": "battement", "variant": "security"},
+    {"id": "garde-cpl", "from": "garde", "to": "cpl", "label": "commun", "variant": "security"},
+    {"id": "cpl-tele", "from": "cpl", "to": "tele", "label": "contact sec en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed"},
+    {"id": "copie-be", "from": "copie", "to": "be", "label": "recopie"},
+    {"id": "be-bus", "from": "be", "to": "bus", "label": "état"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si Domintell tombe, se fige ou se trompe", "items": [
+      "Le relais de garde retombe : le chien de garde matériel de la V2 reste en place, et le filaire garde le chemin du bouton",
+      "Le battement vient de la passerelle, qui bascule un relais DMR02 par le Light Protocol à travers le Master et le bus ; si l'un des trois se tait, le relais ne bascule plus",
+      "Cadence de 200 ms à essayer sur un relais électromécanique et un bus RS-485 ; les événements périodiques du Master sont une autre piste, à confirmer"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "Un fabricant unique de vingt ans, un protocole ASCII simple et documenté, une intégration Home Assistant maintenue par le fabricant",
+      "Une mise en service par GoldenGate",
+      "Seule, les entrées à 10 m sont hors contrainte ; ici, les DISM20 lisent les recopies dans le coffret, la limite est tenue"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 5 570 € HT, 83 modules, ≈ 1,45 m de rail en plus de la couche filaire : la couche la plus chère du comparatif",
+      "Un Master unique sur le chemin de tous les contacts, un logiciel Windows à accès Pro, 3 à 6 semaines-personne"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

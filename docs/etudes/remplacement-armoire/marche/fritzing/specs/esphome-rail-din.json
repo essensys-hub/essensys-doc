@@ -1,0 +1,30 @@
+{
+  "title": "ESPHome sur rail DIN : d'un poussoir à une lampe, une carte par zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, une carte KinCony KC868-A32 sous ESPHome (entrées EL357, ESP32, relais) avec son alimentation 12 V, commutateur Ethernet vers la passerelle.",
+  "notes": ["La carte est d'un seul tenant : les trois blocs du milieu sont ses parties, séparées ici pour le dessin. Boutons, logique et relais partagent le même 12 V et le même GND. Le commutateur est hors du chemin du bouton, à condition de reboot_timeout: 0s."],
+  "blocks": [
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec vers le GND de la carte, nappe", "col": 0, "row": 0, "width": 170, "right": ["contact", "commun"]},
+    {"id": "alim", "kind": "alim", "label": "Alimentation 12 V", "sublabel": "une par carte, un seul GND", "col": 0, "row": 1, "width": 170, "right": ["12 V +", "GND"], "notes": ["Pas de fusible par voie documenté."]},
+    {"id": "entrees", "kind": "entrees", "label": "KC868-A32 : entrées", "sublabel": "optocoupleurs EL357, PCF8574", "col": 1, "row": 0, "left": ["entrée 1", "GND"], "right": ["I2C entrées"], "notes": ["Tension d'isolement non publiée."]},
+    {"id": "esp", "kind": "controleur", "label": "KC868-A32 : ESP32", "sublabel": "micrologiciel ESPHome, YAML du projet", "col": 2, "row": 0, "width": 180, "left": ["I2C entrées", "12 V +", "GND"], "right": ["I2C relais", "Ethernet"], "notes": ["on_press, switch.toggle : sans Home Assistant."]},
+    {"id": "relais", "kind": "actionneur", "label": "KC868-A32 : relais", "sublabel": "10 A, inverseurs, ULN2003A", "col": 3, "row": 0, "left": ["I2C relais", "COM phase"], "right": ["NO sortie"], "notes": ["Relais monostable : restore_mode au redémarrage."]},
+    {"id": "switch", "kind": "module", "label": "Commutateur Ethernet", "sublabel": "hors du chemin du bouton", "col": 3, "row": 1, "left": ["Ethernet carte"], "right": ["Ethernet passerelle"]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "alimentation des charges", "col": 2, "row": 2, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go, MQTT", "col": 4, "row": 1, "width": 170, "left": ["Ethernet"], "notes": ["Home Assistant, sur le CM5 ou ailleurs, supervise sur le même commutateur."]}
+  ],
+  "wires": [
+    ["bouton", "poussoir.contact", "entrees.entrée 1"],
+    ["bouton", "poussoir.commun", "entrees.GND"],
+    ["tbts", "alim.12 V +", "esp.12 V +"],
+    ["0v", "alim.GND", "esp.GND"],
+    ["0v", "alim.GND", "entrees.GND"],
+    ["bus", "entrees.I2C entrées", "esp.I2C entrées"],
+    ["bus", "esp.I2C relais", "relais.I2C relais"],
+    ["reseau", "esp.Ethernet", "switch.Ethernet carte"],
+    ["reseau", "switch.Ethernet passerelle", "passerelle.Ethernet"],
+    ["phase", "secteur.phase", "relais.COM phase"],
+    ["phase", "relais.NO sortie", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

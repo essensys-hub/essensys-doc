@@ -59,7 +59,24 @@ La gamme ne permet pas un contrôleur par zone : **un seul Master par installati
 
 **129 modules, soit ≈ 2,26 m de rail**, trois alimentations, un Master. Une panne d'alimentation ne prive que son coffret, sauf celui du Master ; une panne du Master ou de la paire de données touche les trois zones.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Un poussoir mural envoie son contact sec (jaune) à un module d'entrées Domintell DISM20, limité à 10 m entre le module et le contact. Le module et l'alimentation DALI05 (rouge pour le 15 V, noir pour la masse) sont reliés au bus RS-485 des coffrets, avec la paire de données en bleu. Le bus dessert une carte relais DMR02 et le Master DGQG04, alimenté par le bus. Le Master est relié en violet à la passerelle Essensys. La carte relais reçoit la phase du secteur (marron) et la renvoie par sa sortie 1 à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/domintell_breadboard.png){ loading=lazy }
+
+Un coffret, une lampe, avec les modules de la configuration résiliente ; le Master est unique et sur le chemin de chaque appui, et les entrées à 10 m mettent les nappes de 30 m hors contrainte. Source Fritzing : [domintell.fzz](fritzing/domintell.fzz){ download="domintell.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/domintell-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Domintell seul, du poussoir à la charge, un Master et trois coffrets, hors contrainte" loading="lazy" style="width:100%;aspect-ratio:1280/540;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/domintell-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par un module d'entrées DISM20, limité à 10 m, donc hors contrainte pour des nappes de 30 m, puis par le bus RS-485 commun aux trois coffrets et par le Master unique avant la carte de sortie ; les alimentations DALI05 et le secteur arrivent par le bas, le Master parle à la passerelle en Light Protocol.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, entrées DISM20, bus RS-485 15 V, cartes de sortie DMR02, DTRV01 et DDIM01, charges des trois coffrets. Le lien du poussoir vers les entrées est étiqueté « hors contrainte » : les entrées admettent 10 m, les nappes vont jusqu'à 30 m. Sous le bus, les alimentations DALI05, une par coffret ; sous les cartes de sortie, le secteur 230 V. Au-dessus du bus, le Master DGQG04, avec deux liens en sens inverse, appui et ordre, puis le lien en Light Protocol vers la passerelle Essensys, hors du cadre « Armoire : un Master, un bus, trois coffrets ». Quatre cartes : règle 1 non tenue et hors contrainte, si le Master ou le bus tombe, causes communes (6 défaillances sur 8 privent toute la maison), réserve.](archify/domintell-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -106,6 +123,15 @@ Ce décompte ramène à l'architecture d'avant la V2, en pire : le BP actuel pou
 | Foudre par une nappe | Le DISM touché au mieux ; au pire le bus commun, faute d'isolation documentée |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/domintell-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Domintell en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1290/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/domintell-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Domintell : passerelle, Master, bus, onze cartes DMR02, relais de garde battu par la passerelle, relais de couplage en parallèle du poussoir, relais de recopie et quatre DISM20 qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Domintell » : Master DGQG04, bus RS-485, onze cartes DMR02, relais de garde, relais de couplage, quatre DISM20 et relais de recopie ; la passerelle Essensys, hors du cadre, parle au Master en Light Protocol et bat le relais de garde à travers le Master, le bus et une carte DMR02. Le relais de couplage ferme un contact sec en parallèle des poussoirs ; le second contact du télérupteur remonte par le relais de recopie jusqu'aux DISM20. Quatre cartes : si Domintell tombe, ce que la couche apporte, ce qu'elle coûte, réserve.](archify/domintell-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Domintell fournit la couche domotique :
 

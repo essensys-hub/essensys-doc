@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "KNX TP en dérivation sur le filaire V2 : une couche sacrifiable",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/knx-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Entrées et interface de la couche"},
+        "messagebus": {"label": "Ligne KNX de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "ip", "type": "frontend", "label": "Interface IP", "sublabel": "SCN-IP000.03", "pos": [290, 40], "size": [150, 64]},
+    {"id": "bus", "type": "messagebus", "label": "Ligne KNX", "sublabel": "couche domotique", "pos": [540, 40], "size": [150, 64]},
+    {"id": "aks", "type": "frontend", "label": "Actionneurs AKS", "sublabel": "80 voies, minuterie", "pos": [790, 40], "size": [150, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "chien de garde, borne", "pos": [1040, 40], "size": [150, 64]},
+    {"id": "cpl", "type": "backend", "label": "Relais de couplage", "sublabel": "Finder 38.51, 6 kV", "pos": [1040, 190], "size": [150, 64]},
+    {"id": "be", "type": "frontend", "label": "Entrées MDT BE", "sublabel": "lisent les recopies", "pos": [540, 190], "size": [150, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "Finder 38.51, 2e contact", "pos": [540, 340], "size": [150, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "F1 1 A pour les boutons", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [290, 490], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [790, 490], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [1040, 490], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique KNX : peut tomber sans rien couper", "wraps": ["ip", "bus", "aks", "garde", "cpl", "be", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["src", "push", "tele", "load"]}
+  ],
+  "connections": [
+    {"id": "gw-ip", "from": "gw", "to": "ip", "label": "KNXnet/IP", "variant": "dashed"},
+    {"id": "ip-bus", "from": "ip", "to": "bus"},
+    {"id": "bus-aks", "from": "bus", "to": "aks", "label": "ordre"},
+    {"id": "aks-garde", "from": "aks", "to": "garde", "label": "minuterie", "variant": "security"},
+    {"id": "garde-cpl", "from": "garde", "to": "cpl", "label": "commun", "variant": "security"},
+    {"id": "cpl-tele", "from": "cpl", "to": "tele", "label": "contact sec en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed"},
+    {"id": "copie-be", "from": "copie", "to": "be", "label": "recopie"},
+    {"id": "be-bus", "from": "be", "to": "bus", "label": "état"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si KNX tombe, se fige ou se trompe", "items": [
+      "Le relais de garde s'ouvre : les 63 boutons commandent toujours leurs charges par le filaire",
+      "Le battement de cœur est la minuterie d'une voie d'actionneur, relancée par un télégramme périodique de la passerelle ; elle se règle « ouvert » à la perte du bus"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "Une norme à 500 fabricants, aucun Linux ni logiciel du projet sur le chemin des contacts",
+      "Une mise en service par ETS qu'un intégrateur KNX sait reprendre"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 3 100 € HT, 88 modules, ≈ 1,6 m de rail en plus de la couche filaire",
+      "ETS Lite ou Home, quelques jours d'apprentissage, 5 à 10 semaines-personne de logiciel"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

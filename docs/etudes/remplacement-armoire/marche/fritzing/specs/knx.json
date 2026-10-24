@@ -1,0 +1,32 @@
+{
+  "title": "KNX TP : d'un poussoir à une lampe, une ligne de zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, entrées MDT BE-16000.02, ligne KNX avec son alimentation STC-0640.01, actionneur MDT AKS-0816.03, interface IP vers la passerelle.",
+  "notes": ["Le bus ne sort pas de l'armoire : seules les nappes des poussoirs parcourent la maison. Le 12 V de la boucle des entrées est généré dans le module, séparé du bus."],
+  "blocks": [
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec à impulsion, nappe IDC jusqu'à 30 m", "col": 0, "row": 0, "width": 170, "right": ["contact", "commun"]},
+    {"id": "entrees", "kind": "entrees", "label": "MDT BE-16000.02", "sublabel": "16 entrées contact libre de potentiel, 12 V interne", "col": 1, "row": 0, "left": ["entrée 1", "commun"], "right": ["KNX+", "KNX−"], "notes": ["Séparation galvanique par rapport au bus. Portée de 100 m : par entrée ou cumulée, à confirmer."]},
+    {"id": "stc", "kind": "alim", "label": "MDT STC-0640.01", "sublabel": "alimentation de ligne 640 mA, une par zone", "col": 1, "row": 1, "right": ["30 V +", "30 V −"], "notes": ["Panne la plus citée sur le terrain : sa perte prive la zone de ses boutons."]},
+    {"id": "bus", "kind": "bus", "label": "Ligne KNX TP de la zone", "sublabel": "paire torsadée TBTS 30 V, 64 appareils au plus", "col": 2, "row": 0, "width": 180, "left": ["KNX+ entrées", "KNX− entrées", "30 V + STC", "30 V − STC"], "right": ["KNX+ actionneur", "KNX− actionneur", "KNX+ interface IP", "KNX− interface IP"]},
+    {"id": "actionneur", "kind": "actionneur", "label": "MDT AKS-0816.03", "sublabel": "8 voies, relais bistables 16 A", "col": 3, "row": 0, "left": ["KNX+", "KNX−", "entrée phase"], "right": ["sortie 1"], "notes": ["Le relais garde sa position à la perte du bus. Pas de manette mécanique sur MDT."]},
+    {"id": "ip", "kind": "module", "label": "MDT SCN-IP000.03", "sublabel": "interface IP, 4 tunnels, alimentée par le bus", "col": 3, "row": 1, "left": ["KNX+ bus", "KNX− bus"], "right": ["Ethernet"]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "disjoncteur de zone", "col": 2, "row": 2, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 1, "width": 170, "left": ["Ethernet"], "notes": ["KNXnet/IP en tunnel : à écrire côté passerelle."]}
+  ],
+  "wires": [
+    ["bouton", "poussoir.contact", "entrees.entrée 1"],
+    ["bouton", "poussoir.commun", "entrees.commun"],
+    ["bus", "entrees.KNX+", "bus.KNX+ entrées"],
+    ["bus", "entrees.KNX−", "bus.KNX− entrées"],
+    ["tbts", "stc.30 V +", "bus.30 V + STC"],
+    ["0v", "stc.30 V −", "bus.30 V − STC"],
+    ["bus", "bus.KNX+ actionneur", "actionneur.KNX+"],
+    ["bus", "bus.KNX− actionneur", "actionneur.KNX−"],
+    ["bus", "bus.KNX+ interface IP", "ip.KNX+ bus"],
+    ["bus", "bus.KNX− interface IP", "ip.KNX− bus"],
+    ["reseau", "ip.Ethernet", "passerelle.Ethernet"],
+    ["phase", "secteur.phase", "actionneur.entrée phase"],
+    ["phase", "actionneur.sortie 1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

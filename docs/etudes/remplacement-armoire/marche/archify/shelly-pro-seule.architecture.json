@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Shelly Pro seul : du poussoir à la charge, un relais d'interface par poussoir",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/shelly-pro-seule.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs, charges, secteur"},
+        "security": {"label": "Relais d'interface et source TBTS"},
+        "backend": {"label": "Modules Shelly Pro"},
+        "messagebus": {"label": "Réseau IP, hors chemin du bouton"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "push", "type": "external", "label": "63 poussoirs muraux", "sublabel": "boucle TBTS, jonctions IDC", "pos": [40, 190], "size": [150, 64]},
+    {"id": "itf", "type": "security", "label": "Relais d'interface", "sublabel": "un par poussoir, 63", "pos": [290, 190], "size": [150, 64]},
+    {"id": "mod", "type": "backend", "label": "Module Shelly Pro", "sublabel": "entrée S, micrologiciel", "pos": [540, 190], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Charges du module", "sublabel": "deux ou quatre circuits", "pos": [790, 190], "size": [150, 64]},
+    {"id": "src", "type": "security", "label": "Source TBTS de zone", "sublabel": "reprise de la V2, possible", "pos": [290, 340], "size": [150, 64]},
+    {"id": "sec", "type": "external", "label": "Secteur 230 V", "sublabel": "disjoncteur de la rangée", "pos": [540, 340], "size": [150, 64]},
+    {"id": "net", "type": "messagebus", "label": "Commutateur Ethernet", "sublabel": "ou Wi-Fi, non chiffré", "pos": [540, 40], "size": [150, 64]},
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [790, 40], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Armoire : aucun bus, aucun contrôleur", "wraps": ["itf", "mod", "src", "sec", "net"]}
+  ],
+  "connections": [
+    {"id": "push-itf", "from": "push", "to": "itf", "label": "bobine TBTS", "variant": "emphasis"},
+    {"id": "itf-mod", "from": "itf", "to": "mod", "label": "entrée S", "variant": "emphasis"},
+    {"id": "mod-load", "from": "mod", "to": "load", "label": "230 V, 16 A", "variant": "emphasis"},
+    {"id": "src-itf", "from": "src", "to": "itf", "label": "24 V", "variant": "security"},
+    {"id": "sec-mod", "from": "sec", "to": "mod", "label": "230 V", "variant": "security"},
+    {"id": "net-mod", "from": "net", "to": "mod", "label": "Ethernet", "variant": "dashed"},
+    {"id": "gw-net", "from": "gw", "to": "net", "label": "MQTT ou RPC", "variant": "dashed"}
+  ],
+  "cards": [
+    {"dot": "amber", "title": "Règle 1 : partielle, à confirmer", "items": [
+      "Le poussoir attaque, par un relais d'interface, l'entrée d'un module dont le micrologiciel commande le relais ; une panne ne prive que ses deux ou quatre circuits",
+      "Aucune phrase officielle ne dit que cette liaison fonctionne sans réseau ; un guide tiers l'affirme",
+      "Les entrées ne sont pas séparées du secteur d'après le forum : un relais d'interface par poussoir, bobine côté TBTS, non chiffré"]},
+    {"dot": "emerald", "title": "Ce qui reste, panne par panne", "items": [
+      "Réseau, passerelle ou Home Assistant : tous les boutons, si la liaison locale est confirmée ; perdus : l'application, la commande à distance, les scènes entre modules",
+      "Module figé ou bloqué en mise à jour : ses deux ou quatre circuits, jusqu'au redémarrage ou au remplacement ; les autres modules ne voient rien",
+      "Disjoncteur d'une rangée : les modules des autres rangées ; la rangée perd ses charges et ses boutons ensemble",
+      "Coupure du secteur : au retour, chaque sortie reprend l'état réglé, après un délai réglable ; les volets perdent leur calibration",
+      "Foudre par une ligne de poussoir : le relais d'interface au pire, puis le module"]},
+    {"dot": "violet", "title": "Causes communes", "items": [
+      "Par zone : 0 défaillance unique prive toute la maison, 3 privent un module",
+      "Configuration minimale : le même décompte, 0"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais",
+      "Fiches officielles non lues : la tension des entrées, l'isolement et le caractère libre de potentiel des relais restent à établir"]}
+  ]
+}

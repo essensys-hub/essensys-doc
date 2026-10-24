@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Wago PFC200 seul : du poussoir à la charge, un maître pour trois nœuds",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/wago-pfc200-seule.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs, relais d'interface, charges"},
+        "frontend": {"label": "Bornes d'entrées et de sorties"},
+        "messagebus": {"label": "Coupleur de zone"},
+        "backend": {"label": "Maître, seul calculateur"},
+        "security": {"label": "Alimentations"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "push", "type": "external", "label": "63 poussoirs muraux", "sublabel": "contacts secs, 24 V", "pos": [40, 190], "size": [150, 64]},
+    {"id": "di", "type": "frontend", "label": "Entrées 750-1405", "sublabel": "16 entrées 24 V, 500 V", "pos": [290, 190], "size": [150, 64]},
+    {"id": "cpl", "type": "messagebus", "label": "Coupleur 750-362", "sublabel": "sans logique, un par zone", "pos": [540, 190], "size": [150, 64]},
+    {"id": "do", "type": "frontend", "label": "Bornes 750-517", "sublabel": "2 relais 1 A, monostables", "pos": [790, 190], "size": [150, 64]},
+    {"id": "itf", "type": "external", "label": "Relais d'interface", "sublabel": "230 V, non chiffrés", "pos": [1040, 190], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Charges de la zone", "sublabel": "éclairages, volets, divers", "pos": [1040, 340], "size": [150, 64]},
+    {"id": "psu", "type": "security", "label": "Alimentation 24 V", "sublabel": "787-1602, par nœud", "pos": [540, 340], "size": [150, 64]},
+    {"id": "pfc", "type": "backend", "label": "Maître CODESYS", "sublabel": "751-9301 ou 750-8212", "pos": [540, 40], "size": [150, 64]},
+    {"id": "psum", "type": "security", "label": "Alimentation du maître", "sublabel": "commune, une seule", "pos": [290, 40], "size": [150, 64]},
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [1040, 40], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Nœud de zone : K-Bus dans le coffret, aucune logique", "wraps": ["di", "cpl", "do", "psu"]}
+  ],
+  "connections": [
+    {"id": "push-di", "from": "push", "to": "di", "label": "contact sec", "variant": "emphasis"},
+    {"id": "di-cpl", "from": "di", "to": "cpl", "label": "K-Bus", "variant": "emphasis"},
+    {"id": "cpl-pfc", "from": "cpl", "to": "pfc", "label": "entrées", "variant": "emphasis"},
+    {"id": "pfc-cpl", "from": "pfc", "to": "cpl", "label": "sorties", "variant": "emphasis"},
+    {"id": "cpl-do", "from": "cpl", "to": "do", "label": "K-Bus", "variant": "emphasis"},
+    {"id": "do-itf", "from": "do", "to": "itf", "label": "contact 1 A", "variant": "emphasis"},
+    {"id": "itf-load", "from": "itf", "to": "load", "label": "230 V", "variant": "emphasis"},
+    {"id": "psu-cpl", "from": "psu", "to": "cpl", "label": "24 V", "variant": "security"},
+    {"id": "psum-pfc", "from": "psum", "to": "pfc", "label": "24 V", "variant": "security"},
+    {"id": "pfc-gw", "from": "pfc", "to": "gw", "label": "Modbus TCP", "variant": "dashed"}
+  ],
+  "cards": [
+    {"dot": "rose", "title": "Règle 1 : non tenue", "items": [
+      "Le poussoir attaque une borne d'entrées sans logique ; le programme du contrôleur écrit la sortie",
+      "Les coupleurs 750-362 n'ont pas de logique non plus. Seul le sélecteur manuel du 750-523 commande un contact sans l'automate"]},
+    {"dot": "amber", "title": "Ce qui reste, panne par panne", "items": [
+      "Contrôleur arrêté, runtime stoppé ou figé : rien au bouton, sorties à zéro en 50 ms ; les 750-523 en manuel restent enclenchés",
+      "Alimentation 24 V d'un nœud ou coupleur 750-362 : les deux autres zones restent, rien au bouton dans la zone touchée",
+      "Liaison Ethernet du maître : rien au bouton dans les trois zones",
+      "Passerelle ou réseau local : tout le local reste, l'application est perdue",
+      "Coupure du secteur : tout s'arrête, le programme restitue ou non les états au retour",
+      "Foudre par une ligne de poussoir : la borne d'entrées de la zone au moins"]},
+    {"dot": "orange", "title": "Causes communes", "items": [
+      "Par zone : 5 défaillances uniques sur 8 privent toute la maison, 1 prive une zone",
+      "Configuration minimale, un seul nœud : 6 privent toute la maison"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais",
+      "Manuels du 750-362 et du PFC200 non consultés : le comportement à la perte du maître vient d'un manuel générique et d'un document tiers"]}
+  ]
+}

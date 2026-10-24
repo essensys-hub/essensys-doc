@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Modbus RTU en dérivation sur le filaire V2 : une couche sacrifiable",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {
+          "label": "Poussoirs et charges"
+        },
+        "backend": {
+          "label": "Organes du filaire V2"
+        },
+        "frontend": {
+          "label": "Modules Relay (D) de la couche"
+        },
+        "messagebus": {
+          "label": "Convertisseur et bus RS-485"
+        },
+        "security": {
+          "label": "Garde et alimentation"
+        },
+        "cloud": {
+          "label": "Passerelle Essensys (réseau local)"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "gw",
+      "type": "cloud",
+      "label": "Passerelle Essensys",
+      "sublabel": "maître, bat le garde, Go",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "conv",
+      "type": "messagebus",
+      "label": "Convertisseur USB",
+      "sublabel": "RS-485 isolé",
+      "pos": [
+        290,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "bus",
+      "type": "messagebus",
+      "label": "Bus RS-485",
+      "sublabel": "un segment, 11 modules",
+      "pos": [
+        540,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "mods",
+      "type": "frontend",
+      "label": "Relay (D), relais",
+      "sublabel": "88 relais 10 A, flash-on",
+      "pos": [
+        790,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "garde",
+      "type": "security",
+      "label": "Relais de garde",
+      "sublabel": "chien de garde, borne",
+      "pos": [
+        1040,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "cpl",
+      "type": "backend",
+      "label": "Relais de couplage",
+      "sublabel": "Finder 38.51, 6 kV",
+      "pos": [
+        1040,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "be",
+      "type": "frontend",
+      "label": "Relay (D), entrées",
+      "sublabel": "mêmes modules, 88 entrées",
+      "pos": [
+        540,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "copie",
+      "type": "backend",
+      "label": "Relais de recopie",
+      "sublabel": "Finder 38.51, 2e contact",
+      "pos": [
+        540,
+        340
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "src",
+      "type": "security",
+      "label": "Source 24 V de zone",
+      "sublabel": "F1 1 A pour les boutons",
+      "pos": [
+        40,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "push",
+      "type": "external",
+      "label": "Poussoirs muraux",
+      "sublabel": "contacts secs",
+      "pos": [
+        290,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "tele",
+      "type": "backend",
+      "label": "Télérupteur",
+      "sublabel": "Finder 20.22, état gardé",
+      "pos": [
+        790,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "load",
+      "type": "external",
+      "label": "Lampe",
+      "sublabel": "éclairage 230 V",
+      "pos": [
+        1040,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Couche domotique Modbus : peut tomber sans rien couper",
+      "wraps": [
+        "conv",
+        "bus",
+        "mods",
+        "garde",
+        "cpl",
+        "be",
+        "copie"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Filaire V2 : le bouton commande sa charge sans calculateur",
+      "wraps": [
+        "src",
+        "push",
+        "tele",
+        "load"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "gw-conv",
+      "from": "gw",
+      "to": "conv",
+      "label": "USB",
+      "variant": "dashed"
+    },
+    {
+      "id": "conv-bus",
+      "from": "conv",
+      "to": "bus",
+      "label": "RS-485"
+    },
+    {
+      "id": "bus-mods",
+      "from": "bus",
+      "to": "mods",
+      "label": "coils 05"
+    },
+    {
+      "id": "mods-garde",
+      "from": "mods",
+      "to": "garde",
+      "label": "flash-on",
+      "variant": "security"
+    },
+    {
+      "id": "garde-cpl",
+      "from": "garde",
+      "to": "cpl",
+      "label": "commun",
+      "variant": "security"
+    },
+    {
+      "id": "mods-cpl",
+      "from": "mods",
+      "to": "cpl",
+      "label": "bobine 24 V"
+    },
+    {
+      "id": "cpl-tele",
+      "from": "cpl",
+      "to": "tele",
+      "label": "contact sec en parallèle",
+      "variant": "dashed"
+    },
+    {
+      "id": "tele-copie",
+      "from": "tele",
+      "to": "copie",
+      "label": "2e contact",
+      "variant": "dashed"
+    },
+    {
+      "id": "copie-be",
+      "from": "copie",
+      "to": "be",
+      "label": "recopie"
+    },
+    {
+      "id": "be-bus",
+      "from": "be",
+      "to": "bus",
+      "label": "lecture 02"
+    },
+    {
+      "id": "src-push",
+      "from": "src",
+      "to": "push",
+      "label": "24 V",
+      "variant": "security"
+    },
+    {
+      "id": "push-tele",
+      "from": "push",
+      "to": "tele",
+      "label": "impulsion",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tele-load",
+      "from": "tele",
+      "to": "load",
+      "label": "230 V",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Si la couche tombe, se fige ou se trompe",
+      "items": [
+        "C'est la passerelle qui réarme le relais de garde : avec les Waveshare, par une impulsion flash-on de durée T renouvelée avant son terme",
+        "Si elle se tait, le contact retombe seul au bout de T et la bobine du relais de garde lâche, le chien de garde matériel de la V2 reste en place derrière : couche débranchée en moins d'une seconde côté V2",
+        "Avec un module à chien de garde de communication, Seneca, ICP DAS, Wago ou Wiren Board, le module ouvre la voie de garde après le délai réglé, 10 s au moins chez Seneca",
+        "Waveshare n'a pas de chien de garde de communication"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Ce que la couche apporte",
+      "items": [
+        "≈ 430 € HT pour 88 sorties et 88 entrées en RTU, le total le plus bas du comparatif",
+        "Aucune logique dans l'armoire, la passerelle est le seul cerveau et l'émetteur du battement de cœur",
+        "Un protocole que n'importe quel module d'un autre fabricant remplace au prix d'une adaptation du pilote Go, aucune licence, aucun compte"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Ce qu'elle coûte, ordres de grandeur",
+      "items": [
+        "≈ 430 € HT, ≈ 1,9 m de boîtiers Waveshare en Relay (D), soit un coffret de plus",
+        "Aucune tension d'isolement ni marquage CE publiés chez Waveshare, que les 38.51 de 6 kV rendent acceptable de part et d'autre, et un travail Go à écrire",
+        "En matériel industriel à chien de garde, de 3 000 à 6 600 € HT"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Réserve",
+      "items": [
+        "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"
+      ]
+    }
+  ]
+}

@@ -101,6 +101,16 @@ Chaque dossier décrit une **configuration minimale**, conforme au fabricant (un
 
 Écartés : Revolution Pi, Arduino Opta et Raspberry Pi et Ethernet, déjà étudiés en V1 et rappelés comme repères ; Zigbee et Z-Wave sur rail DIN, sans fil, notés comme variante de Shelly ; Legrand MyHome et Hager coviva, gammes en transition ; Beckhoff, proche de Wago, non chiffré.
 
+## Les schémas
+
+Chaque dossier porte trois schémas, dans les mêmes sections :
+
+- **Câblage Fritzing**, dans « Dans l'armoire sans recâblage » : le chemin d'un poussoir à une lampe avec les modules de la solution, en configuration résiliente et pour une zone. Le fichier `.fzz` se télécharge et s'ouvre dans Fritzing 1.0. Ce sont des **principes de câblage, non validés au banc** ; les boîtiers sont schématiques, pas les pièces réelles des fabricants.
+- **Schéma Archify « seule »**, sous « Seule face à l'exigence » : la chaîne du poussoir à la charge, ce qui est partagé (contrôleur, bus, alimentation, réseau), les pannes qui restent et le nombre de causes communes.
+- **Schéma Archify « en dérivation »**, sous « En dérivation sur le filaire V2 » : la couche de la solution posée sur le filaire, avec le relais de couplage, le relais de garde, la recopie et ce qui bat le cœur du chien de garde.
+
+Les schémas Archify sont interactifs (survol, focus, thème clair ou sombre) ; une image fixe est dépliable sous chacun. Leur source JSON et leur générateur sont versionnés avec le site, dans `marche/archify/` et `marche/fritzing/`. Ils ne disent rien que le dossier ne dise : mêmes références, mêmes chiffres, mêmes réserves.
+
 ## Tableau comparatif
 
 Lecture « seule », configuration résiliente, puis coût de la couche en dérivation. Les coûts sont HT, matériel et licence compris, hors électricien ; « hors… » signale un poste sans prix trouvé. Le détail, les sources et les réserves sont dans chaque dossier.

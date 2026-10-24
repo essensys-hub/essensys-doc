@@ -1,0 +1,26 @@
+{
+  "title": "Shelly Pro : d'un poussoir à une lampe, un relais d'interface par poussoir",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, relais d'interface bobine TBTS, module Shelly Pro 4PM avec son entrée S, passerelle sur le réseau local.",
+  "notes": ["Les entrées S ne sont pas séparées du secteur d'après le forum Shelly, et aucune fiche officielle ne donne leur tension : le poussoir passe par un relais d'interface, bobine côté TBTS, contact côté entrée S. Le commutateur Ethernet entre le module et la passerelle n'est pas représenté."],
+  "blocks": [
+    {"id": "src", "kind": "alim", "label": "Source TBTS de zone", "sublabel": "reprise possible de la source de la V2", "col": 0, "row": 2, "width": 170, "right": ["24 V +", "0 V"]},
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec à impulsion, boucle TBTS", "col": 1, "row": 0, "width": 170, "left": ["24 V"], "right": ["contact"]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "disjoncteur de la rangée", "col": 1, "row": 1, "width": 170, "right": ["phase", "neutre"]},
+    {"id": "relais", "kind": "actionneur", "label": "Relais d'interface", "sublabel": "un par poussoir, bobine TBTS, contact 230 V", "col": 2, "row": 0, "width": 190, "left": ["bobine +", "bobine −", "phase contact"], "right": ["contact"], "notes": ["Porte la barrière d'isolement entre la boucle TBTS et l'entrée S."]},
+    {"id": "module", "kind": "actionneur", "label": "Shelly Pro 4PM", "sublabel": "4 relais 16 A, 4 entrées S, micrologiciel local", "col": 3, "row": 0, "width": 190, "left": ["Live", "Neutre", "entrée S1"], "right": ["Ethernet", "sortie 1"], "notes": ["Le micrologiciel du module lie l'entrée S1 au relais 1 : aucun contrôleur."]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 0, "width": 170, "left": ["Ethernet"], "notes": ["MQTT ou HTTP RPC : à écrire côté passerelle."]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 1, "width": 150, "left": ["phase", "neutre"]}
+  ],
+  "wires": [
+    ["tbts", "src.24 V +", "poussoir.24 V"],
+    ["bouton", "poussoir.contact", "relais.bobine +"],
+    ["0v", "src.0 V", "relais.bobine −"],
+    ["phase", "secteur.phase", "relais.phase contact"],
+    ["ordre", "relais.contact", "module.entrée S1"],
+    ["phase", "secteur.phase", "module.Live"],
+    ["neutre", "secteur.neutre", "module.Neutre"],
+    ["reseau", "module.Ethernet", "passerelle.Ethernet"],
+    ["phase", "module.sortie 1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

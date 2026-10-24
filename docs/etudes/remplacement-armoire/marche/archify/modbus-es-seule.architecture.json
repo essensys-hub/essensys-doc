@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Modbus RTU seul : le maître unique sur le chemin de chaque appui, un segment par zone",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {
+          "label": "Poussoirs, charges, autres zones"
+        },
+        "frontend": {
+          "label": "Modules Relay (D)"
+        },
+        "messagebus": {
+          "label": "Segment RS-485 et convertisseur"
+        },
+        "security": {
+          "label": "Alimentation 24 V"
+        },
+        "cloud": {
+          "label": "Passerelle Essensys, maître unique"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "push",
+      "type": "external",
+      "label": "63 poussoirs muraux",
+      "sublabel": "contacts secs, nappes",
+      "pos": [
+        40,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "mod",
+      "type": "frontend",
+      "label": "Waveshare Relay (D)",
+      "sublabel": "8 entrées, 8 relais 10 A",
+      "pos": [
+        290,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "seg",
+      "type": "messagebus",
+      "label": "Segment RS-485",
+      "sublabel": "un par zone, 3 modules",
+      "pos": [
+        540,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "conv",
+      "type": "messagebus",
+      "label": "Convertisseur USB",
+      "sublabel": "RS-485 isolé, un par zone",
+      "pos": [
+        790,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gw",
+      "type": "cloud",
+      "label": "Passerelle Essensys",
+      "sublabel": "maître unique, Linux, Go",
+      "pos": [
+        1040,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "psu",
+      "type": "security",
+      "label": "Alimentation 24 V",
+      "sublabel": "HDR-60-24, une par zone",
+      "pos": [
+        290,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "load",
+      "type": "external",
+      "label": "Charges de la zone",
+      "sublabel": "éclairages, volets, variateurs",
+      "pos": [
+        290,
+        340
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "others",
+      "type": "external",
+      "label": "Deux autres zones",
+      "sublabel": "un segment chacune",
+      "pos": [
+        1040,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Une zone : un segment, un convertisseur, une alimentation",
+      "wraps": [
+        "mod",
+        "seg",
+        "conv",
+        "psu"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "push-mod",
+      "from": "push",
+      "to": "mod",
+      "label": "contact sec",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "mod-seg",
+      "from": "mod",
+      "to": "seg",
+      "label": "entrées 02",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "seg-conv",
+      "from": "seg",
+      "to": "conv",
+      "label": "RS-485",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "conv-gw",
+      "from": "conv",
+      "to": "gw",
+      "label": "USB",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "gw-conv",
+      "from": "gw",
+      "to": "conv",
+      "label": "coils 05",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "conv-seg",
+      "from": "conv",
+      "to": "seg",
+      "label": "RS-485",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "seg-mod",
+      "from": "seg",
+      "to": "mod",
+      "label": "coils 05",
+      "variant": "emphasis",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "mod-load",
+      "from": "mod",
+      "to": "load",
+      "label": "230 V, relais",
+      "variant": "emphasis"
+    },
+    {
+      "id": "psu-mod",
+      "from": "psu",
+      "to": "mod",
+      "label": "24 V",
+      "variant": "security"
+    },
+    {
+      "id": "others-gw",
+      "from": "others",
+      "to": "gw",
+      "label": "USB",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Règle 1 : non tenue",
+      "items": [
+        "Le module lit le contact, le CM5 l'interroge, décide et écrit le coil : Linux, Go et un bus série sont sur le chemin de chaque appui",
+        "Les voies Waveshare en mode toggle ou linkage, les Wiren Board et la logique GCL des ADAM-6000 atteignent partielle, à confirmer",
+        "Les 8 variateurs atteignent tenue si le poussoir reste câblé en parallèle sur l'EUD12D"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Ce qui reste, panne par panne",
+      "items": [
+        "Passerelle arrêtée, figée ou en mise à jour : aucun bouton, sauf voies en mode local et variateurs à poussoir parallèle, relais Waveshare dans leur dernier état, relais à chien de garde à l'état sûr après le délai réglé",
+        "Segment, convertisseur ou alimentation d'une zone : les deux autres zones restent, dans la zone touchée relais retombés ou figés, aucun bouton, aucune commande manuelle",
+        "Commutateur en TCP : aucun bouton, mêmes états de relais",
+        "Coupure du secteur : relais Waveshare non documentés, pas l'état précédent selon un client, la passerelle relit tout et rétablit",
+        "Un module : ses 8 voies, échange et réadressage par commande",
+        "Foudre par une nappe : le module de la zone au pire"
+      ]
+    },
+    {
+      "dot": "orange",
+      "title": "Causes communes",
+      "items": [
+        "Configuration par zone en RTU : 3 défaillances uniques privent toute la maison, le contrôleur, son logiciel figé et une mise à jour ratée, 3 privent une zone",
+        "Variante TCP, avec le commutateur : 4. Configuration minimale : 6",
+        "Avec les modes locaux Waveshare : 0, à confirmer au banc"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Réserve",
+      "items": [
+        "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"
+      ]
+    }
+  ]
+}

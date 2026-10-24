@@ -61,7 +61,24 @@ Un Miniserver **ne segmente pas son Link** : une chaîne, une terminaison. Trois
 
 Les contacts divers (fil pilote, cumulus, prises, arrosage, machines) prennent les relais libres de la zone des pièces de vie, qui en a treize. **≈ 110 modules, soit ≈ 2 m de rail** sans les trois alimentations ; trois Miniservers, trois Links. Un bouton d'une zone qui commanderait une charge d'une autre zone passerait par le réseau local ; le découpage retenu l'évite.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Une alimentation Loxone Power Supply 100617 envoie son 24 V (rouge) au poussoir mural et au Miniserver Compact 100512, et son 0 V (noir) au Miniserver. Le poussoir commute ce 24 V vers une entrée de la DI Extension 100283 par un fil jaune. Le Miniserver, la DI Extension et la Relay Extension 100038 sont chaînés par le Link (bleu). Le Miniserver est relié en violet, par le réseau local, à la passerelle Essensys. La Relay Extension reçoit la phase du secteur (marron) sur son entrée et la renvoie par son relais 1 à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/loxone_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente. Source Fritzing : [loxone.fzz](fritzing/loxone.fzz){ download="loxone.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/loxone-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Loxone seul, du poussoir à la charge, un Miniserver par zone" loading="lazy" style="width:100%;aspect-ratio:1270/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/loxone-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par une DI Extension, le Link de la zone et le Miniserver Compact, qui renvoie l'ordre par le Link à une Extension de sortie ; l'alimentation 24 V et le secteur arrivent par le bas ; le Miniserver est relié par le réseau local à la passerelle.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, DI Extension, Link de la zone, Extensions de sortie, charges de la zone. Au-dessus du Link, le Miniserver Compact, relié au Link par un lien « état » et un lien « ordre ». Sous le Link, l'alimentation 24 V ; sous les Extensions de sortie, le secteur 230 V. Ces éléments sont dans le cadre « Armoire d'une zone ». En haut, hors du cadre : deux autres zones et le Miniserver arrivent sur le réseau local, qui rejoint la passerelle Essensys par WebSocket. Quatre cartes : règle 1 non tenue, panne du Miniserver, de l'alimentation ou du Link d'une zone, causes communes, réserve.](archify/loxone-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -107,6 +124,15 @@ Le découpage par zone divise la panne par trois, il ne la supprime pas : dans l
 | Foudre par une ligne de poussoirs | Au pire la zone entière ; les autres zones |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/loxone-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Loxone en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1260/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/loxone-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Loxone : passerelle, Miniserver, Link, Relay Extension, relais de garde, relais de couplage en parallèle du poussoir, relais de recopie et DI Extension qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Loxone » : Miniserver 100335, Link, Relay Extension, relais de garde, relais de couplage, DI Extension et relais de recopie. La passerelle Essensys, hors cadre, parle au Miniserver en WebSocket. La Relay Extension envoie un battement au relais de garde ; celui-ci alimente le commun du relais de couplage, qui ferme un contact sec en parallèle des poussoirs. Le second contact du télérupteur remonte par le relais de recopie jusqu'à la DI Extension. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/loxone-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Loxone fournit la couche domotique :
 

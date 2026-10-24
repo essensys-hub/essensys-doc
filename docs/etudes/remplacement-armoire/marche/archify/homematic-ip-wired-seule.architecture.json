@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Homematic IP Wired seul : du poussoir à la charge, un DRAP et un bus par zone, hors contrainte",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/homematic-ip-wired-seule.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs, charges, secteur"},
+        "frontend": {"label": "Modules d'entrées DRI32"},
+        "messagebus": {"label": "Bus RS-485 24 V de la zone"},
+        "backend": {"label": "DRAP, centrale et actionneurs"},
+        "security": {"label": "Alimentation DRPS4"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "push", "type": "external", "label": "63 poussoirs muraux", "sublabel": "contacts secs, nappes de 30 m", "pos": [40, 190], "size": [160, 64]},
+    {"id": "be", "type": "frontend", "label": "Entrées DRI32", "sublabel": "blindé au-delà de 3 m", "pos": [320, 190], "size": [180, 64]},
+    {"id": "bus", "type": "messagebus", "label": "Bus RS-485 24 V", "sublabel": "un par zone, 20 à 22 boutons", "pos": [560, 190], "size": [170, 64]},
+    {"id": "act", "type": "backend", "label": "Actionneurs de la zone", "sublabel": "DRS8, DRBL4, DRD3", "pos": [820, 190], "size": [160, 64]},
+    {"id": "load", "type": "external", "label": "Charges de la zone", "sublabel": "éclairages, volets, variateurs", "pos": [1070, 190], "size": [170, 64]},
+    {"id": "drps", "type": "security", "label": "Alimentation DRPS4", "sublabel": "une par zone, 24 V 4 A", "pos": [320, 40], "size": [180, 64]},
+    {"id": "drap", "type": "backend", "label": "Point d'accès DRAP", "sublabel": "un par zone, maître du bus", "pos": [560, 40], "size": [170, 64]},
+    {"id": "ccu", "type": "backend", "label": "Centrale CCU3", "sublabel": "une seule, au mur", "pos": [820, 40], "size": [160, 64]},
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [1070, 40], "size": [170, 64]},
+    {"id": "sec", "type": "external", "label": "Secteur 230 V", "sublabel": "chaque canal sur sa phase", "pos": [820, 350], "size": [160, 64]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Armoire et centrale au mur : un DRAP par zone", "wraps": ["be", "bus", "act", "drps", "drap", "ccu", "sec"]}
+  ],
+  "connections": [
+    {"id": "push-be", "from": "push", "to": "be", "label": "hors contrainte", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "be-bus", "from": "be", "to": "bus", "label": "appui", "variant": "emphasis"},
+    {"id": "bus-act", "from": "bus", "to": "act", "label": "ordre", "variant": "emphasis"},
+    {"id": "act-load", "from": "act", "to": "load", "label": "230 V", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "drps-drap", "from": "drps", "to": "drap", "label": "24 V", "variant": "security"},
+    {"id": "sec-act", "from": "sec", "to": "act", "label": "230 V", "variant": "security"},
+    {"id": "bus-drap", "from": "bus", "to": "drap", "label": "appui"},
+    {"id": "drap-bus", "from": "drap", "to": "bus", "label": "ordre"},
+    {"id": "drap-ccu", "from": "drap", "to": "ccu", "label": "Ethernet", "variant": "dashed"},
+    {"id": "ccu-gw", "from": "ccu", "to": "gw", "label": "XML-RPC", "variant": "dashed"}
+  ],
+  "cards": [
+    {"dot": "rose", "title": "Règle 1 : non tenue, et hors contrainte", "items": [
+      "Le poussoir attaque un DRI32 ; l'ordre traverse le bus et son maître, le DRAP, jusqu'à l'actionneur, qui n'a pas d'entrée poussoir locale",
+      "Les entrées DRI32 ne sont pas libres de potentiel : elles sortent le 24 V du bus vers les nappes",
+      "Au-delà de 3 m, câble blindé et séparation des conducteurs 230 V, ce que les nappes existantes ne respectent pas : hors contrainte sauf accord écrit d'eQ-3",
+      "Liaisons directes sans centrale : documentées pour la radio, contredites sur le terrain pour le filaire"]},
+    {"dot": "amber", "title": "Si le DRAP, la centrale ou le réseau tombe", "items": [
+      "Alimentation ou DRAP d'une zone : aucun bouton dans la zone, les deux autres fonctionnent ; éclairages dans leur état (bistables), volets arrêtés",
+      "Centrale ou réseau local : si les liaisons directes tiennent, tous les boutons ; sinon aucun bouton, et les touches de face avant de chaque actionneur",
+      "Court-circuit sur un bus : sa zone, jusqu'à la réparation et l'acquittement sur le DRAP"]},
+    {"dot": "orange", "title": "Causes communes", "items": [
+      "4 des 8 défaillances uniques privent toute la maison de ses boutons si les liaisons directes exigent la centrale, 0 si elles tiennent sans elle ; 3 privent une zone",
+      "Les quatre : centrale, logiciel figé, mise à jour ratée, commutateur ou routeur. Un essai de banc, centrale coupée, dirait si le compte est 4 ou 0"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

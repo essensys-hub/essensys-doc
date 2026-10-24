@@ -1,0 +1,35 @@
+{
+  "title": "Domintell : d'un poussoir à une lampe, un bus pour trois coffrets",
+  "subtitle": "Configuration résiliente, un coffret. Poussoir mural, entrées DISM20, bus RS-485 avec son alimentation DALI05, Master DGQG04, carte relais DMR02, passerelle.",
+  "notes": ["Le Master est unique : chaque appui passe par lui. Le DISM20 admet 10 m au plus entre le module et le contact, les nappes vont jusqu'à 30 m : hors contrainte."],
+  "blocks": [
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec à impulsion, nappe jusqu'à 30 m", "col": 0, "row": 0, "width": 170, "right": ["contact", "commun"]},
+    {"id": "entrees", "kind": "entrees", "label": "Domintell DISM20", "sublabel": "20 contacts secs, 10 m au plus : hors contrainte", "col": 1, "row": 0, "left": ["entrée 1", "commun"], "right": ["15 V +", "masse", "données"], "notes": ["Doit être connecté à un vrai contact sec. Isolation des entrées non documentée."]},
+    {"id": "dali", "kind": "alim", "label": "Domintell DALI05", "sublabel": "alimentation du bus 15 V, 4 A, une par coffret", "col": 1, "row": 1, "right": ["15 V +", "masse"], "notes": ["Sa perte prive son coffret de ses boutons ; dans le coffret du Master, elle éteint le Master."]},
+    {"id": "bus", "kind": "bus", "label": "Bus RS-485 des coffrets", "sublabel": "15 V et une paire de données, une seule paire pour les trois coffrets", "col": 2, "row": 0, "width": 190, "left": ["15 V + DISM20", "masse DISM20", "données DISM20", "15 V + DALI05", "masse DALI05"], "right": ["15 V + DMR02", "masse DMR02", "données DMR02", "15 V + Master", "masse Master", "données Master"]},
+    {"id": "carte", "kind": "actionneur", "label": "Domintell DMR02", "sublabel": "8 relais 16 A, DIP switches de secours dans l'armoire", "col": 3, "row": 0, "left": ["15 V +", "masse", "données", "entrée phase"], "right": ["sortie 1"], "notes": ["Type de relais et état au retour de tension : non trouvé."]},
+    {"id": "master", "kind": "controleur", "label": "Domintell DGQG04", "sublabel": "Master unique, alimenté par le bus, Ethernet", "col": 3, "row": 1, "left": ["15 V +", "masse", "données"], "right": ["Ethernet"]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "alimente la carte de sortie", "col": 2, "row": 2, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 1, "width": 170, "left": ["Ethernet"], "notes": ["Light Protocol en WebSocket Secure, deux connexions au plus : à écrire côté passerelle."]}
+  ],
+  "wires": [
+    ["bouton", "poussoir.contact", "entrees.entrée 1"],
+    ["bouton", "poussoir.commun", "entrees.commun"],
+    ["tbts", "entrees.15 V +", "bus.15 V + DISM20"],
+    ["0v", "entrees.masse", "bus.masse DISM20"],
+    ["bus", "entrees.données", "bus.données DISM20"],
+    ["tbts", "dali.15 V +", "bus.15 V + DALI05"],
+    ["0v", "dali.masse", "bus.masse DALI05"],
+    ["tbts", "bus.15 V + DMR02", "carte.15 V +"],
+    ["0v", "bus.masse DMR02", "carte.masse"],
+    ["bus", "bus.données DMR02", "carte.données"],
+    ["tbts", "bus.15 V + Master", "master.15 V +"],
+    ["0v", "bus.masse Master", "master.masse"],
+    ["bus", "bus.données Master", "master.données"],
+    ["reseau", "master.Ethernet", "passerelle.Ethernet"],
+    ["phase", "secteur.phase", "carte.entrée phase"],
+    ["phase", "carte.sortie 1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

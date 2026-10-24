@@ -1,0 +1,24 @@
+{
+  "title": "Siemens LOGO! 8 : d'un poussoir à une lampe, version 230 V hors contrainte",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, unité LOGO! 230RCE (entrées, programme, relais), commutateur Ethernet vers la passerelle. Les extensions DM16 230R, emboîtées sur l'unité, ne sont pas dessinées.",
+  "notes": ["Version 230 V, hors contrainte : le commun du poussoir est la phase et les nappes portent le secteur dans toute la maison, hors des îlots TBTS de la V2. Les entrées ne sont pas isolées de l'alimentation, et tous les modules doivent être sur la même phase.", "Relais monostable : en STOP ou hors tension, le contact est ouvert."],
+  "blocks": [
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "disjoncteur de la zone", "col": 0, "row": 1, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact à impulsion, nappe à 230 V", "col": 1, "row": 0, "width": 150, "left": ["phase"], "right": ["contact"]},
+    {"id": "logo", "kind": "controleur", "label": "LOGO! 230RCE", "sublabel": "8 entrées non isolées, 4 relais 10 A, programme de l'unité", "col": 2, "row": 0, "width": 180, "left": ["I1", "L phase", "N neutre", "Q1 commun"], "right": ["Q1", "Ethernet"], "notes": ["Relais monostable : en STOP, contact ouvert."]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 3, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "switch", "kind": "bus", "label": "Commutateur Ethernet", "sublabel": "LOGO! CSM230 ou du commerce", "col": 3, "row": 1, "width": 170, "left": ["Ethernet"], "right": ["Ethernet gw"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 1, "width": 170, "left": ["Ethernet"], "notes": ["Modbus TCP ou MQTT, côté passerelle."]}
+  ],
+  "wires": [
+    ["phase", "secteur.phase", "poussoir.phase"],
+    ["bouton", "poussoir.contact", "logo.I1"],
+    ["phase", "secteur.phase", "logo.L phase"],
+    ["phase", "secteur.phase", "logo.Q1 commun"],
+    ["neutre", "secteur.neutre", "logo.N neutre"],
+    ["phase", "logo.Q1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"],
+    ["reseau", "logo.Ethernet", "switch.Ethernet"],
+    ["reseau", "switch.Ethernet gw", "passerelle.Ethernet"]
+  ]
+}

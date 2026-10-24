@@ -52,7 +52,24 @@ Deux KC868-A32 et une KC868-A16, soit 80 entrées et 80 relais, ou plus simpleme
 
 **Trois A32, une par zone** : pièces de vie 20 entrées et ≈ 22 relais, chambres 21 et ≈ 23, pièces d'eau 22 et ≈ 26, chacune sous les 32 voies de la carte. Chaque carte a sa propre alimentation 12 V et son GND ; les cartes ne se touchent que par Ethernet, à transformateur d'isolement. La logique de zone (poussoir → relais, verrouillage des volets, minuteries) est écrite dans le YAML de la carte et tourne sans Home Assistant. La configuration comprend trois réglages sans lesquels elle ne tient pas : `reboot_timeout: 0s` sous `api:`, sous `ethernet:` ou `wifi:` et sous `mqtt:` ; `restore_mode: RESTORE_DEFAULT_OFF` sur les éclairages ; mise à jour carte par carte.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Un poussoir mural envoie son contact sec (jaune) vers une entrée de la carte KinCony KC868-A32, et son commun vers le GND de la carte. La carte est dessinée en trois blocs : entrées à optocoupleurs EL357, ESP32 sous ESPHome, relais. Une alimentation 12 V (rouge pour le 12 V, noir pour le GND) alimente la carte. Les entrées parlent à l'ESP32, puis l'ESP32 aux relais, par des bus I2C (bleu). L'ESP32 est relié en violet à un commutateur Ethernet, lui-même relié à la passerelle Essensys. Le secteur envoie la phase (marron) au relais, dont la sortie va à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/esphome-rail-din_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente. Source Fritzing : [esphome-rail-din.fzz](fritzing/esphome-rail-din.fzz){ download="esphome-rail-din.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/esphome-rail-din-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : ESPHome sur rail DIN seul, du poussoir à la charge, une carte par zone" loading="lazy" style="width:100%;aspect-ratio:1270/660;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/esphome-rail-din-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par les entrées de la carte, son ESP32 sous ESPHome et ses relais ; l'alimentation 12 V et le secteur arrivent par le bas ; la carte parle à un commutateur Ethernet, relié à Home Assistant, aux deux autres cartes et à la passerelle.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, entrées de la carte, ESP32 de la carte, relais de la carte, charges de la zone, les trois blocs du milieu étant dans le cadre « Carte KC868-A32 de la zone : un seul îlot, un seul GND ». Sous l'ESP32, l'alimentation 12 V ; sous les relais, le secteur 230 V. Au-dessus de l'ESP32, un commutateur Ethernet, relié à Home Assistant, aux deux autres cartes et, par MQTT, à la passerelle Essensys. Quatre cartes : règle 1 non tenue, ce qui reste panne par panne, causes communes, réserve.](archify/esphome-rail-din-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -100,6 +117,15 @@ Ce décompte vaut ce que valent trois lignes de YAML : le redémarrage toutes le
 | Foudre par une nappe | La carte de la zone au pire ; les deux autres par l'isolement des transformateurs Ethernet, non vérifié pour cette carte |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/esphome-rail-din-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : ESPHome sur rail DIN en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1260/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/esphome-rail-din-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche ESPHome : passerelle qui bat le chien de garde, commutateur, trois cartes A32 sans logique, relais de garde, relais de couplage en parallèle du poussoir, relais de recopie qui renvoie l'état aux entrées des cartes.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique ESPHome » : commutateur Ethernet, trois cartes A32, relais de garde, relais de couplage et relais de recopie ; la passerelle Essensys, hors du cadre, est reliée au commutateur et bat le chien de garde. Les cartes envoient des impulsions au relais de garde et commandent la bobine du relais de couplage, qui ferme un contact sec en parallèle des poussoirs ; le second contact du télérupteur remonte par le relais de recopie jusqu'aux entrées des cartes. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/esphome-rail-din-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Les télérupteurs, les chaînes de volets et les variateurs à entrée locale de la [V2](../v2/filaire-d-abord.md) gardent le chemin du bouton ; les cartes ne font que fermer des contacts secs et lire des recopies.
 

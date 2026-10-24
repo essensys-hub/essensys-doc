@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ESPHome sur rail DIN en dérivation sur le filaire V2 : une couche sacrifiable",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {
+          "label": "Poussoirs et charges"
+        },
+        "backend": {
+          "label": "Organes du filaire V2"
+        },
+        "frontend": {
+          "label": "Cartes ESPHome de la couche"
+        },
+        "messagebus": {
+          "label": "Réseau Ethernet"
+        },
+        "security": {
+          "label": "Garde et alimentation"
+        },
+        "cloud": {
+          "label": "Passerelle Essensys (réseau local)"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "gw",
+      "type": "cloud",
+      "label": "Passerelle Essensys",
+      "sublabel": "bat le chien de garde, Go",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "sw",
+      "type": "messagebus",
+      "label": "Commutateur Ethernet",
+      "sublabel": "réseau local",
+      "pos": [
+        290,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "cartes",
+      "type": "frontend",
+      "label": "Trois cartes A32",
+      "sublabel": "aucune logique, ESPHome",
+      "pos": [
+        540,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "garde",
+      "type": "security",
+      "label": "Relais de garde",
+      "sublabel": "chien de garde, borne",
+      "pos": [
+        1040,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "cpl",
+      "type": "backend",
+      "label": "Relais de couplage",
+      "sublabel": "Finder 38.51, 6 kV",
+      "pos": [
+        1040,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "copie",
+      "type": "backend",
+      "label": "Relais de recopie",
+      "sublabel": "Finder 38.51, 2e contact",
+      "pos": [
+        540,
+        340
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "src",
+      "type": "security",
+      "label": "Source 24 V de zone",
+      "sublabel": "F1 1 A pour les boutons",
+      "pos": [
+        40,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "push",
+      "type": "external",
+      "label": "Poussoirs muraux",
+      "sublabel": "contacts secs",
+      "pos": [
+        290,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "tele",
+      "type": "backend",
+      "label": "Télérupteur",
+      "sublabel": "Finder 20.22, état gardé",
+      "pos": [
+        790,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "load",
+      "type": "external",
+      "label": "Lampe",
+      "sublabel": "éclairage 230 V",
+      "pos": [
+        1040,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Couche domotique ESPHome : peut tomber sans rien couper",
+      "wraps": [
+        "sw",
+        "cartes",
+        "garde",
+        "cpl",
+        "copie"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Filaire V2 : le bouton commande sa charge sans calculateur",
+      "wraps": [
+        "src",
+        "push",
+        "tele",
+        "load"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "gw-sw",
+      "from": "gw",
+      "to": "sw",
+      "label": "Ethernet",
+      "variant": "dashed"
+    },
+    {
+      "id": "sw-cartes",
+      "from": "sw",
+      "to": "cartes",
+      "label": "API ou MQTT"
+    },
+    {
+      "id": "cartes-garde",
+      "from": "cartes",
+      "to": "garde",
+      "label": "impulsions",
+      "variant": "security"
+    },
+    {
+      "id": "garde-cpl",
+      "from": "garde",
+      "to": "cpl",
+      "label": "commun",
+      "variant": "security"
+    },
+    {
+      "id": "cartes-cpl",
+      "from": "cartes",
+      "to": "cpl",
+      "label": "bobine 24 V"
+    },
+    {
+      "id": "cpl-tele",
+      "from": "cpl",
+      "to": "tele",
+      "label": "contact sec en parallèle",
+      "variant": "dashed"
+    },
+    {
+      "id": "tele-copie",
+      "from": "tele",
+      "to": "copie",
+      "label": "2e contact",
+      "variant": "dashed"
+    },
+    {
+      "id": "copie-cartes",
+      "from": "copie",
+      "to": "cartes",
+      "label": "recopie"
+    },
+    {
+      "id": "src-push",
+      "from": "src",
+      "to": "push",
+      "label": "24 V",
+      "variant": "security"
+    },
+    {
+      "id": "push-tele",
+      "from": "push",
+      "to": "tele",
+      "label": "impulsion",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tele-load",
+      "from": "tele",
+      "to": "load",
+      "label": "230 V",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Si la couche tombe, se fige ou se trompe",
+      "items": [
+        "Les 63 boutons commandent toujours leurs charges par le filaire",
+        "C'est la passerelle qui réarme le relais de garde, la carte ne fait que relayer : si la passerelle se tait, les impulsions cessent et le chien de garde de la V2 ouvre le relais en moins d'une seconde",
+        "Un interval: qui ferait battre ce relais depuis la carte est à proscrire, il garderait la couche branchée alors que son cerveau est mort",
+        "Si la carte redémarre, ses relais reviennent à ALWAYS_OFF et le relais de garde retombe, ce défaut joue ici dans le bon sens"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Ce que la couche apporte",
+      "items": [
+        "≈ 360 € HT de cartes pour 96 sorties et 96 entrées, le prix de cartes le plus bas du comparatif",
+        "Un logiciel libre très répandu, aucune licence, un matériel que n'importe quelle carte ESP32 à relais peut remplacer",
+        "Les relais des cartes commandent les bobines 24 V des 38.51, les contacts de recopie se ferment vers le GND de la carte comme un poussoir"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Ce qu'elle coûte, ordres de grandeur",
+      "items": [
+        "≈ 360 € HT, ≈ 0,96 m de platine hors rail DIN, hors alimentation 12 V, commutateur, port, droits et TVA d'import",
+        "Aucune tension d'isolement publiée, un marquage CE limité à la radio, un micrologiciel compilé par le projet dans l'armoire, à tenir à jour"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Réserve",
+      "items": [
+        "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Siemens LOGO! 8 en dérivation sur le filaire V2 : une couche sacrifiable",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/siemens-logo-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Modules LOGO! de la couche"},
+        "messagebus": {"label": "Réseau Ethernet de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "sw", "type": "messagebus", "label": "Commutateur Ethernet", "sublabel": "cinq adresses IP", "pos": [290, 40], "size": [160, 64]},
+    {"id": "unit", "type": "frontend", "label": "Unités LOGO! 8", "sublabel": "5 × 230RCE + 2 DM16 230R", "pos": [540, 40], "size": [160, 64]},
+    {"id": "be", "type": "frontend", "label": "Entrées des unités", "sublabel": "120 entrées, non isolées", "pos": [790, 40], "size": [160, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "chien de garde de la V2", "pos": [40, 190], "size": [150, 64]},
+    {"id": "cpl", "type": "backend", "label": "Relais de couplage", "sublabel": "Finder 38.51, 6 kV", "pos": [290, 190], "size": [160, 64]},
+    {"id": "out", "type": "frontend", "label": "Sorties relais", "sublabel": "100 relais isolés", "pos": [540, 190], "size": [160, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "Finder 38.51, 2e contact", "pos": [790, 190], "size": [160, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [40, 340], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [290, 340], "size": [160, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "boucles des poussoirs", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [290, 490], "size": [160, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique LOGO! : peut tomber sans rien couper", "wraps": ["gw", "sw", "unit", "be", "garde", "cpl", "out", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["load", "tele", "src", "push"]}
+  ],
+  "connections": [
+    {"id": "gw-sw", "from": "gw", "to": "sw", "label": "Modbus TCP", "variant": "dashed"},
+    {"id": "sw-unit", "from": "sw", "to": "unit"},
+    {"id": "unit-out", "from": "unit", "to": "out", "label": "ordre"},
+    {"id": "out-cpl", "from": "out", "to": "cpl", "label": "bobine 24 V", "variant": "security"},
+    {"id": "gw-garde", "from": "gw", "to": "garde", "label": "bat le cœur", "variant": "dashed"},
+    {"id": "garde-cpl", "from": "garde", "to": "cpl", "label": "commun", "variant": "security"},
+    {"id": "cpl-tele", "from": "cpl", "to": "tele", "label": "contact sec en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed", "fromSide": "right", "toSide": "bottom"},
+    {"id": "copie-be", "from": "copie", "to": "be", "label": "recopie"},
+    {"id": "be-unit", "from": "be", "to": "unit", "label": "état"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si la couche tombe", "items": [
+      "Si l'unité s'arrête ou perd sa tension, ses relais s'ouvrent d'eux-mêmes : la couche se retire, les boutons commandent toujours leurs charges par le filaire",
+      "Si le réarmeur se tait, le relais de garde retombe en moins d'une seconde",
+      "Si la passerelle porte la logique, elle réarme le chien de garde de la V2 ; si le LOGO! la porte, son générateur d'impulsions peut le réarmer, mais un relais ne bat pas toutes les 200 ms : il faudrait une sortie transistor, en version 24 V"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "≈ 1 600 € HT pour 100 relais et 120 entrées, un protocole ouvert, aucun Linux dans l'armoire",
+      "Une licence à ≈ 50 € HT, un automate dont les sorties s'ouvrent à l'arrêt, un fabricant qui vend depuis trente ans"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 60 modules, ≈ 1,1 m de rail en plus de la couche filaire, un commutateur Ethernet, cinq adresses IP",
+      "Des entrées non isolées : en 230 V, le contact de recopie ferme la phase de l'unité sur l'entrée, la barrière de 6 kV du 38.51 protège le filaire ; la version 24 V n'a pas de prix trouvé",
+      "Une scrutation Modbus d'une seconde environ, ≈ 3 à 7 semaines-personne de logiciel ; charge minimale de 100 mA à comparer à une bobine 38.51"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}
