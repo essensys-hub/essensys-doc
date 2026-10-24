@@ -98,6 +98,19 @@ nav:
       - Autocritique des études V1: etudes/remplacement-armoire/v2/autocritique-v1.md
       - Banc deux lumières: etudes/banc-deux-lumieres.md
       - Sections de câbles: etudes/remplacement-armoire/v2/sections-de-cables.md
+      - "Solutions du marché":
+        - Comparatif: etudes/remplacement-armoire/marche/index.md
+        - KNX TP: etudes/remplacement-armoire/marche/knx.md
+        - Loxone: etudes/remplacement-armoire/marche/loxone.md
+        - Niko Home Control II: etudes/remplacement-armoire/marche/niko-home-control.md
+        - Domintell: etudes/remplacement-armoire/marche/domintell.md
+        - Homematic IP Wired: etudes/remplacement-armoire/marche/homematic-ip-wired.md
+        - Eltako Series 14: etudes/remplacement-armoire/marche/eltako-series-14.md
+        - "Siemens LOGO! 8": etudes/remplacement-armoire/marche/siemens-logo.md
+        - Wago PFC200: etudes/remplacement-armoire/marche/wago-pfc200.md
+        - Shelly Pro: etudes/remplacement-armoire/marche/shelly-pro.md
+        - ESPHome sur rail DIN: etudes/remplacement-armoire/marche/esphome-rail-din.md
+        - Modbus et passerelle: etudes/remplacement-armoire/marche/modbus-es.md
       - "V1 figées (21 octobre 2026)":
         - Revolution Pi: etudes/remplacement-armoire/revolution-pi.md
         - Arduino Opta: etudes/remplacement-armoire/arduino-opta.md

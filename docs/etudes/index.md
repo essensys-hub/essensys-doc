@@ -26,6 +26,24 @@ L'étude a connu deux versions. Les trois études V1 remplaçaient les cartes pa
 | [Banc deux lumières](banc-deux-lumieres.md) | Le banc de développement de la V2 : implantation sur rail DIN, liste des fils, télérupteur Finder contre Eltako ES12Z |
 | [Sections de câbles](remplacement-armoire/v2/sections-de-cables.md) | Rigide, souple et embouts : quelle section pour chaque liaison de l'armoire |
 
+### Solutions du marché : remplacer l'armoire sans recâblage
+
+KNX pourrait-il remplacer les quatre cartes sans toucher aux fils des poussoirs ni des charges ? Et les autres solutions du marché ? Le [comparatif](remplacement-armoire/marche/index.md) lit onze solutions deux fois : seules face à l'exigence de résilience, puis en couche domotique sur le filaire de la V2.
+
+| Dossier | Famille |
+| --- | --- |
+| [KNX TP](remplacement-armoire/marche/knx.md) | Bus normalisé, multi-fabricants |
+| [Loxone](remplacement-armoire/marche/loxone.md) | Propriétaire, centralisé |
+| [Niko Home Control II](remplacement-armoire/marche/niko-home-control.md) | Propriétaire, bus |
+| [Domintell](remplacement-armoire/marche/domintell.md) | Propriétaire, bus |
+| [Homematic IP Wired](remplacement-armoire/marche/homematic-ip-wired.md) | Propriétaire, bus filaire, firmware alternatif libre |
+| [Eltako Series 14](remplacement-armoire/marche/eltako-series-14.md) | Propriétaire, bus RS-485 |
+| [Siemens LOGO! 8](remplacement-armoire/marche/siemens-logo.md) | Automate |
+| [Wago PFC200](remplacement-armoire/marche/wago-pfc200.md) | Automate, ouvert |
+| [Shelly Pro](remplacement-armoire/marche/shelly-pro.md) | Modules LAN et Wi-Fi sur rail DIN |
+| [ESPHome sur rail DIN](remplacement-armoire/marche/esphome-rail-din.md) | Open source, matériel et logiciel |
+| [Modbus et passerelle](remplacement-armoire/marche/modbus-es.md) | Modules d'E/S Modbus pilotés par la passerelle, protocole ouvert |
+
 ### V1 : trois études figées le 21 octobre 2026
 
 Ces études restent publiées telles quelles, pour l'historique et pour ce que la V2 en reprend : câblage de migration, repiquage des phases, relais de couplage.
