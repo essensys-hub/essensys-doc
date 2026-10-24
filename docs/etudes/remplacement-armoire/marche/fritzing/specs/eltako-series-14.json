@@ -1,0 +1,31 @@
+{
+  "title": "Eltako Series 14 : d'un poussoir à une lampe, un bus de zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, entrées FTS14EM, maître FTS14KS avec sa FSNT14-12V/12W, actionneur FSR14-4x, passerelle série FGW14-USB vers la passerelle.",
+  "notes": ["Le bus ne sort pas de l'armoire : seules les nappes des poussoirs parcourent la maison. Les boucles de poussoirs ont leur propre 24 V continu, séparé du 12 V du bus.", "Les trois bus de la configuration résiliente sont séparés : ce câblage montre l'un d'eux. La ligne HOLD d'arbitrage n'est pas dessinée."],
+  "blocks": [
+    {"id": "s24", "kind": "alim", "label": "Alimentation 24 V", "sublabel": "boucles de poussoirs, SNT12/24V ou équivalent", "col": 0, "row": 1, "width": 150, "right": ["24 V +", "0 V"]},
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec à impulsion, nappe IDC", "col": 1, "row": 0, "width": 150, "left": ["24 V +"], "right": ["contact"]},
+    {"id": "maitre", "kind": "controleur", "label": "Maître FTS14KS avec FSNT14", "sublabel": "maître de bus sans radio, alimentation 12 V, 12 W", "col": 1, "row": 2, "width": 170, "right": ["RSA/RSB", "12 V/GND"], "notes": ["Une FSNT14 par bus de zone : sa perte éteint toutes les lumières de la zone."]},
+    {"id": "entrees", "kind": "entrees", "label": "Eltako FTS14EM", "sublabel": "10 entrées, boucle 8 à 230 V isolée, 24 V recommandé", "col": 2, "row": 0, "width": 170, "left": ["entrée 1", "commun -E", "RSA/RSB", "12 V/GND"]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "contacts des actionneurs", "col": 2, "row": 3, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "actionneur", "kind": "actionneur", "label": "Eltako FSR14-4x", "sublabel": "4 contacts NO 4 A, alimenté par le bus", "col": 3, "row": 0, "width": 170, "left": ["RSA/RSB", "12 V/GND", "entrée phase"], "right": ["sortie 1"], "notes": ["Relais monostable : à la perte du 12 V, l'appareil s'éteint. Aucune entrée de commande locale."]},
+    {"id": "fgw", "kind": "module", "label": "Eltako FGW14-USB", "sublabel": "passerelle série, 9 600 ou 58 000 bauds", "col": 3, "row": 1, "width": 170, "left": ["RSA/RSB", "12 V/GND"], "right": ["USB"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 1, "width": 170, "left": ["USB"], "notes": ["ESP2 sur port série : à écrire côté passerelle, sans bibliothèque Go."]}
+  ],
+  "wires": [
+    ["tbts", "s24.24 V +", "poussoir.24 V +"],
+    ["bouton", "poussoir.contact", "entrees.entrée 1"],
+    ["0v", "s24.0 V", "entrees.commun -E"],
+    ["bus", "maitre.RSA/RSB", "entrees.RSA/RSB"],
+    ["tbts", "maitre.12 V/GND", "entrees.12 V/GND"],
+    ["bus", "maitre.RSA/RSB", "actionneur.RSA/RSB"],
+    ["tbts", "maitre.12 V/GND", "actionneur.12 V/GND"],
+    ["bus", "maitre.RSA/RSB", "fgw.RSA/RSB"],
+    ["tbts", "maitre.12 V/GND", "fgw.12 V/GND"],
+    ["bus", "fgw.USB", "passerelle.USB"],
+    ["phase", "secteur.phase", "actionneur.entrée phase"],
+    ["phase", "actionneur.sortie 1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

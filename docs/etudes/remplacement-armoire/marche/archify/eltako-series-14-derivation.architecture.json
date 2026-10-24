@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Eltako Series 14 en dérivation sur le filaire V2 : une couche sacrifiable",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/eltako-series-14-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Modules Series 14 de la couche"},
+        "messagebus": {"label": "Bus RS-485 de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (liaison USB)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "fgw", "type": "frontend", "label": "Passerelle série", "sublabel": "FGW14-USB, ESP2", "pos": [290, 40], "size": [160, 64]},
+    {"id": "bus", "type": "messagebus", "label": "Bus RS-485 Eltako", "sublabel": "FTS14KS, 2 FSNT14, 12 V", "pos": [540, 40], "size": [160, 64]},
+    {"id": "be", "type": "frontend", "label": "Entrées FTS14EM", "sublabel": "7 modules, 70 contacts", "pos": [790, 40], "size": [160, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "chien de garde de la V2", "pos": [40, 190], "size": [150, 64]},
+    {"id": "cpl", "type": "backend", "label": "Relais de couplage", "sublabel": "Finder 38.51, 6 kV", "pos": [290, 190], "size": [160, 64]},
+    {"id": "fsr", "type": "frontend", "label": "Sorties FSR14-4x", "sublabel": "22 modules, 88 contacts", "pos": [540, 190], "size": [160, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "Finder 38.51, 2e contact", "pos": [790, 190], "size": [160, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [40, 340], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [290, 340], "size": [160, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "boucles des poussoirs", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [290, 490], "size": [160, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique Series 14 : peut tomber sans rien couper", "wraps": ["gw", "fgw", "bus", "be", "garde", "cpl", "fsr", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["load", "tele", "src", "push"]}
+  ],
+  "connections": [
+    {"id": "gw-fgw", "from": "gw", "to": "fgw", "label": "USB, ESP2", "variant": "dashed"},
+    {"id": "fgw-bus", "from": "fgw", "to": "bus"},
+    {"id": "bus-fsr", "from": "bus", "to": "fsr", "label": "ordre"},
+    {"id": "fsr-cpl", "from": "fsr", "to": "cpl", "label": "bobine 24 V", "variant": "security"},
+    {"id": "gw-garde", "from": "gw", "to": "garde", "label": "bat le cœur", "variant": "dashed"},
+    {"id": "garde-cpl", "from": "garde", "to": "cpl", "label": "commun", "variant": "security"},
+    {"id": "cpl-tele", "from": "cpl", "to": "tele", "label": "contact sec en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed", "fromSide": "right", "toSide": "bottom"},
+    {"id": "copie-be", "from": "copie", "to": "be", "label": "recopie"},
+    {"id": "be-bus", "from": "be", "to": "bus", "label": "état"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si la couche tombe", "items": [
+      "Si le 12 V du bus tombe, tous les FSR14-4x s'ouvrent : la couche se retire d'elle-même, les boutons commandent toujours leurs charges par le filaire",
+      "La gamme n'a pas de relais de garde : le chien de garde matériel de la V2 est réarmé par la passerelle, qui porte la logique ; si elle se tait, le relais de garde retombe en moins d'une seconde",
+      "Un contact FSR14 est limité à 1 000 manœuvres par heure et ne peut pas battre toutes les 200 ms ; une voie en télérupteur à retombée temporisée peut ajouter une garde lente, de l'ordre de la minute"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "La couche la moins chère et la plus compacte des bus du comparatif",
+      "Aucun Linux ni logiciel du projet sur le bus, aucune licence, un outil gratuit, le fabricant des variateurs déjà retenus"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 1 580 € HT, ≈ 40 modules, ≈ 0,75 m de rail en plus de la couche filaire",
+      "Un bus propriétaire à un seul fabricant, un outil Windows, une liaison série USB au lieu d'un réseau, pas de bibliothèque Go",
+      "≈ 3 à 6 semaines-personne de logiciel ; courant d'une bobine 38.51 face à un contact FSR14 à vérifier"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

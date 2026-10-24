@@ -58,7 +58,24 @@ Un **DRAP, une alimentation et un bus par zone**, chacun avec ses entrées et se
 
 **23 modules, soit 92 unités ≈ 1,61 m de rail**, trois alimentations, trois DRAP, une CCU3 au mur.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Un poussoir mural envoie son contact (jaune) à un module d'entrées HmIPW-DRI32, dont les entrées ne sont pas libres de potentiel et sortent le 24 V du bus vers le poussoir. L'alimentation HmIPW-DRPS4 (rouge pour le 24 V, noir pour la masse) alimente le point d'accès HmIPW-DRAP, maître du bus, qui alimente le bus RS-485 de la zone avec sa paire de données en bleu. Le module d'entrées et un actionneur HmIPW-DRS8 sont reliés à ce bus. Le DRAP est relié en violet à la centrale HmIP-CCU3, elle-même reliée à la passerelle Essensys. L'actionneur reçoit la phase du secteur (marron) et la renvoie par sa sortie 1 à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/homematic-ip-wired_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente ; les entrées qui sortent le 24 V du bus et le câble blindé exigé au-delà de 3 m mettent les nappes existantes hors contrainte, sauf accord écrit d'eQ-3. Source Fritzing : [homematic-ip-wired.fzz](fritzing/homematic-ip-wired.fzz){ download="homematic-ip-wired.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/homematic-ip-wired-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Homematic IP Wired seul, du poussoir à la charge, un DRAP et un bus par zone, hors contrainte" loading="lazy" style="width:100%;aspect-ratio:1280/540;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/homematic-ip-wired-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par un module d'entrées DRI32, hors contrainte pour des nappes existantes sauf accord écrit d'eQ-3, puis par le bus de la zone et son maître, le DRAP, avant l'actionneur ; l'alimentation DRPS4 et le secteur arrivent séparément, et le DRAP parle à la centrale CCU3, puis à la passerelle en XML-RPC.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, entrées DRI32, bus RS-485 24 V de la zone, actionneurs de la zone, charges de la zone. Le lien du poussoir vers les entrées est étiqueté « hors contrainte ». Au-dessus du bus, le point d'accès DRAP, avec deux liens en sens inverse, appui et ordre, alimenté en 24 V par la DRPS4 placée à sa gauche ; à sa droite, la centrale CCU3, puis la passerelle Essensys en XML-RPC, hors du cadre « Armoire et centrale au mur : un DRAP par zone ». Sous les actionneurs, le secteur 230 V. Quatre cartes : règle 1 non tenue et hors contrainte, si le DRAP, la centrale ou le réseau tombe, causes communes (4 des 8 défaillances privent toute la maison si les liaisons directes exigent la centrale, 0 sinon), réserve.](archify/homematic-ip-wired-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -104,6 +121,15 @@ Ce décompte dit l'essentiel : la gamme découpe bien les zones (un DRAP par zon
 | Foudre par une nappe | Le DRI32 de la zone au mieux, le bus de la zone au pire ; les autres zones et la centrale derrière l'Ethernet |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/homematic-ip-wired-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Homematic IP Wired en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1290/658;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/homematic-ip-wired-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Homematic IP Wired : passerelle, centrale CCU3, point d'accès DRAP, onze DRS8, relais de garde battu par la passerelle, relais de couplage en parallèle du poussoir, relais de recopie et trois DRI32 qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Homematic IP Wired » : centrale CCU3, point d'accès DRAP, onze DRS8, relais de garde, relais de couplage, trois DRI32 et relais de recopie ; la passerelle Essensys, hors du cadre, parle à la CCU3 en XML-RPC et bat le relais de garde à travers la CCU3, le réseau local, le DRAP et un canal DRS8. Le relais de couplage ferme un contact sec en parallèle des poussoirs ; le second contact du télérupteur remonte par le relais de recopie jusqu'aux DRI32. Quatre cartes : si Homematic IP Wired tombe, ce que la couche apporte, ce qu'elle coûte, réserve.](archify/homematic-ip-wired-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Homematic IP Wired fournit la couche domotique :
 

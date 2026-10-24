@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ESPHome sur rail DIN seul : du poussoir à la charge, une carte par zone",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {
+          "label": "Poussoirs, charges, secteur"
+        },
+        "frontend": {
+          "label": "Cartes KC868-A32 et autres cartes"
+        },
+        "backend": {
+          "label": "Relais de la carte"
+        },
+        "messagebus": {
+          "label": "Réseau Ethernet"
+        },
+        "security": {
+          "label": "Alimentation 12 V"
+        },
+        "cloud": {
+          "label": "Passerelle Essensys (réseau local)"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "push",
+      "type": "external",
+      "label": "63 poussoirs muraux",
+      "sublabel": "contacts secs, nappes",
+      "pos": [
+        40,
+        340
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "in",
+      "type": "frontend",
+      "label": "Entrées de la carte",
+      "sublabel": "optocoupleurs EL357",
+      "pos": [
+        290,
+        340
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "esp",
+      "type": "frontend",
+      "label": "ESP32 de la carte",
+      "sublabel": "YAML du projet, on_press",
+      "pos": [
+        540,
+        340
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "rel",
+      "type": "backend",
+      "label": "Relais de la carte",
+      "sublabel": "10 A, inverseurs, ULN2003A",
+      "pos": [
+        790,
+        340
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "load",
+      "type": "external",
+      "label": "Charges de la zone",
+      "sublabel": "éclairages, volets, variateurs",
+      "pos": [
+        1060,
+        340
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "psu",
+      "type": "security",
+      "label": "Alimentation 12 V",
+      "sublabel": "une par carte, un seul GND",
+      "pos": [
+        540,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "sec",
+      "type": "external",
+      "label": "Secteur 230 V",
+      "sublabel": "charges 230 V",
+      "pos": [
+        790,
+        490
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "sw",
+      "type": "messagebus",
+      "label": "Commutateur Ethernet",
+      "sublabel": "hors du chemin du bouton",
+      "pos": [
+        540,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "ha",
+      "type": "frontend",
+      "label": "Home Assistant",
+      "sublabel": "CM5, supervision, scènes",
+      "pos": [
+        290,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "others",
+      "type": "frontend",
+      "label": "Deux autres cartes",
+      "sublabel": "même schéma, une par zone",
+      "pos": [
+        790,
+        190
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gw",
+      "type": "cloud",
+      "label": "Passerelle Essensys",
+      "sublabel": "CM5, backend Go, MQTT",
+      "pos": [
+        540,
+        40
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Carte KC868-A32 de la zone : un seul îlot, un seul GND",
+      "wraps": [
+        "in",
+        "esp",
+        "rel"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "push-in",
+      "from": "push",
+      "to": "in",
+      "label": "contact sec",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "in-esp",
+      "from": "in",
+      "to": "esp",
+      "label": "bus I2C",
+      "variant": "emphasis"
+    },
+    {
+      "id": "esp-rel",
+      "from": "esp",
+      "to": "rel",
+      "label": "bus I2C",
+      "variant": "emphasis"
+    },
+    {
+      "id": "rel-load",
+      "from": "rel",
+      "to": "load",
+      "label": "230 V, NO/NC",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "psu-esp",
+      "from": "psu",
+      "to": "esp",
+      "label": "12 V",
+      "variant": "security"
+    },
+    {
+      "id": "sec-rel",
+      "from": "sec",
+      "to": "rel",
+      "label": "230 V",
+      "variant": "security"
+    },
+    {
+      "id": "esp-sw",
+      "from": "esp",
+      "to": "sw",
+      "label": "Ethernet"
+    },
+    {
+      "id": "ha-sw",
+      "from": "ha",
+      "to": "sw",
+      "label": "API native"
+    },
+    {
+      "id": "others-sw",
+      "from": "others",
+      "to": "sw",
+      "label": "Ethernet"
+    },
+    {
+      "id": "gw-sw",
+      "from": "gw",
+      "to": "sw",
+      "label": "MQTT",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Règle 1 : non tenue",
+      "items": [
+        "La liaison poussoir, relais tourne sur l'ESP32 de chaque carte et marche sans Home Assistant, une carte morte ne prive que sa zone",
+        "Mais le micrologiciel est compilé par le projet à partir d'un YAML, pas fixé par le fabricant, et l'ordre traverse deux bus I2C internes et huit PCF8574",
+        "Par défaut, une carte redémarre toutes les 15 minutes sans client, reboot_timeout, et ses relais reviennent à ALWAYS_OFF"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Ce qui reste, panne par panne",
+      "items": [
+        "Home Assistant ou le réseau : les 63 boutons restent par la logique de chaque carte, à condition de reboot_timeout: 0s partout, sinon extinction toutes les 15 minutes",
+        "Une carte ou son alimentation 12 V : la zone perd ses 20 à 22 boutons, éclairages éteints, volets arrêtés, les deux autres zones indemnes",
+        "Carte figée : sa zone, jusqu'au redémarrage par chien de garde",
+        "Mise à jour ratée : retour arrière si enable_ota_rollback, une carte à la fois",
+        "Coupure du secteur : au retour, relais éteints par défaut, dernier état avec RESTORE_DEFAULT_OFF, position des volets estimée",
+        "Foudre par une nappe : la carte de la zone au pire, les deux autres par les transformateurs Ethernet, non vérifié"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Causes communes",
+      "items": [
+        "Configuration résiliente, avec ses trois réglages : 0 défaillance unique prive toute la maison, 5 privent une zone",
+        "Sans reboot_timeout: 0s, 2 défaillances privent toute la maison toutes les 15 minutes",
+        "Configuration minimale : 2, et 4 avec les deux pièges"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Réserve",
+      "items": [
+        "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"
+      ]
+    }
+  ]
+}

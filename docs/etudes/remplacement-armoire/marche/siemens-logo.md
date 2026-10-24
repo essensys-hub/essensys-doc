@@ -54,7 +54,24 @@ Il n'existe pas de LOGO! à 85 sorties : la configuration minimale est déjà un
 
 Le fil pilote, le cumulus, les prises, l'arrosage et les machines prennent les sorties restantes des unités doubles. **Cinq unités**, 120 entrées et 100 sorties, cinq adresses IP, cinq serveurs Modbus TCP. **≈ 72 modules, soit ≈ 1,3 m de rail**, variateurs et commutateur compris. En version 230 V, chaque unité est alimentée par le disjoncteur de sa zone ; en version 24 V, une LOGO! Power par zone.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite, en version 230 V hors contrainte. Le secteur envoie sa phase (marron) au poussoir mural, qui en commute le contact (jaune) vers l'entrée I1 d'une unité LOGO! 230RCE. La même phase alimente l'unité et le commun de son relais Q1 ; le neutre (bleu clair) alimente l'unité. Le relais Q1 renvoie la phase à une lampe, qui reçoit aussi le neutre. L'unité est reliée en violet à un commutateur Ethernet, lui-même relié à la passerelle Essensys.](fritzing/siemens-logo_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec l'unité de la configuration résiliente, en version 230 V hors contrainte : les nappes des poussoirs portent le secteur. Source Fritzing : [siemens-logo.fzz](fritzing/siemens-logo.fzz){ download="siemens-logo.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/siemens-logo-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Siemens LOGO! seul, du poussoir à la charge, version 230 V hors contrainte" loading="lazy" style="width:100%;aspect-ratio:1270/540;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/siemens-logo-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par les entrées d'une unité, son programme et ses relais monostables ; le disjoncteur de zone alimente l'unité, le secteur alimente les contacts ; les unités se relient par un commutateur Ethernet à la passerelle. La version 230 V, chiffrée, met le secteur sur les nappes : elle est hors contrainte.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs sur nappes à 230 V, entrées des unités, programme de l'unité, relais de l'unité, charges de la zone. Sous le programme, le disjoncteur de zone ; sous les relais, le secteur 230 V. Dans le cadre « Armoire : version 230 V, nappes de poussoirs sous secteur, hors contrainte », en haut : quatre autres unités et le commutateur Ethernet, relié au programme de l'unité, puis, hors du cadre, à la passerelle Essensys par Modbus TCP ou MQTT. Quatre cartes : règle 1 non tenue et version 230 V hors contrainte, ce qui reste panne par panne, causes communes, réserve.](archify/siemens-logo-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -103,6 +120,15 @@ Le passage de 5 à 0 ne coûte qu'une unité de plus. Il tient à une décision 
 Les utilisateurs de Home Assistant notent que les relais LOGO! n'ont que deux contacts (C et NO), sans commande manuelle, et montent des relais séparés pour que l'éclairage survive aux contrôleurs.
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/siemens-logo-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Siemens LOGO! en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1020/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/siemens-logo-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche LOGO! : passerelle, commutateur Ethernet, unités, sorties relais, relais de garde battu par la passerelle, relais de couplage en parallèle du poussoir, relais de recopie et entrées qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique LOGO! » : passerelle Essensys, commutateur Ethernet, unités LOGO! 8, entrées des unités, relais de garde, relais de couplage, sorties relais et relais de recopie. La passerelle parle aux unités par Modbus TCP et bat le cœur du relais de garde ; celui-ci alimente le commun du relais de couplage, dont la bobine 24 V est commandée par les sorties relais et qui ferme un contact sec en parallèle des poussoirs. Le second contact du télérupteur remonte par le relais de recopie jusqu'aux entrées des unités. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/siemens-logo-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Le LOGO! fournit la couche domotique :
 

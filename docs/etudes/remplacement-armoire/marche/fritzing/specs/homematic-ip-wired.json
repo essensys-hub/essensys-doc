@@ -1,0 +1,37 @@
+{
+  "title": "Homematic IP Wired : d'un poussoir à une lampe, un DRAP et un bus de zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, entrées HmIPW-DRI32, bus RS-485 24 V avec son point d'accès DRAP et son alimentation DRPS4, actionneur DRS8, centrale CCU3, passerelle.",
+  "notes": ["Les entrées DRI32 ne sont pas libres de potentiel : elles sortent le 24 V du bus vers le poussoir. Au-delà de 3 m, câble blindé exigé : les nappes existantes ne le respectent pas, hors contrainte sauf accord écrit d'eQ-3."],
+  "blocks": [
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact à impulsion, nappe jusqu'à 30 m", "col": 0, "row": 0, "width": 170, "right": ["contact", "commun"]},
+    {"id": "drps", "kind": "alim", "label": "HmIPW-DRPS4", "sublabel": "alimentation 24 V, 4 A, une par zone", "col": 0, "row": 1, "width": 170, "right": ["24 V +", "masse"]},
+    {"id": "entrees", "kind": "entrees", "label": "HmIPW-DRI32", "sublabel": "32 entrées, non isolées, tension du bus", "col": 1, "row": 0, "left": ["entrée 1", "commun"], "right": ["24 V +", "masse", "données"], "notes": ["Commun GND du bus, 3,2 mA : organes de commande pour 26 V au moins."]},
+    {"id": "drap", "kind": "controleur", "label": "HmIPW-DRAP", "sublabel": "point d'accès, maître du bus et source du bus", "col": 1, "row": 1, "left": ["24 V +", "masse"], "right": ["24 V + bus", "masse bus", "données bus", "Ethernet"], "notes": ["Alimente tout le bus de sa zone."]},
+    {"id": "bus", "kind": "bus", "label": "Bus RS-485 de la zone", "sublabel": "24 V TBTS et une paire de données, 19,2 kbit/s", "col": 2, "row": 0, "width": 190, "left": ["24 V + DRI32", "masse DRI32", "données DRI32", "24 V + DRAP", "masse DRAP", "données DRAP"], "right": ["24 V + DRS8", "masse DRS8", "données DRS8"]},
+    {"id": "actionneur", "kind": "actionneur", "label": "HmIPW-DRS8", "sublabel": "8 relais NO bistables, chaque canal sur sa phase", "col": 3, "row": 0, "left": ["24 V +", "masse", "données", "phase canal 1"], "right": ["sortie 1"], "notes": ["Le relais garde sa position. Touches Channel et Select en face avant."]},
+    {"id": "ccu", "kind": "controleur", "label": "HmIP-CCU3", "sublabel": "centrale locale, une seule pour les trois DRAP", "col": 3, "row": 1, "left": ["Ethernet DRAP"], "right": ["Ethernet LAN"]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "alimente la sortie", "col": 2, "row": 2, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 1, "width": 170, "left": ["Ethernet"], "notes": ["XML-RPC vers la CCU3 : à écrire côté passerelle."]}
+  ],
+  "wires": [
+    ["bouton", "poussoir.contact", "entrees.entrée 1"],
+    ["bouton", "poussoir.commun", "entrees.commun"],
+    ["tbts", "drps.24 V +", "drap.24 V +"],
+    ["0v", "drps.masse", "drap.masse"],
+    ["tbts", "entrees.24 V +", "bus.24 V + DRI32"],
+    ["0v", "entrees.masse", "bus.masse DRI32"],
+    ["bus", "entrees.données", "bus.données DRI32"],
+    ["tbts", "drap.24 V + bus", "bus.24 V + DRAP"],
+    ["0v", "drap.masse bus", "bus.masse DRAP"],
+    ["bus", "drap.données bus", "bus.données DRAP"],
+    ["tbts", "bus.24 V + DRS8", "actionneur.24 V +"],
+    ["0v", "bus.masse DRS8", "actionneur.masse"],
+    ["bus", "bus.données DRS8", "actionneur.données"],
+    ["reseau", "drap.Ethernet", "ccu.Ethernet DRAP"],
+    ["reseau", "ccu.Ethernet LAN", "passerelle.Ethernet"],
+    ["phase", "secteur.phase", "actionneur.phase canal 1"],
+    ["phase", "actionneur.sortie 1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

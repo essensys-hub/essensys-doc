@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Niko Home Control II en dérivation sur le filaire V2 : une couche posée sur le filaire",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/niko-home-control-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Contrôleur, sorties et entrées de la couche"},
+        "messagebus": {"label": "Bus de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "ctrl", "type": "frontend", "label": "Contrôleur", "sublabel": "550-00003, Hobby API", "pos": [290, 40], "size": [150, 64]},
+    {"id": "bus", "type": "messagebus", "label": "Bus 26 V", "sublabel": "couche domotique", "pos": [540, 40], "size": [150, 64]},
+    {"id": "out", "type": "frontend", "label": "Modules 550-00106", "sublabel": "90 contacts non secs", "pos": [790, 40], "size": [150, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "chien de garde, borne", "pos": [1040, 40], "size": [150, 64]},
+    {"id": "cpl", "type": "backend", "label": "Relais de couplage", "sublabel": "38.51, bobine 24 ou 230 V", "pos": [1040, 190], "size": [150, 64]},
+    {"id": "cap", "type": "frontend", "label": "Modules capteurs", "sublabel": "lisent les recopies", "pos": [540, 190], "size": [150, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "Finder 38.51, 2e contact", "pos": [540, 340], "size": [150, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "alimente les boutons", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [290, 490], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [790, 490], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [1040, 490], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique Niko : posée sur le filaire, sans le remplacer", "wraps": ["ctrl", "bus", "out", "garde", "cpl", "cap", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["src", "push", "tele", "load"]}
+  ],
+  "connections": [
+    {"id": "gw-ctrl", "from": "gw", "to": "ctrl", "label": "MQTT TLS", "variant": "dashed"},
+    {"id": "ctrl-bus", "from": "ctrl", "to": "bus"},
+    {"id": "bus-out", "from": "bus", "to": "out", "label": "impulsion"},
+    {"id": "out-garde", "from": "out", "to": "garde", "label": "battement", "variant": "security"},
+    {"id": "garde-cpl", "from": "garde", "to": "cpl", "label": "commun", "variant": "security"},
+    {"id": "cpl-tele", "from": "cpl", "to": "tele", "label": "contact en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed"},
+    {"id": "copie-cap", "from": "copie", "to": "cap", "label": "recopie"},
+    {"id": "cap-bus", "from": "cap", "to": "bus", "label": "adresse"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si la couche tombe, se fige ou se trompe", "items": [
+      "Si la passerelle, le contrôleur ou le jeton se tait, le relais de garde retombe en moins d'une seconde et la couche se débranche : les boutons commandent toujours leurs charges par le filaire",
+      "Le réarmement vient de la passerelle, par la Hobby API en MQTT, qui commute un contact relié au relais de garde ; aucun bloc d'impulsion périodique trouvé",
+      "Le jeton d'API expire chaque année et se renouvelle en ligne : un oubli débranche la domotique sans toucher aux boutons"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "Un courtier MQTT dans le contrôleur, chiffré en TLS",
+      "Un binding openHAB officiel et deux intégrations Home Assistant communautaires"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 8 100 € HT, ≈ 142 modules, ≈ 2,5 m de rail en plus de la couche filaire : la couche la plus chère du comparatif",
+      "Sorties qui ne sont pas des contacts secs : alimentation 24 V du module à vérifier, sinon des 38.51 à bobine 230 V commandés par la phase, côté îlot domotique",
+      "Trois entrées par module, tenue en une seule installation à confirmer, jeton annuel, Niko ne supporte pas les applications bâties sur la Hobby API"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, le fabricant et des essais"]}
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "title": "Wago PFC200 : d'un poussoir à une lampe, un nœud de zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, entrées 750-1405, coupleur 750-362 avec son alimentation 24 V, bornes relais 750-517, relais d'interface, maître 751-9301 ou 750-8212 vers la passerelle.",
+  "notes": ["Le K-Bus reste dans l'embase des bornes, dans l'armoire : seules les nappes des poussoirs parcourent la maison. Wago impose de séparer l'alimentation du système et celle du terrain. Les relais d'interface 230 V derrière les contacts 1 A ne sont pas chiffrés dans le dossier."],
+  "blocks": [
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec, boucle de 24 V à 2 à 2,5 mA", "col": 0, "row": 0, "width": 170, "right": ["contact", "commun"]},
+    {"id": "coupleur", "kind": "module", "label": "WAGO 750-362", "sublabel": "coupleur Modbus TCP de zone, aucune logique", "col": 0, "row": 1, "width": 170, "right": ["K-Bus entrées", "K-Bus sorties", "Ethernet maître"], "notes": ["Un coupleur par nœud, trois nœuds chaînés en Ethernet."]},
+    {"id": "alimnoeud", "kind": "alim", "label": "Alimentation 24 V du nœud", "sublabel": "787-1602, une par nœud", "col": 0, "row": 2, "width": 170, "right": ["24 V +", "0 V"]},
+    {"id": "alimmaitre", "kind": "alim", "label": "Alimentation du maître", "sublabel": "commune aux trois nœuds", "col": 0, "row": 3, "width": 170, "right": ["24 V +", "0 V"], "notes": ["Sa perte fait tomber le maître."]},
+    {"id": "entrees", "kind": "entrees", "label": "WAGO 750-1405", "sublabel": "16 entrées 24 V, 500 V", "col": 1, "row": 0, "width": 170, "left": ["entrée 1", "commun", "24 V terrain", "0 V terrain", "K-Bus"], "notes": ["+24 V et 0 V communs aux 16 voies."]},
+    {"id": "maitre", "kind": "controleur", "label": "WAGO 751-9301", "sublabel": "ou PFC200 750-8212, programme CODESYS", "col": 1, "row": 3, "width": 170, "left": ["24 V +", "0 V", "Ethernet nœud"], "right": ["Ethernet passerelle"], "notes": ["Seul calculateur : les sorties passent à zéro si le programme ne rafraîchit pas le bus en 50 ms."]},
+    {"id": "bornes", "kind": "actionneur", "label": "WAGO 750-517", "sublabel": "2 relais inverseurs 1 A, monostables", "col": 2, "row": 0, "width": 170, "left": ["K-Bus"], "right": ["contact 1", "commun 1"]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "circuit de la charge", "col": 2, "row": 1, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 2, "row": 3, "width": 170, "left": ["Ethernet"], "notes": ["Modbus TCP ou MQTT : à écrire côté passerelle."]},
+    {"id": "interface", "kind": "actionneur", "label": "Relais d'interface", "sublabel": "230 V, derrière le contact 1 A", "col": 3, "row": 0, "width": 170, "left": ["bobine", "commun bobine", "entrée phase"], "right": ["sortie"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]}
+  ],
+  "wires": [
+    ["bouton", "poussoir.contact", "entrees.entrée 1"],
+    ["bouton", "poussoir.commun", "entrees.commun"],
+    ["tbts", "alimnoeud.24 V +", "entrees.24 V terrain"],
+    ["0v", "alimnoeud.0 V", "entrees.0 V terrain"],
+    ["bus", "coupleur.K-Bus entrées", "entrees.K-Bus"],
+    ["bus", "coupleur.K-Bus sorties", "bornes.K-Bus"],
+    ["reseau", "coupleur.Ethernet maître", "maitre.Ethernet nœud"],
+    ["tbts", "alimmaitre.24 V +", "maitre.24 V +"],
+    ["0v", "alimmaitre.0 V", "maitre.0 V"],
+    ["reseau", "maitre.Ethernet passerelle", "passerelle.Ethernet"],
+    ["ordre", "bornes.contact 1", "interface.bobine"],
+    ["ordre", "bornes.commun 1", "interface.commun bobine"],
+    ["phase", "secteur.phase", "interface.entrée phase"],
+    ["phase", "interface.sortie", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

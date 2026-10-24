@@ -66,7 +66,24 @@ Un bus RS-485, une alimentation : **neuf Waveshare Relay (D)**, soit 72 entrées
 
 **Variante Modbus TCP** : un coupleur Wago 750-362 par zone (409 € HT) avec deux bornes 750-1405 (32 entrées) et des bornes relais, ou un Waveshare Modbus POE ETH Relay 30CH par zone (70 $) avec des IO 8CH PoE ; un commutateur Ethernet commun, PoE pour Waveshare. Le 750-517 ne commute que 1 A : la borne relais 16 A Wago et son prix n'ont pas été trouvés, et le prix de l'IO 8CH PoE n'a pas été relevé. La variante TCP n'est donc pas chiffrée en armoire complète. Elle isole mieux chaque module qu'un bus multipoint, et ajoute le commutateur comme cause commune.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Un poussoir mural envoie son contact sec (jaune) à une entrée d'un module Waveshare Modbus RTU Relay (D), alimenté en 24 V par une Mean Well HDR-60-24 (rouge pour le 24 V, noir pour le 0 V). Le module, dessiné en deux blocs, entrées puis relais, est relié par deux fils bleus au segment RS-485 de la zone. Le même segment est relié, par deux autres fils bleus, à un convertisseur USB-RS485 isolé, lui-même relié en violet à la passerelle Essensys, maître unique. Le relais reçoit la phase du secteur (marron) et la renvoie par sa sortie NO à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/modbus-es_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente. Source Fritzing : [modbus-es.fzz](fritzing/modbus-es.fzz){ download="modbus-es.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/modbus-es-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Modbus RTU seul, le maître unique sur le chemin de chaque appui, un segment par zone" loading="lazy" style="width:100%;aspect-ratio:1230/488;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/modbus-es-seule.html){ target="_blank" rel="noopener" }. Le poussoir attaque un module Relay (D) ; le contact remonte par le segment RS-485 et le convertisseur jusqu'à la passerelle, maître unique, qui décide et renvoie l'ordre par le même chemin au relais ; l'alimentation 24 V arrive par le haut.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, module Waveshare Relay (D), segment RS-485, convertisseur USB, passerelle Essensys. Entre le module et la passerelle, chaque liaison est doublée : lecture des entrées en fonction 02 dans un sens, écriture des coils en fonction 05 dans l'autre. Le module commande en dessous les charges de la zone. Au-dessus du module, l'alimentation 24 V ; au-dessus de la passerelle, les deux autres zones, reliées par USB. Le cadre « Une zone » enveloppe le module, le segment, le convertisseur et l'alimentation. Quatre cartes : règle 1 non tenue, ce qui reste panne par panne, causes communes, réserve.](archify/modbus-es-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -113,6 +130,15 @@ Ce décompte est celui des V1 : un calculateur sur le chemin du bouton, un déco
 | Foudre par une nappe | Le module de la zone au pire ; les autres par les isolations magnétiques, non chiffrées |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/modbus-es-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Modbus RTU en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1260/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/modbus-es-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Modbus : passerelle qui bat le chien de garde, convertisseur, bus RS-485, modules Relay (D), relais de garde, relais de couplage en parallèle du poussoir, relais de recopie et entrées qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Modbus » : convertisseur USB, bus RS-485, modules Relay (D) en sorties, relais de garde, relais de couplage, modules Relay (D) en entrées et relais de recopie ; la passerelle Essensys, hors du cadre, est reliée au convertisseur. Les modules envoient une impulsion flash-on au relais de garde et commandent la bobine du relais de couplage, qui ferme un contact sec en parallèle des poussoirs ; le second contact du télérupteur remonte par le relais de recopie jusqu'aux entrées. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/modbus-es-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs à entrée locale de la [V2](../v2/filaire-d-abord.md) gardent le chemin du bouton ; les modules Modbus ne font que fermer des contacts secs et lire des recopies, et c'est exactement le « serveur d'entrées-sorties léger » de la V2.
 

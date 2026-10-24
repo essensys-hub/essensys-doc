@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Loxone en dérivation sur le filaire V2 : une couche posée sur le filaire",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/loxone-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Miniserver, sorties et entrées de la couche"},
+        "messagebus": {"label": "Link de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "ms", "type": "frontend", "label": "Miniserver 100335", "sublabel": "API WebSocket locale", "pos": [290, 40], "size": [150, 64]},
+    {"id": "link", "type": "messagebus", "label": "Link", "sublabel": "couche domotique", "pos": [540, 40], "size": [150, 64]},
+    {"id": "out", "type": "frontend", "label": "Relay Extension", "sublabel": "92 contacts secs 16 A", "pos": [790, 40], "size": [150, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "chien de garde, borne", "pos": [1040, 40], "size": [150, 64]},
+    {"id": "cpl", "type": "backend", "label": "Relais de couplage", "sublabel": "Finder 38.51, bobine 24 V", "pos": [1040, 190], "size": [150, 64]},
+    {"id": "di", "type": "frontend", "label": "DI Extension", "sublabel": "lisent les recopies", "pos": [540, 190], "size": [150, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "Finder 38.51, 6 kV", "pos": [540, 340], "size": [150, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "alimente les boutons", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [290, 490], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [790, 490], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [1040, 490], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique Loxone : posée sur le filaire, sans le remplacer", "wraps": ["ms", "link", "out", "garde", "cpl", "di", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["src", "push", "tele", "load"]}
+  ],
+  "connections": [
+    {"id": "gw-ms", "from": "gw", "to": "ms", "label": "WebSocket", "variant": "dashed"},
+    {"id": "ms-link", "from": "ms", "to": "link"},
+    {"id": "link-out", "from": "link", "to": "out", "label": "ordre"},
+    {"id": "out-garde", "from": "out", "to": "garde", "label": "battement", "variant": "security"},
+    {"id": "garde-cpl", "from": "garde", "to": "cpl", "label": "commun", "variant": "security"},
+    {"id": "cpl-tele", "from": "cpl", "to": "tele", "label": "contact sec en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed"},
+    {"id": "copie-di", "from": "copie", "to": "di", "label": "recopie"},
+    {"id": "di-link", "from": "di", "to": "link", "label": "état"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si la couche tombe, se fige ou se trompe", "items": [
+      "Si la passerelle se tait, la minuterie du bloc fonction expire et le relais de garde retombe : les boutons commandent toujours leurs charges par le filaire",
+      "C'est le Miniserver qui réarme le battement de cœur. S'il se fige ou perd le Link, l'état du relais qui tient la garde n'est pas documenté : le chien de garde matériel de la V2 reste indispensable",
+      "Il attend un signal alterné qu'un relais mécanique à 200 ms ne fournira pas longtemps ; la cadence se fixe au banc"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "Un contrôleur sans licence, mis à jour gratuitement depuis 2010 jusque sur la première génération",
+      "Une API locale documentée, une communauté active : loxforum, LoxBerry, PyLoxone"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 3 950 € HT, ≈ 71 modules plus l'alimentation, ≈ 1,3 m de rail en plus de la couche filaire",
+      "Un système propriétaire sur carte microSD dans l'armoire, Windows pour Loxone Config, 4 à 8 semaines-personne de logiciel"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, le fabricant et des essais"]}
+  ]
+}

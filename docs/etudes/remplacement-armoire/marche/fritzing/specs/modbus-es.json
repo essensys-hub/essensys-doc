@@ -1,0 +1,225 @@
+{
+  "title": "Modbus et passerelle : d'un poussoir à une lampe, un segment de zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, module Waveshare Modbus RTU Relay (D), segment RS-485 avec son alimentation 24 V, convertisseur USB-RS485 isolé vers la passerelle, maître unique.",
+  "notes": [
+    "Le module Relay (D) est d'un seul tenant : ses entrées et ses relais sont dessinés en deux blocs. Entrée passive : le module fournit la boucle, la borne DI COM reste libre. Chaque appui traverse la passerelle : elle lit l'entrée, décide et écrit le coil."
+  ],
+  "blocks": [
+    {
+      "id": "poussoir",
+      "kind": "poussoir",
+      "label": "Poussoir mural",
+      "sublabel": "contact sec, nappe",
+      "col": 0,
+      "row": 0,
+      "width": 170,
+      "right": [
+        "contact",
+        "commun"
+      ]
+    },
+    {
+      "id": "alim",
+      "kind": "alim",
+      "label": "Mean Well HDR-60-24",
+      "sublabel": "alimentation 24 V, une par zone",
+      "col": 0,
+      "row": 1,
+      "width": 170,
+      "right": [
+        "24 V +",
+        "0 V"
+      ]
+    },
+    {
+      "id": "entrees",
+      "kind": "entrees",
+      "label": "Waveshare Relay (D) : entrées",
+      "sublabel": "8 entrées optocouplées 5 à 36 V",
+      "col": 1,
+      "row": 0,
+      "width": 190,
+      "left": [
+        "entrée 1",
+        "commun",
+        "24 V +",
+        "0 V"
+      ],
+      "right": [
+        "A+",
+        "B−"
+      ],
+      "notes": [
+        "Tension d'isolement non publiée."
+      ]
+    },
+    {
+      "id": "bus",
+      "kind": "bus",
+      "label": "Segment RS-485 de la zone",
+      "sublabel": "deux fils et un commun, 32 appareils au plus",
+      "col": 2,
+      "row": 0,
+      "width": 190,
+      "left": [
+        "A+ entrées",
+        "B− entrées"
+      ],
+      "right": [
+        "A+ relais",
+        "B− relais",
+        "A+ convertisseur",
+        "B− convertisseur"
+      ]
+    },
+    {
+      "id": "relais",
+      "kind": "actionneur",
+      "label": "Waveshare Relay (D) : relais",
+      "sublabel": "8 relais 10 A, un NO et un NC",
+      "col": 3,
+      "row": 0,
+      "width": 190,
+      "left": [
+        "A+",
+        "B−",
+        "COM phase"
+      ],
+      "right": [
+        "NO sortie"
+      ],
+      "notes": [
+        "Même module que les entrées, même 24 V."
+      ]
+    },
+    {
+      "id": "conv",
+      "kind": "module",
+      "label": "Waveshare 15817",
+      "sublabel": "convertisseur USB-RS485 isolé, un par zone",
+      "col": 3,
+      "row": 1,
+      "width": 190,
+      "left": [
+        "A+ bus",
+        "B− bus"
+      ],
+      "right": [
+        "USB"
+      ]
+    },
+    {
+      "id": "secteur",
+      "kind": "alim",
+      "label": "Secteur 230 V",
+      "sublabel": "alimentation des charges",
+      "col": 2,
+      "row": 2,
+      "width": 150,
+      "right": [
+        "phase",
+        "neutre"
+      ]
+    },
+    {
+      "id": "lampe",
+      "kind": "charge",
+      "label": "Lampe",
+      "sublabel": "un des 25 éclairages",
+      "col": 4,
+      "row": 0,
+      "width": 150,
+      "left": [
+        "phase",
+        "neutre"
+      ]
+    },
+    {
+      "id": "passerelle",
+      "kind": "passerelle",
+      "label": "Passerelle Essensys",
+      "sublabel": "Raspberry Pi CM5, backend Go, maître unique",
+      "col": 4,
+      "row": 1,
+      "width": 190,
+      "left": [
+        "USB"
+      ],
+      "notes": [
+        "Un seul maître pour les trois segments."
+      ]
+    }
+  ],
+  "wires": [
+    [
+      "bouton",
+      "poussoir.contact",
+      "entrees.entrée 1"
+    ],
+    [
+      "bouton",
+      "poussoir.commun",
+      "entrees.commun"
+    ],
+    [
+      "tbts",
+      "alim.24 V +",
+      "entrees.24 V +"
+    ],
+    [
+      "0v",
+      "alim.0 V",
+      "entrees.0 V"
+    ],
+    [
+      "bus",
+      "entrees.A+",
+      "bus.A+ entrées"
+    ],
+    [
+      "bus",
+      "entrees.B−",
+      "bus.B− entrées"
+    ],
+    [
+      "bus",
+      "bus.A+ relais",
+      "relais.A+"
+    ],
+    [
+      "bus",
+      "bus.B− relais",
+      "relais.B−"
+    ],
+    [
+      "bus",
+      "bus.A+ convertisseur",
+      "conv.A+ bus"
+    ],
+    [
+      "bus",
+      "bus.B− convertisseur",
+      "conv.B− bus"
+    ],
+    [
+      "reseau",
+      "conv.USB",
+      "passerelle.USB"
+    ],
+    [
+      "phase",
+      "secteur.phase",
+      "relais.COM phase"
+    ],
+    [
+      "phase",
+      "relais.NO sortie",
+      "lampe.phase"
+    ],
+    [
+      "neutre",
+      "secteur.neutre",
+      "lampe.neutre"
+    ]
+  ]
+}

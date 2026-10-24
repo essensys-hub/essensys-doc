@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Wago PFC200 en dérivation sur le filaire V2 : une couche d'entrées-sorties industrielle",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/wago-pfc200-derivation.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs et charges"},
+        "backend": {"label": "Organes du filaire V2"},
+        "frontend": {"label": "Contrôleur et bornes de la couche"},
+        "messagebus": {"label": "K-Bus de la couche"},
+        "security": {"label": "Garde et alimentation"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [40, 40], "size": [150, 64]},
+    {"id": "pfc", "type": "frontend", "label": "Contrôleur CODESYS", "sublabel": "751-9301, bat le cœur", "pos": [290, 40], "size": [150, 64]},
+    {"id": "cpl", "type": "messagebus", "label": "Coupleur 750-362", "sublabel": "K-Bus, sans logique", "pos": [540, 40], "size": [150, 64]},
+    {"id": "do", "type": "frontend", "label": "Bornes 750-517", "sublabel": "43 bornes, 86 contacts", "pos": [790, 40], "size": [150, 64]},
+    {"id": "garde", "type": "security", "label": "Relais de garde", "sublabel": "tenu par le battement", "pos": [1040, 40], "size": [150, 64]},
+    {"id": "cp", "type": "backend", "label": "Relais de couplage", "sublabel": "Finder 38.51, 6 kV", "pos": [790, 190], "size": [150, 64]},
+    {"id": "di", "type": "frontend", "label": "Bornes 750-1405", "sublabel": "5 bornes, 80 entrées", "pos": [540, 190], "size": [150, 64]},
+    {"id": "copie", "type": "backend", "label": "Relais de recopie", "sublabel": "2e contact du télérupteur", "pos": [540, 340], "size": [150, 64]},
+    {"id": "src", "type": "security", "label": "Source 24 V de zone", "sublabel": "alimente les boutons", "pos": [40, 490], "size": [150, 64]},
+    {"id": "push", "type": "external", "label": "Poussoirs muraux", "sublabel": "contacts secs", "pos": [290, 490], "size": [150, 64]},
+    {"id": "tele", "type": "backend", "label": "Télérupteur", "sublabel": "Finder 20.22, état gardé", "pos": [790, 490], "size": [150, 64]},
+    {"id": "load", "type": "external", "label": "Lampe", "sublabel": "éclairage 230 V", "pos": [1040, 490], "size": [150, 64]}
+  ],
+  "boundaries": [
+    {"kind": "security-group", "label": "Couche domotique Wago : peut tomber sans rien couper", "wraps": ["pfc", "cpl", "do", "garde", "cp", "di", "copie"]},
+    {"kind": "region", "label": "Filaire V2 : le bouton commande sa charge sans calculateur", "wraps": ["src", "push", "tele", "load"]}
+  ],
+  "connections": [
+    {"id": "gw-pfc", "from": "gw", "to": "pfc", "label": "Modbus TCP", "variant": "dashed"},
+    {"id": "pfc-cpl", "from": "pfc", "to": "cpl", "label": "Ethernet"},
+    {"id": "cpl-do", "from": "cpl", "to": "do", "label": "K-Bus"},
+    {"id": "do-garde", "from": "do", "to": "garde", "label": "battement", "variant": "security"},
+    {"id": "do-cp", "from": "do", "to": "cp", "label": "bobines 24 V"},
+    {"id": "garde-cp", "from": "garde", "to": "cp", "label": "commun", "variant": "security", "fromSide": "bottom", "toSide": "right"},
+    {"id": "cp-tele", "from": "cp", "to": "tele", "label": "contact sec en parallèle", "variant": "dashed"},
+    {"id": "tele-copie", "from": "tele", "to": "copie", "label": "2e contact", "variant": "dashed"},
+    {"id": "copie-di", "from": "copie", "to": "di", "label": "recopie"},
+    {"id": "di-cpl", "from": "di", "to": "cpl", "label": "état"},
+    {"id": "src-push", "from": "src", "to": "push", "label": "24 V", "variant": "security"},
+    {"id": "push-tele", "from": "push", "to": "tele", "label": "impulsion", "variant": "emphasis"},
+    {"id": "tele-load", "from": "tele", "to": "load", "label": "230 V", "variant": "emphasis"}
+  ],
+  "cards": [
+    {"dot": "emerald", "title": "Si la couche tombe, se fige ou se trompe", "items": [
+      "Le relais de garde retombe : les poussoirs commandent toujours leurs charges par le filaire",
+      "Le contrôleur réarme le chien de garde : si le runtime s'arrête ou se fige, le repli à 50 ms ouvre le contact et le relais retombe",
+      "Si la passerelle se tait, l'automate continue de battre : le programme doit cesser de battre de lui-même, sinon la couche reste armée sans personne pour la piloter"]},
+    {"dot": "cyan", "title": "Ce que la couche apporte", "items": [
+      "Des bornes industrielles à ressort, un protocole Modbus TCP que tout parle",
+      "Un micrologiciel et un kit de développement publiés par le fabricant, des pièces que l'industrie achète encore dans dix ans"]},
+    {"dot": "amber", "title": "Ce qu'elle coûte, ordres de grandeur", "items": [
+      "≈ 6 350 € HT hors alimentation, environ deux fois la couche KNX, ≈ 0,75 m de rail en plus de la couche filaire",
+      "Un Linux à maintenir dans l'armoire, CODESYS à apprendre, 4 à 8 semaines-personne de logiciel, estimation sans source",
+      "À comparer à la Revolution Pi Connect 5, ≈ 581 € HT nue, modules d'entrées-sorties non chiffrés"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, les fabricants et des essais"]}
+  ]
+}

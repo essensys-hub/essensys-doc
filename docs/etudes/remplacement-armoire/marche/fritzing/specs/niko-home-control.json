@@ -1,0 +1,29 @@
+{
+  "title": "Niko Home Control II : d'un poussoir à une lampe, une installation par zone",
+  "subtitle": "Configuration résiliente, une zone. Poussoir mural, module capteurs 550-00210, bus 26 V alimenté par le contrôleur connecté 550-00003, module de commutation 550-00106, passerelle Essensys par le réseau local.",
+  "notes": ["Le bus ne sort pas de l'armoire : seules les boucles TBTS des poussoirs, 50 m au plus, parcourent la maison. Le module de commutation ne donne pas un contact sec : il distribue la phase qu'il reçoit. L'alimentation secteur du contrôleur n'est pas dessinée."],
+  "blocks": [
+    {"id": "poussoir", "kind": "poussoir", "label": "Poussoir mural", "sublabel": "contact sec, nappe IDC, TBTS", "col": 0, "row": 0, "width": 170, "right": ["contact", "commun"]},
+    {"id": "capteurs", "kind": "entrees", "label": "Niko module capteurs 550-00210", "sublabel": "3 entrées contacts secs, 50 m", "col": 1, "row": 0, "width": 200, "left": ["entrée 1", "commun"], "right": ["bus A", "bus B"], "notes": ["Envoie l'adresse au contrôleur. Emploi en poussoir non décrit par Niko."]},
+    {"id": "controleur", "kind": "controleur", "label": "Contrôleur connecté 550-00003", "sublabel": "logique, bus 26 V 400 mA intégré, 1 WAN, 3 LAN", "col": 1, "row": 1, "width": 200, "right": ["bus A", "bus B", "LAN"], "notes": ["Un contrôleur par installation, une installation par zone."]},
+    {"id": "bus", "kind": "bus", "label": "Bus de la zone", "sublabel": "deux fils non polarisés, 26 V TBTS, rail et coupleur 550-00020", "col": 2, "row": 0, "width": 200, "left": ["A capteurs", "B capteurs", "A contrôleur", "B contrôleur"], "right": ["A sortie", "B sortie"]},
+    {"id": "sortie", "kind": "actionneur", "label": "Niko 550-00106", "sublabel": "6 contacts 16 A, relais bistables", "col": 3, "row": 0, "width": 190, "left": ["bus A", "bus B", "entrée phase"], "right": ["sortie 1"], "notes": ["Distribue la phase reçue : sortie non libre de potentiel. Une seule phase par module."]},
+    {"id": "secteur", "kind": "alim", "label": "Secteur 230 V", "sublabel": "disjoncteur de zone", "col": 2, "row": 2, "width": 150, "right": ["phase", "neutre"]},
+    {"id": "lampe", "kind": "charge", "label": "Lampe", "sublabel": "un des 25 éclairages", "col": 4, "row": 0, "width": 150, "left": ["phase", "neutre"]},
+    {"id": "passerelle", "kind": "passerelle", "label": "Passerelle Essensys", "sublabel": "Raspberry Pi CM5, backend Go", "col": 4, "row": 1, "width": 170, "left": ["Ethernet"], "notes": ["Hobby API : MQTT en TLS, jeton à renouveler chaque année."]}
+  ],
+  "wires": [
+    ["bouton", "poussoir.contact", "capteurs.entrée 1"],
+    ["bouton", "poussoir.commun", "capteurs.commun"],
+    ["bus", "capteurs.bus A", "bus.A capteurs"],
+    ["bus", "capteurs.bus B", "bus.B capteurs"],
+    ["tbts", "controleur.bus A", "bus.A contrôleur"],
+    ["0v", "controleur.bus B", "bus.B contrôleur"],
+    ["bus", "bus.A sortie", "sortie.bus A"],
+    ["bus", "bus.B sortie", "sortie.bus B"],
+    ["reseau", "controleur.LAN", "passerelle.Ethernet"],
+    ["phase", "secteur.phase", "sortie.entrée phase"],
+    ["phase", "sortie.sortie 1", "lampe.phase"],
+    ["neutre", "secteur.neutre", "lampe.neutre"]
+  ]
+}

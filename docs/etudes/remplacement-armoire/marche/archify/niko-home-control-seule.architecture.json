@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Niko Home Control II seul : du poussoir à la charge, un contrôleur par zone",
+    "output": "docs/etudes/remplacement-armoire/marche/archify/niko-home-control-seule.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": {"label": "Poussoirs, charges, secteur, Internet"},
+        "frontend": {"label": "Modules capteurs et autres zones"},
+        "messagebus": {"label": "Bus de la zone, réseau local"},
+        "backend": {"label": "Contrôleur et modules de sortie"},
+        "cloud": {"label": "Passerelle Essensys (réseau local)"}
+      }
+    }
+  },
+  "components": [
+    {"id": "net", "type": "external", "label": "Internet", "sublabel": "jeton, services Niko", "pos": [540, 40], "size": [170, 64]},
+    {"id": "others", "type": "frontend", "label": "Deux autres zones", "sublabel": "un contrôleur chacune", "pos": [290, 190], "size": [160, 64]},
+    {"id": "lan", "type": "messagebus", "label": "Réseau local", "sublabel": "routeur de la maison", "pos": [540, 190], "size": [170, 64]},
+    {"id": "gw", "type": "cloud", "label": "Passerelle Essensys", "sublabel": "CM5, backend Go", "pos": [800, 190], "size": [160, 64]},
+    {"id": "ctrl", "type": "backend", "label": "Contrôleur 550-00003", "sublabel": "logique, bus 26 V intégré", "pos": [540, 340], "size": [170, 64]},
+    {"id": "push", "type": "external", "label": "63 poussoirs muraux", "sublabel": "contacts secs", "pos": [40, 490], "size": [160, 64]},
+    {"id": "cap", "type": "frontend", "label": "Modules capteurs", "sublabel": "550-00210, 3 entrées", "pos": [290, 490], "size": [160, 64]},
+    {"id": "bus", "type": "messagebus", "label": "Bus de la zone", "sublabel": "deux fils, rail et coupleur", "pos": [540, 490], "size": [170, 64]},
+    {"id": "out", "type": "backend", "label": "Modules de sortie", "sublabel": "distribuent la phase reçue", "pos": [800, 490], "size": [170, 64]},
+    {"id": "load", "type": "external", "label": "Charges de la zone", "sublabel": "éclairages, volets, variateurs", "pos": [1060, 490], "size": [170, 64]},
+    {"id": "sec", "type": "external", "label": "Secteur 230 V", "sublabel": "disjoncteur de zone", "pos": [800, 640], "size": [170, 64]}
+  ],
+  "boundaries": [
+    {"kind": "region", "label": "Armoire d'une zone : le bus ne sort pas du coffret", "wraps": ["ctrl", "cap", "bus", "out", "sec"]}
+  ],
+  "connections": [
+    {"id": "push-cap", "from": "push", "to": "cap", "label": "contact", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "cap-bus", "from": "cap", "to": "bus", "label": "adresse", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "bus-ctrl", "from": "bus", "to": "ctrl", "label": "adresse", "variant": "emphasis"},
+    {"id": "ctrl-bus", "from": "ctrl", "to": "bus", "label": "impulsion", "variant": "emphasis"},
+    {"id": "bus-out", "from": "bus", "to": "out", "label": "impulsion", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "out-load", "from": "out", "to": "load", "label": "230 V", "variant": "emphasis", "fromSide": "right", "toSide": "left"},
+    {"id": "sec-out", "from": "sec", "to": "out", "label": "230 V", "variant": "security"},
+    {"id": "ctrl-lan", "from": "ctrl", "to": "lan", "label": "LAN"},
+    {"id": "others-lan", "from": "others", "to": "lan", "label": "LAN"},
+    {"id": "net-lan", "from": "net", "to": "lan", "label": "à confirmer", "variant": "dashed"},
+    {"id": "lan-gw", "from": "lan", "to": "gw", "label": "MQTT TLS", "variant": "dashed"}
+  ],
+  "cards": [
+    {"dot": "rose", "title": "Règle 1 : non tenue", "items": [
+      "Le module capteurs envoie l'adresse au contrôleur, qui active l'action ; le module de sortie n'agit que sur une impulsion de données du contrôleur",
+      "Aucune logique locale entrée vers sortie documentée",
+      "Trois entrées par module capteurs, 22 modules pour les 63 poussoirs ; son emploi comme entrée poussoir n'est pas décrit"]},
+    {"dot": "amber", "title": "Si le contrôleur, l'alimentation ou le bus d'une zone tombe", "items": [
+      "Les deux autres zones restent ; dans la zone, aucun bouton ne répond",
+      "Éclairages dans leur état, relais bistables, à confirmer ; volets arrêtés",
+      "Boutons manuels des modules : temporaires, écrasés par la prochaine communication bus ; fonctionnement sans contrôleur non précisé",
+      "Bus en court-circuit : non documenté, au pire la zone"]},
+    {"dot": "emerald", "title": "Causes communes", "items": [
+      "Par zone : 0 défaillance unique prive toute la maison, sous réserve de la cause 6 ; 6 privent une zone",
+      "Cause 6 : le contrôleur « requires internet connectivity for correct operation » ; si cela touche le fonctionnement local, une coupure d'Internet prive les trois zones",
+      "Un seul contrôleur, configuration minimale : 6 privent toute la maison, 7 si la dépendance à Internet se confirme"]},
+    {"dot": "slate", "title": "Réserve", "items": [
+      "Estimations d'octobre 2026, à confirmer par un électricien, des devis, le fabricant et des essais"]}
+  ]
+}

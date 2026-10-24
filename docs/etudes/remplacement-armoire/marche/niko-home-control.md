@@ -56,7 +56,24 @@ Le manuel impose un contrôleur par installation et deux alimentations au plus ;
 
 Avec un 550-00106 pour les contacts divers : **≈ 136 modules, soit ≈ 2,4 m de rail**, trois contrôleurs. Chaque zone compte 12 à 16 modules d'armoire : l'alimentation intégrée de son contrôleur suffit.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Un poussoir mural envoie son contact sec (jaune, deux fils) à un module capteurs Niko 550-00210. Le module est relié par deux fils bleus au bus de la zone, que le contrôleur connecté 550-00003 alimente par deux autres fils (rouge et noir). Le bus dessert un module de commutation 550-00106 par deux fils bleus. Le contrôleur est relié en violet, par le réseau local, à la passerelle Essensys. Le module de commutation reçoit la phase du secteur (marron) et la renvoie par sa sortie 1 à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/niko-home-control_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente. Source Fritzing : [niko-home-control.fzz](fritzing/niko-home-control.fzz){ download="niko-home-control.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/niko-home-control-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Niko Home Control II seul, du poussoir à la charge, un contrôleur par zone" loading="lazy" style="width:100%;aspect-ratio:1270/830;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/niko-home-control-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par un module capteurs, le bus de la zone et le contrôleur, qui renvoie une impulsion par le bus à un module de sortie ; le secteur arrive par le bas ; le contrôleur est relié par le réseau local à la passerelle, et Internet arrive sur ce réseau, dépendance à confirmer.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, modules capteurs, bus de la zone, modules de sortie, charges de la zone. Au-dessus du bus, le contrôleur 550-00003, relié au bus par un lien « adresse » et un lien « impulsion ». Sous les modules de sortie, le secteur 230 V. Ces éléments sont dans le cadre « Armoire d'une zone ». Au-dessus, hors du cadre : le réseau local reçoit le contrôleur et deux autres zones, rejoint la passerelle Essensys en MQTT TLS, et reçoit Internet par un lien à confirmer. Quatre cartes : règle 1 non tenue, panne du contrôleur, de l'alimentation ou du bus d'une zone, causes communes, réserve.](archify/niko-home-control-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -102,6 +119,15 @@ Le découpage par zone demande trois installations que Niko n'a pas conçues pou
 | Foudre par une boucle de poussoirs | Au pire la zone ; les autres zones. La garantie de quatre ans exclut la surtension |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/niko-home-control-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Niko Home Control II en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1260/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/niko-home-control-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Niko : passerelle, contrôleur, bus, modules 550-00106 dont les contacts ne sont pas secs, relais de garde, relais de couplage en parallèle du poussoir, relais de recopie et modules capteurs qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Niko » : contrôleur 550-00003, bus 26 V, modules 550-00106, relais de garde, relais de couplage, modules capteurs et relais de recopie. La passerelle Essensys, hors cadre, parle au contrôleur en MQTT TLS. Les modules 550-00106 envoient un battement au relais de garde ; celui-ci alimente le commun du relais de couplage, qui ferme un contact en parallèle des poussoirs. Le second contact du télérupteur remonte par le relais de recopie jusqu'aux modules capteurs. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/niko-home-control-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Niko fournirait la couche domotique, avec quatre obstacles :
 

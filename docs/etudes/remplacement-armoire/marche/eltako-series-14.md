@@ -58,7 +58,24 @@ Un bus, un maître, tout dans l'armoire : FAM14 et sa FSNT14, sept FTS14EM (70 e
 
 Un FSR14-4x pour les prises, l'arrosage et les machines, un FSR14-2x pour le cumulus et un F4HK14 s'ajoutent sur l'un des bus. Chaque bus reste sous les 12 W d'une FSNT14, donc une seule par zone, qu'une seconde peut doubler en redondance. **≈ 52 modules, soit ≈ 0,95 m de rail**, jusqu'à ≈ 60 modules (1,1 m) avec les entretoises DS14.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Une alimentation 24 V des boucles envoie son 24 V (rouge) au poussoir mural, dont le contact sec (jaune) rejoint une entrée du module Eltako FTS14EM ; son 0 V (noir) rejoint le commun -E du module. Un maître FTS14KS avec sa FSNT14 envoie la paire de données RSA et RSB (bleu) et le 12 V avec la masse (rouge) au FTS14EM, à l'actionneur FSR14-4x et à la passerelle série FGW14-USB. La FGW14-USB est reliée en bleu à la passerelle Essensys. L'actionneur reçoit la phase du secteur (marron) et la renvoie par sa sortie 1 à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/eltako-series-14_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente. Source Fritzing : [eltako-series-14.fzz](fritzing/eltako-series-14.fzz){ download="eltako-series-14.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/eltako-series-14-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Eltako Series 14 seule, du poussoir à la charge, un bus par zone" loading="lazy" style="width:100%;aspect-ratio:1270/540;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/eltako-series-14-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par un module d'entrées FTS14EM, le bus RS-485 de la zone et un actionneur ; l'alimentation 24 V des boucles, l'alimentation FSNT14 du bus et le secteur arrivent par le bas ; le maître de bus et la passerelle série FGW14-USB se branchent sur le bus, et la FGW14-USB rejoint la passerelle par USB.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs, entrées FTS14EM, bus RS-485 de la zone, actionneurs Eltako FSR14-4x, FSB14 et FUD14, charges de la zone. Sous les poussoirs, l'alimentation 24 V des boucles ; sous le bus, l'alimentation FSNT14 en 12 V ; sous les actionneurs, le secteur 230 V. Dans le cadre « Armoire », en haut : le maître FTS14KS, relié au bus, et la passerelle série FGW14-USB, reliée au bus et, hors du cadre, à la passerelle Essensys par une liaison USB, ESP2. Quatre cartes : règle 1 non tenue, ce qui reste panne par panne, causes communes, réserve.](archify/eltako-series-14-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -106,6 +123,15 @@ Le découpage par zone retrouve donc, comme KNX, trois boîtiers indépendants s
 Les retours d'utilisateurs parlent surtout du bus : poussoirs qui demandent un second appui après le raccordement d'openHAB, « perturbations occasionnelles du bus », alimentations usées avec le temps.
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/eltako-series-14-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Eltako Series 14 en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1020/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/eltako-series-14-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Series 14 : passerelle, FGW14-USB, bus RS-485, sorties FSR14-4x, relais de garde battu par la passerelle, relais de couplage en parallèle du poussoir, relais de recopie et entrées FTS14EM qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Series 14 » : passerelle Essensys, FGW14-USB, bus RS-485, entrées FTS14EM, relais de garde, relais de couplage, sorties FSR14-4x et relais de recopie. La passerelle parle à la FGW14-USB par USB et bat le cœur du relais de garde ; celui-ci alimente le commun du relais de couplage, dont la bobine 24 V est commandée par les sorties FSR14-4x et qui ferme un contact sec en parallèle des poussoirs. Le second contact du télérupteur remonte par le relais de recopie jusqu'aux entrées FTS14EM. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/eltako-series-14-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs EUD12D-UC à entrée locale gardent le chemin du bouton. La Series 14 fournit la couche domotique :
 

@@ -64,7 +64,24 @@ Une **ligne par zone**, chacune avec son alimentation, ses entrées et ses actio
 
 ![Configuration résiliente : une ligne KNX par zone, coupleurs vers la ligne principale](img/knx-par-zone.svg)
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Un poussoir mural envoie son contact sec (jaune) à un module d'entrées MDT BE-16000.02. Le module est relié par deux fils bleus à la ligne KNX de la zone, alimentée par une STC-0640.01 (rouge pour le 30 V, noir pour le 0 V). La ligne alimente un actionneur MDT AKS-0816.03 et une interface IP, reliée en violet à la passerelle Essensys. L'actionneur reçoit la phase du secteur (marron) et la renvoie par sa sortie 1 à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/knx_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente. Source Fritzing : [knx.fzz](fritzing/knx.fzz){ download="knx.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/knx-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : KNX seul, du poussoir à la charge, une ligne par zone" loading="lazy" style="width:100%;aspect-ratio:1270/540;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/knx-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par un module d'entrées, la ligne KNX de la zone et un actionneur ; l'alimentation de la ligne et le secteur arrivent par le bas ; la ligne principale porte l'interface IP vers la passerelle.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, entrées MDT BE, ligne KNX de la zone, actionneurs MDT, charges de la zone. Sous la ligne, l'alimentation STC ; sous les actionneurs, le secteur 230 V. Dans le cadre « Armoire », en haut : deux autres zones et la ligne principale, puis l'interface IP vers la passerelle Essensys en KNXnet/IP. Quatre cartes : règle 1 non tenue, panne d'alimentation d'une zone, causes communes, réserve.](archify/knx-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -109,6 +126,15 @@ Ce décompte dit l'essentiel : KNX par zone retrouve l'architecture d'aujourd'hu
 | Foudre par une ligne de poussoirs | Le module d'entrées de la zone au pire ; les autres zones. Un coup direct qui emprunte le bus a détruit 70 % d'une installation rapportée, mais son bus sortait du bâtiment |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/knx-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : KNX en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1260/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/knx-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche KNX : passerelle, interface IP, ligne, actionneurs, relais de garde, relais de couplage en parallèle du poussoir, relais de recopie et entrées qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique KNX » : passerelle Essensys, interface IP, ligne KNX, actionneurs AKS, relais de garde, relais de couplage, entrées MDT BE et relais de recopie. Le relais de couplage ferme un contact sec en parallèle des poussoirs ; le second contact du télérupteur remonte par le relais de recopie jusqu'aux entrées. Quatre cartes : si KNX tombe, ce que la couche apporte, ce qu'elle coûte, réserve.](archify/knx-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. KNX fournit la couche domotique :
 

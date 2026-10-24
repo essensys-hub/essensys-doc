@@ -46,7 +46,24 @@ Sept Pro 4PM pour les éclairages (28 relais), quinze Pro 2PM en mode volet, qua
 
 La gamme n'a ni segment, ni alimentation commune, ni contrôleur : il n'y a rien à découper par zone au sens du comparatif. La seule ressource partagée est le réseau IP, qui n'est pas sur le chemin du bouton tant que chaque poussoir est câblé sur l'entrée du module qui commande sa charge. La configuration résiliente est donc **la même que la minimale**, avec les modules regroupés par zone dans le coffret et, si l'on veut isoler aussi la commande à distance, un petit commutateur par zone. Les comptages et les prix qui suivent portent sur ce matériel.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Une source TBTS de zone alimente en rouge un poussoir mural, dont le contact sec (jaune) attaque la bobine d'un relais d'interface ; le 0 V (noir) revient à l'autre borne de la bobine. Le contact du relais d'interface, qui reçoit la phase du secteur (marron), est relié en vert à l'entrée S1 d'un module Shelly Pro 4PM. Le module reçoit la phase et le neutre (bleu clair) du secteur, renvoie la phase par sa sortie 1 à une lampe, qui reçoit aussi le neutre, et est relié en violet par Ethernet à la passerelle Essensys.](fritzing/shelly-pro_breadboard.png){ loading=lazy }
+
+Une zone, une lampe : le poussoir passe par son relais d'interface avant l'entrée S du module. Source Fritzing : [shelly-pro.fzz](fritzing/shelly-pro.fzz){ download="shelly-pro.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/shelly-pro-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Shelly Pro seul, du poussoir à la charge, un relais d'interface par poussoir" loading="lazy" style="width:100%;aspect-ratio:980/530;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/shelly-pro-seule.html){ target="_blank" rel="noopener" }. Le poussoir attaque la bobine d'un relais d'interface, dont le contact rejoint l'entrée S d'un module Shelly Pro ; le micrologiciel du module commande ses charges. Le réseau et la passerelle sont à côté du chemin du bouton, le secteur de la rangée et la source TBTS arrivent par le bas.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite : 63 poussoirs muraux, relais d'interface (un par poussoir), module Shelly Pro, charges du module. Sous les relais d'interface, la source TBTS de zone ; sous le module, le secteur 230 V. Au-dessus du module, le commutateur Ethernet, relié à la passerelle Essensys par MQTT ou RPC. Un cadre « Armoire » entoure les relais, le module, la source, le secteur et le commutateur. Quatre cartes : règle 1 partielle à confirmer, ce qui reste panne par panne, causes communes, réserve.](archify/shelly-pro-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -92,6 +109,15 @@ Ce décompte dit l'essentiel : par son architecture à un module par groupe de c
 | Foudre par une ligne de poussoir | Le relais d'interface au pire, puis le module ; les autres modules |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/shelly-pro-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Shelly Pro en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1010/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/shelly-pro-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Shelly : passerelle, commutateur, modules Pro 4PM dont les relais tiennent le relais de garde et les relais de couplage à bobine 230 V, relais de recopie et entrées S qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Shelly » : passerelle Essensys, commutateur Ethernet, Pro 4PM relais, relais de garde, relais de couplage, Pro 4PM entrées S et relais de recopie. Les relais des Pro 4PM tiennent le relais de garde par le battement et commandent les bobines 230 V du relais de couplage, qui ferme un contact sec en parallèle des poussoirs ; le second contact du télérupteur remonte par le relais de recopie jusqu'aux entrées S. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/shelly-pro-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Shelly Pro fournit la couche domotique :
 

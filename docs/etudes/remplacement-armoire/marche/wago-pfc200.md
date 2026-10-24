@@ -61,7 +61,24 @@ Les 43 bornes relais de la configuration minimale sont réparties par zone avec 
 
 Cette configuration **ne découpe que le matériel, pas la logique** : les trois coupleurs restent des esclaves d'un maître unique, qui lit toutes les entrées et écrit toutes les sorties.
 
+<!-- schemas:fritzing:debut -->
+### Câblage d'un poussoir à une charge (Fritzing)
+
+![Câblage coloré de gauche à droite. Un poussoir mural envoie son contact sec (jaune) à une borne d'entrées WAGO 750-1405, qui reçoit aussi le 24 V et le 0 V du terrain d'une alimentation 24 V de nœud (rouge et noir). La borne d'entrées est reliée par le K-Bus (bleu) au coupleur 750-362 du nœud, qui est relié par un fil bleu à une borne relais 750-517 et par un câble Ethernet (violet) au maître WAGO 751-9301, lui-même alimenté par une alimentation du maître. Le maître est relié en violet à la passerelle Essensys. La borne relais commande en vert la bobine d'un relais d'interface, qui reçoit la phase du secteur (marron) et la renvoie par sa sortie à une lampe, qui reçoit aussi le neutre (bleu clair).](fritzing/wago-pfc200_breadboard.png){ loading=lazy }
+
+Une zone, une lampe, avec les modules de la configuration résiliente : un maître et un nœud de zone. Source Fritzing : [wago-pfc200.fzz](fritzing/wago-pfc200.fzz){ download="wago-pfc200.fzz" } (Fritzing 1.0.x). Principe de câblage, non validé au banc.
+<!-- schemas:fritzing:fin -->
+
 ## Seule face à l'exigence
+
+<!-- schemas:seule:debut -->
+<iframe src="../archify/wago-pfc200-seule.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Wago PFC200 seul, du poussoir à la charge, un maître pour trois nœuds" loading="lazy" style="width:100%;aspect-ratio:1230/530;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/wago-pfc200-seule.html){ target="_blank" rel="noopener" }. Le poussoir passe par une borne d'entrées et le coupleur de zone, qui n'a aucune logique ; toutes les entrées montent au maître, seul calculateur, et toutes les sorties en redescendent vers les bornes relais, un relais d'interface et la charge ; la passerelle parle au maître en Modbus TCP.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. De gauche à droite, dans la rangée centrale : 63 poussoirs muraux, entrées 750-1405, coupleur 750-362, bornes 750-517, relais d'interface, puis charges de la zone sous les relais. Les entrées, le coupleur, les bornes et l'alimentation 24 V du nœud sont dans un cadre « Nœud de zone ». En haut, au-dessus du coupleur, le maître CODESYS reçoit les entrées et renvoie les sorties par deux flèches ; il est alimenté par l'alimentation du maître et relié en pointillés à la passerelle Essensys par Modbus TCP. Quatre cartes : règle 1 non tenue, ce qui reste panne par panne, causes communes, réserve.](archify/wago-pfc200-seule.png){ loading=lazy }
+<!-- schemas:seule:fin -->
 
 ### Les sept règles
 
@@ -108,6 +125,15 @@ Ce décompte dit l'essentiel : le découpage en trois coupleurs rapproche le mat
 | Foudre par une ligne de poussoir | La borne d'entrées de la zone au moins ; au-delà, l'isolement de 500 V ne garantit rien |
 
 ## En dérivation sur le filaire V2
+
+<!-- schemas:derivation:debut -->
+<iframe src="../archify/wago-pfc200-derivation.html?embed=1&amp;theme=light" title="Diagramme d'architecture interactif : Wago PFC200 en dérivation sur le filaire V2" loading="lazy" style="width:100%;aspect-ratio:1260/680;height:auto;border:0"></iframe>
+
+[Ouvrir le diagramme en plein écran](archify/wago-pfc200-derivation.html){ target="_blank" rel="noopener" }. En bas, le filaire V2 : source 24 V, poussoirs, télérupteur, lampe. En haut, la couche Wago : passerelle, contrôleur CODESYS qui bat le cœur, coupleur, bornes relais qui tiennent le relais de garde et les relais de couplage en parallèle du poussoir, relais de recopie et bornes d'entrées qui relisent l'état.
+
+??? info "Image fixe du diagramme"
+    ![Capture du diagramme d'architecture. Cadre du bas « Filaire V2 » : source 24 V de zone, poussoirs muraux, télérupteur Finder 20.22, lampe. Cadre du haut « Couche domotique Wago » : passerelle Essensys, contrôleur CODESYS, coupleur 750-362, bornes 750-517, relais de garde, relais de couplage, bornes 750-1405 et relais de recopie. Les bornes 750-517 tiennent le relais de garde par le battement et commandent les bobines du relais de couplage, qui ferme un contact sec en parallèle des poussoirs ; le second contact du télérupteur remonte par le relais de recopie jusqu'aux bornes d'entrées. Quatre cartes : si la couche tombe, ce qu'elle apporte, ce qu'elle coûte, réserve.](archify/wago-pfc200-derivation.png){ loading=lazy }
+<!-- schemas:derivation:fin -->
 
 Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Wago fournit la couche domotique :
 
