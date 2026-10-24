@@ -1,6 +1,6 @@
 ---
 title: "Eltako Series 14 : remplacer l'armoire sans recâblage"
-description: "Le bus RS-485 Eltako Series 14 pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils : modules FTS14EM pour les 63 poussoirs, actionneurs FSR14, FSB14 et FUD14 alimentés par le bus. Seule, elle met le bus entre le bouton et sa charge et éteint les lumières d'une zone à la perte de son 12 V ; en dérivation, c'est la couche la plus compacte et la moins chère des bus, mais propriétaire. Environ 2 100 € HT par zone, 1 600 € HT en couche domotique."
+description: "Le bus RS-485 Eltako Series 14 pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils : modules FTS14EM pour les 63 poussoirs, actionneurs FSR14, FSB14 et FUD14 alimentés par le bus. Seule, elle met le bus entre le bouton et sa charge et éteint les lumières d'une zone à la perte de son 12 V ; en dérivation, c'est la couche la plus compacte et la moins chère des bus, mais propriétaire. Environ 2 180 € HT par zone, 1 580 € HT en couche domotique."
 ---
 
 # Eltako Series 14
@@ -10,7 +10,7 @@ Eltako fabrique les variateurs EUD12D-UC que la V2 retient. Sa Series 14 est aut
 !!! abstract "Synthèse"
     - **Seule** : la Series 14 remplace les quatre cartes sans recâblage ni câble de bus dans la maison, en moins d'un mètre de rail. Mais chaque poussoir passe par un module FTS14EM, le bus et un actionneur : **règle 1 non tenue**. Elle fait moins bien que KNX sur la règle 2 : les télérupteurs FSR14-4x sont monostables et alimentés par le 12 V du bus ; la perte d'une alimentation **éteint toutes les lumières de sa zone**. En configuration par zone (trois bus, trois alimentations, trois maîtres), **aucune des huit défaillances uniques ne prive toute la maison de ses boutons** ; trois privent une zone, quatre si le maître de bus est nécessaire à l'exécution des ordres, point qu'Eltako ne documente pas.
     - **En dérivation** : la couche la moins chère et la plus compacte des bus de ce comparatif, sans Linux, sans licence, avec un outil gratuit et le fabricant des variateurs de la V2. Elle est propriétaire, à un seul fabricant, configurée sous Windows, reliée à la passerelle par une liaison série USB, avec une bibliothèque Python mais pas de bibliothèque Go.
-    - **Coût estimé** : ≈ 1 800 € HT en configuration minimale, ≈ 2 100 € HT par zone, ≈ 1 600 € HT en couche domotique seule. Prix d'octobre 2026 d'une boutique allemande, TTC à 19 %, convertis en HT ; trois références au prix conseillé Eltako HT, faute de prix boutique.
+    - **Coût estimé** : ≈ 1 800 € HT en configuration minimale, ≈ 2 180 € HT par zone, ≈ 1 580 € HT en couche domotique seule. Prix d'octobre 2026 d'une boutique allemande, TTC à 19 %, convertis en HT ; trois références au prix conseillé Eltako HT, faute de prix boutique.
     - **Réserve** : estimations à confirmer par un électricien, des devis, le fabricant et des essais. L'alimentation 24 V des boucles de poussoirs n'a pas de prix trouvé.
 
 ## Principe et gamme
@@ -44,7 +44,7 @@ Les boutons radio, les écrans et les poussoirs EnOcean de la gamme ne sont pas 
 
 ### Configuration minimale
 
-Un bus, un maître, tout dans l'armoire : FAM14 et sa FSNT14, sept FTS14EM (70 entrées), sept FSR14-4x (28 voies), huit FSB14 (16 volets), huit FUD14, un F4HK14, un FSR14-2x, une FGW14-USB. Le bilan de puissance, ≈ 12,6 W, dépasse les 10 W d'une alimentation : une seconde FSNT14 et un pont TB14. 58 adresses sur 126. **44 à 48 modules, soit ≈ 0,8 à 0,9 m de rail**, entretoises DS14 comprises si les variateurs dépassent 200 W. Une alimentation 24 V pour les boucles de poussoirs s'ajoute.
+Un bus, un maître, tout dans l'armoire : FAM14 et sa FSNT14, sept FTS14EM (70 entrées), sept FSR14-4x (28 voies), huit FSB14 (16 volets), huit FUD14, un F4HK14, un FSR14-2x, une FGW14-USB. Le bilan de puissance, ≈ 12,6 W, dépasse les 12 W d'une alimentation : une seconde FSNT14 et un pont TB14. 58 adresses sur 126. **44 à 48 modules, soit ≈ 0,8 à 0,9 m de rail**, entretoises DS14 comprises si les variateurs dépassent 200 W. Une alimentation 24 V pour les boucles de poussoirs s'ajoute.
 
 ### Configuration résiliente
 
@@ -56,7 +56,7 @@ Un bus, un maître, tout dans l'armoire : FAM14 et sa FSNT14, sept FTS14EM (70 e
 | Chambres (21, 7, 5, 4) | 3 | 2 × 4x | 3 | 4 | ≈ 4,7 W | 18 |
 | Pièces d'eau (22, 13, 4 dont le store, 1) | 3 | 4 × 4x | 2 | 1 | ≈ 4,9 W | 16 |
 
-Un FSR14-4x pour les prises, l'arrosage et les machines, un FSR14-2x pour le cumulus et un F4HK14 s'ajoutent sur l'un des bus. Chaque bus reste sous 10 W, donc une seule FSNT14 par zone, qu'une seconde peut doubler en redondance. **≈ 52 modules, soit ≈ 0,95 m de rail**, jusqu'à ≈ 60 modules (1,1 m) avec les entretoises DS14.
+Un FSR14-4x pour les prises, l'arrosage et les machines, un FSR14-2x pour le cumulus et un F4HK14 s'ajoutent sur l'un des bus. Chaque bus reste sous les 12 W d'une FSNT14, donc une seule par zone, qu'une seconde peut doubler en redondance. **≈ 52 modules, soit ≈ 0,95 m de rail**, jusqu'à ≈ 60 modules (1,1 m) avec les entretoises DS14.
 
 ## Seule face à l'exigence
 
@@ -82,7 +82,7 @@ Dans la configuration résiliente, la liste fermée du comparatif donne :
 | 2. Court-circuit ou ligne collée | une zone | Les trois bus sont séparés, sans liaison native ; la FSNT14 tient le court-circuit et redémarre seule ; une entrée collée fait ré-émettre E10 toutes les 5 min, sans diagnostic |
 | 3. Contrôleur central | une zone, à confirmer | Pas de contrôleur logique ; mais un maître par bus. Le manuel évoque un bus « fonctionnant sans FAM14 » et la bibliothèque libre fonctionne « avec ou sans FAM14 » ; **aucun document Eltako ne dit si les actionneurs exécutent encore les ordres des FTS14EM quand le maître est en panne et le 12 V présent** |
 | 4. Logiciel figé | un module | Pas de logiciel central ; un actionneur figé prive ses voies ; la passerelle n'est pas dans la boucle |
-| 5. Mise à jour ratée | un module | Aucune mise à jour de firmware des actionneurs trouvée ; PCT14 écrit la mémoire d'un appareil à la fois |
+| 5. Mise à jour ratée | un module | Aucune mise à jour de micrologiciel des actionneurs trouvée ; PCT14 écrit la mémoire d'un appareil à la fois |
 | 6. Licence, compte ou cloud | rien | PCT14 est gratuit, aucun cloud dans la gamme |
 | 7. Commutateur ou routeur | rien | Liaison USB vers la passerelle, hors du chemin du bouton |
 | 8. Foudre sur le chemin du bus | une zone | Le bus reste dans l'armoire ; l'onde entre par les boucles de poussoirs et frappe le FTS14EM de la zone, isolé du bus sans valeur chiffrée ; GND commun à tout le bus de la zone |
@@ -115,7 +115,7 @@ Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs
 - **Battement de cœur** : la gamme n'a pas de relais de garde. Le réarmement du chien de garde matériel de la V2 revient à la **passerelle**, qui porte la logique ; un contact FSR14, limité à 1 000 manœuvres par heure, ne peut pas battre toutes les 200 ms. Une voie FSR14 en télérupteur à retombée temporisée peut ajouter une garde lente, de l'ordre de la minute, qui retombe si la passerelle cesse de l'écrire. Si la passerelle se tait, le relais de garde retombe en moins d'une seconde ; si le 12 V du bus tombe, tous les FSR14-4x s'ouvrent : la couche se retire d'elle-même. Un contact FSR14 soudé reste borné par le câblage de la V2.
 - **Logique et interface** : la passerelle, par la liaison série ESP2 de la FGW14-USB. Les actionneurs ne portent que des scènes et des temporisations par voie.
 
-Ce que la couche apporte : ≈ 1 600 € HT, **≈ 40 modules (≈ 0,75 m de rail)**, aucun Linux ni logiciel du projet sur le bus, aucune licence, un outil gratuit, et le fabricant des variateurs déjà retenus. Ce qu'elle coûte : un bus propriétaire à un seul fabricant, un outil Windows, une liaison série USB au lieu d'un réseau, une bibliothèque Python LGPL et des intégrations communautaires, pas de bibliothèque Go. Face à la Revolution Pi Connect 5 (≈ 581 € HT nue, plus ses modules d'entrées-sorties), la Series 14 est moins chère et plus compacte, sans le Linux de la Connect 5 dans l'armoire. Face à KNX (≈ 3 100 € HT, 88 modules), elle coûte moitié moins et tient sur moitié moins de rail. Face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), elle est dans la même gamme de prix, avec des relais intégrés et sans protocole ouvert.
+Ce que la couche apporte : ≈ 1 580 € HT, **≈ 40 modules (≈ 0,75 m de rail)**, aucun Linux ni logiciel du projet sur le bus, aucune licence, un outil gratuit, et le fabricant des variateurs déjà retenus. Ce qu'elle coûte : un bus propriétaire à un seul fabricant, un outil Windows, une liaison série USB au lieu d'un réseau, une bibliothèque Python LGPL et des intégrations communautaires, pas de bibliothèque Go. À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici) ; la Series 14 n'a pas de Linux dans l'armoire. Face à KNX (≈ 3 100 € HT, 88 modules), elle coûte moitié moins et tient sur moitié moins de rail. Face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), elle est dans la même gamme de prix, avec des relais intégrés et sans protocole ouvert.
 
 ## Foudre et isolement
 
@@ -132,7 +132,7 @@ Ce que la couche apporte : ≈ 1 600 € HT, **≈ 40 modules (≈ 0,75 m de rai
 | Outil | **PCT14**, Windows, **gratuit**, mise à jour automatique depuis la version 8.1 ; connexion par la prise mini-USB du FAM14 ou du FTS14KS, avec un code de légalisation fourni dans l'emballage ; liste des appareils, lecture et écriture de la mémoire, sauvegarde et restauration du projet. Sous Mac ou Linux, les utilisateurs passent par une machine virtuelle |
 | Sans PC | Apprentissage par les commutateurs rotatifs de chaque actionneur (LRN, CLR), suffisant pour une installation simple |
 | Formation | « Installation réservée aux électriciens » sur chaque notice ; aucune certification pour PCT14 ; manuel PCT14 en allemand |
-| Mise à jour | Aucune mise à jour de firmware des actionneurs ni du maître trouvée ; PCT14 affiche la version logicielle de chaque appareil |
+| Mise à jour | Aucune mise à jour de micrologiciel des actionneurs ni du maître trouvée ; PCT14 affiche la version logicielle de chaque appareil |
 | Sécurité | Code de légalisation PCT14 ; le FAM14 porte une radio EnOcean 868 MHz, le FTS14KS n'en a pas |
 | API pour la passerelle | Liaison série **ESP2-Eltako** par la FGW14-USB (9 600 ou 58 000 bauds) ou la prise mini-USB du maître (57 600 bauds selon l'intégration Home Assistant). Pas de KNXnet/IP, de Modbus ni de REST pour les actionneurs ; MQTT et REST seulement pour les compteurs, par la FGW14WL-IP |
 | Bibliothèques libres | `eltako14bus` (Python, LGPL) et son outil `eltakotool` ; intégration Home Assistant **communautaire** `grimmpp/home-assistant-eltako` (MIT, ≈ 1 900 commits, FSR14, FSB14, FUD14 et FTS14EM pris en charge) : l'intégration officielle Eltako de Home Assistant ne couvre que les Series 62 et 64 Matter ; binding openHAB EnOcean officiel en mode RS-485. Bibliothèque Go : non trouvée |
@@ -170,16 +170,16 @@ Prix relevés le 24 octobre 2026 chez elektro-wandelt (Allemagne), TTC à 19 %, 
 | Passerelles série | FGW14-USB | 3 | 48,72 € | 146 € |
 | Entrées | FTS14EM | 8 | 54,02 € | 432 € |
 | Éclairages et divers | FSR14-4x | 8 | 47,46 € | 380 € |
-| Cumulus | FSR14-2x | 1 | 69,32 € (prix conseillé HT) | 69 € |
+| Cinquième éclairage des pièces de vie, cumulus | FSR14-2x | 2 | 69,32 € (prix conseillé HT) | 139 € |
 | Volets | FSB14 | 8 | 46,03 € | 368 € |
 | Variateurs | FUD14 | 8 | 52,08 € | 417 € |
 | Fil pilote | F4HK14 | 1 | 66,67 € (prix conseillé HT) | 67 € |
 | Alimentation 24 V des boucles de poussoirs | SNT12/24V ou équivalent | 3 | non trouvé | — |
-| **Matériel** | | | | **≈ 2 100 € HT** |
+| **Matériel** | | | | **≈ 2 180 € HT** |
 | Logiciel | PCT14 | 1 | 0 € | 0 € |
-| **Total** | | | | **≈ 2 100 € HT** |
+| **Total** | | | | **≈ 2 180 € HT** |
 
-Soit ≈ 300 € HT de plus que la configuration minimale, pour passer de 3 à 0 défaillance unique touchant toute la maison. Avec trois FAM14 à la place des FTS14KS, ≈ 2 140 € HT. Une FSNT14 redondante par zone ajouterait ≈ 90 € HT.
+Soit ≈ 380 € HT de plus que la configuration minimale, pour passer de 3 à 0 défaillance unique touchant toute la maison. Avec trois FAM14 à la place des FTS14KS, ≈ 2 210 € HT. Une FSNT14 redondante par zone ajouterait ≈ 90 € HT.
 
 ### Couche domotique en dérivation
 
@@ -213,7 +213,7 @@ Soit ≈ 300 € HT de plus que la configuration minimale, pour passer de 3 à 0
 
 ## Verdict
 
-- **Seule** : la Series 14 remplace l'armoire sans toucher un fil, dans moins d'un mètre de rail et pour ≈ 2 100 € HT par zone, et son découpage en trois bus ne laisse aucune défaillance unique priver toute la maison. Elle ne tient pas la règle 1 et fait moins bien que KNX sur la règle 2 : la perte d'une alimentation de zone éteint toutes ses lumières au lieu de les laisser dans leur état, et le rôle du maître de bus dans l'exécution des ordres n'est pas documenté. C'est le bus de la famille dont la V2 a retenu le filaire ; il n'en a pas la résilience.
+- **Seule** : la Series 14 remplace l'armoire sans toucher un fil, dans moins d'un mètre de rail et pour ≈ 2 180 € HT par zone, et son découpage en trois bus ne laisse aucune défaillance unique priver toute la maison. Elle ne tient pas la règle 1 et fait moins bien que KNX sur la règle 2 : la perte d'une alimentation de zone éteint toutes ses lumières au lieu de les laisser dans leur état, et le rôle du maître de bus dans l'exécution des ordres n'est pas documenté. C'est le bus de la famille dont la V2 a retenu le filaire ; il n'en a pas la résilience.
 - **En dérivation** : la couche la plus compacte et la moins chère des bus, sans Linux ni licence, chez le fabricant des variateurs déjà choisis ; mais propriétaire, à un seul fabricant, outillée sous Windows et reliée à la passerelle par une liaison série sans bibliothèque Go.
 - **À qui elle convient** : à qui a déjà de la radio EnOcean ou veut un bus bon marché et compact, accepte un seul fournisseur et une intégration communautaire.
 
@@ -250,4 +250,4 @@ Toutes consultées le 24 octobre 2026.
 27. [EnOcean Alliance, FSR14-4x](https://www.enocean-alliance.org/product/eltako_actuator-fsr14-4x/) : « le fonctionnement exige le FAM14 », 868 MHz.
 
 !!! note "À confirmer auprès des fabricants"
-    Le comportement des actionneurs quand le maître de bus (FAM14 ou FTS14KS) est en panne et le 12 V présent ; les tensions d'essai entre les entrées FTS14EM et le bus, et entre le bus et les contacts 230 V des FSR14-4x, FSB14 et FUD14, avec la classe SELV ou PELV ; la longueur de ligne admise à 24 V continu sur les FTS14EM ; l'existence d'une mise à jour de firmware et son échec ; la commande manuelle du FUD14 ; le verrouillage et le temps mort du FSB14 ; l'exécution des ordres FTS14EM pendant une session PCT14 ; la version actuelle du FAM14 (1 module 12 V ou 2 modules 230 V) ; les recommandations foudre d'Eltako ; la charge minimale des contacts FSR14 face à une bobine de 38.51 ; les prix boutique des FSR14-2x, F4HK14 et de l'alimentation 24 V des boucles ; la disponibilité des pièces à dix ans.
+    Le comportement des actionneurs quand le maître de bus (FAM14 ou FTS14KS) est en panne et le 12 V présent ; les tensions d'essai entre les entrées FTS14EM et le bus, et entre le bus et les contacts 230 V des FSR14-4x, FSB14 et FUD14, avec la classe SELV ou PELV ; la longueur de ligne admise à 24 V continu sur les FTS14EM ; l'existence d'une mise à jour de micrologiciel et son échec ; la commande manuelle du FUD14 ; le verrouillage et le temps mort du FSB14 ; l'exécution des ordres FTS14EM pendant une session PCT14 ; la version actuelle du FAM14 (1 module 12 V ou 2 modules 230 V) ; les recommandations foudre d'Eltako ; la charge minimale des contacts FSR14 face à une bobine de 38.51 ; les prix boutique des FSR14-2x, F4HK14 et de l'alimentation 24 V des boucles ; la disponibilité des pièces à dix ans.

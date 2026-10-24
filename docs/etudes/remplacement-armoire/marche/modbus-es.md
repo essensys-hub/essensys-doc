@@ -1,6 +1,6 @@
 ---
 title: "Modbus et passerelle : remplacer l'armoire sans recâblage"
-description: "Des modules d'entrées-sorties Modbus RTU ou TCP sur rail DIN, interrogés directement par la passerelle Raspberry Pi CM5 qui devient le maître, pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils. Seule, toute la logique est dans la passerelle, cause commune unique ; en dérivation, c'est la forme concrète du serveur d'entrées-sorties léger de la V2 et la couche domotique la moins chère du comparatif. De l'ordre de 1 100 à 1 200 € HT en armoire complète, 430 € HT en couche domotique seule."
+description: "Des modules d'entrées-sorties Modbus RTU ou TCP sur rail DIN, interrogés directement par la passerelle Raspberry Pi CM5 qui devient le maître, pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils. Seule, toute la logique est dans la passerelle, cause commune unique ; en dérivation, c'est la forme concrète du serveur d'entrées-sorties léger de la V2 et la couche domotique la moins chère du comparatif. De l'ordre de 700 à 820 € HT en armoire complète, 430 € HT en couche domotique seule."
 ---
 
 # Modbus et passerelle
@@ -8,9 +8,9 @@ description: "Des modules d'entrées-sorties Modbus RTU ou TCP sur rail DIN, int
 Modbus est le protocole d'automatisme le plus ancien encore en service : ouvert, sans redevance, porté par des centaines de fabricants de modules d'entrées-sorties. Ce dossier du [comparatif](index.md) regarde la forme la plus dépouillée qu'une armoire puisse prendre : des modules sans logique, un bus RS-485 ou un réseau Ethernet dans le coffret, et la passerelle Raspberry Pi CM5 existante, avec son backend Go, comme **maître unique**. Aucun automate, aucun serveur domotique entre les deux. C'est la forme concrète du « serveur d'entrées-sorties léger » que la V2 cite comme candidat pour sa couche domotique.
 
 !!! abstract "Synthèse"
-    - **Seule** : des modules Waveshare à 8 entrées et 8 relais reprennent les 63 poussoirs et ≈ 70 relais sans changer un fil, pour ≈ 1 100 à 1 200 € HT, variateurs compris. Mais chaque appui traverse la passerelle, son Linux et son logiciel : **règle 1 non tenue**. Le maître est unique quel que soit le découpage : en configuration par zone (un segment RS-485, une alimentation par zone), **3 défaillances uniques privent toute la maison** de ses boutons, le contrôleur, son logiciel figé et une mise à jour ratée ; 4 en variante TCP, avec le commutateur ; 6 en configuration minimale. Les modes locaux de certains modules (bascule ou recopie entrée → relais dans le module) peuvent ramener ce compte à 0, à confirmer au banc.
+    - **Seule** : des modules Waveshare à 8 entrées et 8 relais reprennent les 63 poussoirs et ≈ 70 relais sans changer un fil, pour ≈ 705 à 820 € HT, variateurs compris. Mais chaque appui traverse la passerelle, son Linux et son logiciel : **règle 1 non tenue**. Le maître est unique quel que soit le découpage : en configuration par zone (un segment RS-485, une alimentation par zone), **3 défaillances uniques privent toute la maison** de ses boutons, le contrôleur, son logiciel figé et une mise à jour ratée ; 4 en variante TCP, avec le commutateur ; 6 en configuration minimale. Les modes locaux de certains modules (bascule ou recopie entrée → relais dans le module) peuvent ramener ce compte à 0, à confirmer au banc.
     - **En dérivation** : la couche domotique la moins chère du comparatif, **≈ 430 € HT** pour 88 sorties et 88 entrées en RTU, sans aucune logique dans l'armoire, avec la passerelle comme seul cerveau et comme émetteur du battement de cœur. La fonction clé est le chien de garde de communication qui ouvre les relais quand le maître se tait : présent chez Seneca, Advantech, ICP DAS, Wago et Wiren Board, **absent chez Waveshare**, où seule une impulsion à durée bornée en tient lieu. Les variantes industrielles coûtent 3 000 à 6 600 € HT.
-    - **Coût estimé** : ≈ 1 073 € HT en configuration minimale RTU, ≈ 1 190 € HT par zone, ≈ 430 € HT en couche domotique seule ; variante TCP non chiffrée en armoire complète. Prix d'octobre 2026, boutiques allemandes et fabricants, TTC convertis en HT à 19 %.
+    - **Coût estimé** : ≈ 705 € HT en configuration minimale RTU, ≈ 820 € HT par zone, ≈ 430 € HT en couche domotique seule ; variante TCP non chiffrée en armoire complète. Les variateurs EUD12D-UC sont comptés au prix boutique de 43,45 € HT retenu par la V2, le prix catalogue Eltako (89,37 € HT) restant en note. Prix d'octobre 2026, boutiques allemandes et fabricants, TTC convertis en HT à 19 %.
     - **Réserve** : estimations à confirmer par un électricien, des devis, les fabricants et des essais. Aucune tension d'isolement ni marquage CE trouvés pour les modules Waveshare ; le comportement de leurs relais au démarrage n'est pas documenté.
 
 ## Principe et gamme
@@ -64,7 +64,7 @@ Un bus RS-485, une alimentation : **neuf Waveshare Relay (D)**, soit 72 entrées
 
 **Dix Relay (D), trois convertisseurs, trois alimentations, ≈ 1,9 m de rail.** Le découpage isole les pannes de bus et d'alimentation, pas celle du maître : la gamme ne permet pas un contrôleur par zone sans ajouter un automate, ce qui serait une autre solution. Un segment en défaut, un convertisseur grillé ou une alimentation morte ne touchent que leur zone ; le CM5 reste au bout des trois segments.
 
-**Variante Modbus TCP** : un coupleur Wago 750-362 par zone (430 € HT) avec deux bornes 750-1405 (32 entrées) et des bornes relais, ou un Waveshare Modbus POE ETH Relay 30CH par zone (70 $) avec des IO 8CH PoE ; un commutateur Ethernet commun, PoE pour Waveshare. Le 750-517 ne commute que 1 A : la borne relais 16 A Wago et son prix n'ont pas été trouvés, et le prix de l'IO 8CH PoE n'a pas été relevé. La variante TCP n'est donc pas chiffrée en armoire complète. Elle isole mieux chaque module qu'un bus multipoint, et ajoute le commutateur comme cause commune.
+**Variante Modbus TCP** : un coupleur Wago 750-362 par zone (409 € HT) avec deux bornes 750-1405 (32 entrées) et des bornes relais, ou un Waveshare Modbus POE ETH Relay 30CH par zone (70 $) avec des IO 8CH PoE ; un commutateur Ethernet commun, PoE pour Waveshare. Le 750-517 ne commute que 1 A : la borne relais 16 A Wago et son prix n'ont pas été trouvés, et le prix de l'IO 8CH PoE n'a pas été relevé. La variante TCP n'est donc pas chiffrée en armoire complète. Elle isole mieux chaque module qu'un bus multipoint, et ajoute le commutateur comme cause commune.
 
 ## Seule face à l'exigence
 
@@ -122,7 +122,7 @@ Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs
 - **Logique** : toute dans la passerelle, en Go ; aucune dans l'armoire. Scrutation des entrées en fonction 02, fronts, appui long et double appui côté passerelle sur les recopies des poussoirs, écriture des coils, surveillance des délais, journal.
 - **Durées bornées** : par le câblage de la V2 ; le flash-off Waveshare peut doubler la borne par voie, sans que la V2 en dépende.
 
-Ce que la couche apporte : **≈ 430 € HT** en RTU Waveshare, le total le plus bas du comparatif et le repère des autres dossiers ; un protocole que n'importe quel module d'un autre fabricant remplace au prix d'une adaptation du pilote Go ; aucune licence, aucun compte, aucun Linux de plus que celui de la passerelle. Ce qu'elle coûte : ≈ 1,9 m de boîtiers Waveshare en Relay (D), soit un coffret de plus, ou ≈ 0,6 m en 32CH plus des IO 8CH aux cotes inconnues ; aucune tension d'isolement ni marquage CE publiés chez Waveshare, ce que les 38.51 (6 kV) de la V2 rendent acceptable de part et d'autre ; un travail Go à écrire, mais sans intégrateur ni outil propriétaire. Face à la Revolution Pi Connect 5 (≈ 581 € HT nue, plus ses modules d'entrées-sorties, marquée CE, entrées isolées, Linux à maintenir), Modbus RTU coûte le quart et n'ajoute aucun calculateur. En matériel industriel, la même couche vaut ≈ 3 010 € HT en Advantech, ≈ 3 860 € HT en Seneca, ≈ 6 600 € HT en Wago TCP : du prix de KNX (≈ 3 100 € HT), avec des isolements chiffrés et des chiens de garde intégrés.
+Ce que la couche apporte : **≈ 430 € HT** en RTU Waveshare, le total le plus bas du comparatif et le repère des autres dossiers ; un protocole que n'importe quel module d'un autre fabricant remplace au prix d'une adaptation du pilote Go ; aucune licence, aucun compte, aucun Linux de plus que celui de la passerelle. Ce qu'elle coûte : ≈ 1,9 m de boîtiers Waveshare en Relay (D), soit un coffret de plus, ou ≈ 0,6 m en 32CH plus des IO 8CH aux cotes inconnues ; aucune tension d'isolement ni marquage CE publiés chez Waveshare, ce que les 38.51 (6 kV) de la V2 rendent acceptable de part et d'autre ; un travail Go à écrire, mais sans intégrateur ni outil propriétaire. À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici) ; Modbus RTU n'ajoute aucun calculateur à la passerelle. En matériel industriel, la même couche vaut ≈ 3 010 € HT en Advantech, ≈ 3 860 € HT en Seneca, ≈ 6 600 € HT en Wago TCP : du prix de KNX (≈ 3 100 € HT), avec des isolements chiffrés et des chiens de garde intégrés.
 
 ## Foudre et isolement
 
@@ -148,35 +148,35 @@ La note ne chiffre pas le travail Go. La V2 compte 5 à 11 semaines-personne pou
 
 ## Nomenclature et coût estimé
 
-Prix relevés le 24 octobre 2026 : Waveshare en dollars hors taxes sur sa boutique et en euros chez Eckstein (TTC à 19 %, converti en HT) ; convertisseur chez Welectron (TTC à 19 %) ; alimentation chez TME (HT) ; EUD12D-UC au prix catalogue Eltako hors TVA, la V2 l'ayant trouvé à 43,45 € HT en boutique ; matériel industriel chez RS, Farnell, Bürklin et Seneca. Hors port, droits, rail, coffret et câblage, déjà comptés par la V2.
+Prix relevés le 24 octobre 2026 : Waveshare en dollars hors taxes sur sa boutique et en euros chez Eckstein (TTC à 19 %, converti en HT) ; convertisseur chez Welectron (TTC à 19 %) ; alimentation chez TME (HT) ; EUD12D-UC au prix boutique de 43,45 € HT (51,70 € TTC chez zaehlerschrank24, le prix retenu par la V2), le prix catalogue Eltako de 89,37 € HT étant rappelé en note ; matériel industriel chez RS, Farnell, Bürklin et Seneca, les deux références Wago au prix RS France du [dossier Wago](wago-pfc200.md). Hors port, droits, rail, coffret et câblage, déjà comptés par la V2.
 
 ### Configuration minimale
 
 | Poste | Référence | Qté | Prix unitaire HT | Total HT | Source |
 | --- | --- | --- | --- | --- | --- |
 | Entrées et relais | Waveshare Modbus RTU Relay (D) | 9 | 35,25 € (41,95 € TTC) ; 34,99 $ chez le fabricant | 317 € | Eckstein, Waveshare |
-| Variateurs | Eltako EUD12D-UC | 8 | 89,37 € (catalogue) | 715 € | Eltako |
+| Variateurs | Eltako EUD12D-UC | 8 | 43,45 € (51,70 € TTC ; catalogue Eltako 89,37 € HT) | 348 € | zaehlerschrank24 |
 | Maître | Convertisseur USB-RS485 isolé Waveshare 15817 | 1 | 22,61 € (26,90 € TTC) | 23 € | Welectron |
 | Alimentation | Mean Well HDR-60-24 | 1 | 18,06 € | 18 € | TME |
-| **Matériel** | | | | **≈ 1 073 € HT** | |
+| **Matériel** | | | | **≈ 705 € HT** | |
 | Logiciel | Bibliothèques libres | | 0 € | 0 € | — |
-| **Total** | | | | **≈ 1 073 € HT**, ≈ 1,75 m de rail | |
+| **Total** | | | | **≈ 705 € HT**, ≈ 1,75 m de rail | |
 
-Avec un parafoudre RS-485 DT-UFB-485/BS (≈ 165 € HT), facultatif : ≈ 1 240 € HT. Aux 43,45 € HT de la V2 pour l'EUD12D-UC, le total descend à ≈ 705 € HT.
+Avec un parafoudre RS-485 DT-UFB-485/BS (≈ 165 € HT), facultatif : ≈ 870 € HT. Au prix catalogue Eltako de l'EUD12D-UC (89,37 € HT), le total monterait à ≈ 1 073 € HT.
 
 ### Configuration résiliente
 
 | Poste | Référence | Qté | Prix unitaire HT | Total HT |
 | --- | --- | --- | --- | --- |
 | Entrées et relais, trois zones et le commun | Waveshare Modbus RTU Relay (D) | 10 | 35,25 € | 353 € |
-| Variateurs | Eltako EUD12D-UC | 8 | 89,37 € | 715 € |
+| Variateurs | Eltako EUD12D-UC | 8 | 43,45 € | 348 € |
 | Maître | Convertisseur USB-RS485 isolé, un par zone | 3 | 22,61 € | 68 € |
 | Alimentations, une par zone | Mean Well HDR-60-24 | 3 | 18,06 € | 54 € |
-| **Matériel** | | | | **≈ 1 190 € HT** |
+| **Matériel** | | | | **≈ 820 € HT** |
 | Logiciel | | | 0 € | 0 € |
-| **Total** | | | | **≈ 1 190 € HT**, ≈ 1,9 m de rail |
+| **Total** | | | | **≈ 820 € HT**, ≈ 1,9 m de rail |
 
-Soit ≈ 120 € HT de plus que la minimale pour passer de 6 à 3 défaillances uniques touchant toute la maison. Les trois qui restent sont la passerelle elle-même : aucun module ne les enlève. Variante TCP : trois coupleurs Wago 750-362 (1 291 € HT) et cinq bornes 750-1405 (≈ 560 € HT) sans les bornes relais, non trouvées ; trois Waveshare POE ETH Relay 30CH (210 $) sans les IO 8CH PoE, non relevés : **non chiffrée**.
+Soit ≈ 115 € HT de plus que la minimale pour passer de 6 à 3 défaillances uniques touchant toute la maison. Les trois qui restent sont la passerelle elle-même : aucun module ne les enlève. Variante TCP : trois coupleurs Wago 750-362 (1 227 € HT) et cinq bornes 750-1405 (≈ 560 € HT) sans les bornes relais, non trouvées ; trois Waveshare POE ETH Relay 30CH (210 $) sans les IO 8CH PoE, non relevés : **non chiffrée**.
 
 ### Couche domotique en dérivation
 
@@ -196,7 +196,7 @@ Variantes, pour les mêmes ≈ 85 sorties et ≈ 70 entrées :
 | RTU Waveshare, deux références | 3 × Relay 32CH (96 relais, 189 $) et 9 × IO 8CH (72 entrées, 216 $), convertisseur et alimentation | ≈ 410 € HT, ≈ 0,6 m plus les IO 8CH |
 | RTU Advantech | 5 × ADAM-4051 (80 entrées, 823 €), 11 × ADAM-4068 (88 relais 0,25 A sur bobines, 2 167 €), convertisseur | ≈ 3 010 € HT |
 | RTU Seneca | 5 × ZC-16DI-8DO (1 173 €), 5 × Z-10-D-OUT (660 €), 11 × Z-8R-10A (1 925 €), supports ≈ 100 € | ≈ 3 860 € HT |
-| TCP Wago, par zone | 3 × 750-362 (1 291 €), 5 × 750-1405 (≈ 560 €), 43 × 750-517 (86 contacts 1 A, 4 752 €), fins de bus non chiffrées | ≈ 6 600 € HT |
+| TCP Wago, par zone | 3 × 750-362 (1 227 €), 5 × 750-1405 (≈ 560 €), 43 × 750-517 (86 contacts 1 A, 4 818 €), fins de bus non chiffrées | ≈ 6 600 € HT |
 | TCP Waveshare | 3 × POE ETH Relay 30CH (210 $), 9 × POE ETH IO 8CH (prix non relevé), commutateur PoE | incomplet |
 
 Les relais de couplage et de recopie 38.51, le relais de garde et les bornes sectionnables sont déjà dans la V2 et ne sont pas recomptés.
@@ -221,7 +221,7 @@ Les relais de couplage et de recopie 38.51, le relais de garde et les bornes sec
 
 ## Verdict
 
-- **Seule** : la forme la plus dépouillée d'une armoire à calculateur, pour ≈ 1 100 à 1 200 € HT. Elle met la passerelle, son Linux et son Go sur le chemin de chaque appui ; le découpage par zone ne retire rien à cette cause commune, et 3 défaillances uniques privent toute la maison, 4 en TCP. Les modes locaux Waveshare la rapprocheraient de la règle 1, sans documentation sur leur comportement au redémarrage. Ce n'est pas une réponse à l'exigence : c'est la V1 Revolution Pi sans la Revolution Pi.
+- **Seule** : la forme la plus dépouillée d'une armoire à calculateur, pour ≈ 705 à 820 € HT. Elle met la passerelle, son Linux et son Go sur le chemin de chaque appui ; le découpage par zone ne retire rien à cette cause commune, et 3 défaillances uniques privent toute la maison, 4 en TCP. Les modes locaux Waveshare la rapprocheraient de la règle 1, sans documentation sur leur comportement au redémarrage. Ce n'est pas une réponse à l'exigence : c'est la V1 Revolution Pi sans la Revolution Pi.
 - **En dérivation** : la couche domotique la moins chère du comparatif, ≈ 430 € HT, sans logique ni logiciel dans l'armoire, le battement de cœur émis par la passerelle et borné dans le module ; son point faible est l'absence de chien de garde et d'isolement chiffré chez Waveshare, que les 38.51 et le relais de garde de la V2 compensent, ou qu'un module industriel à chien de garde corrige pour 3 000 à 6 600 € HT. Elle fixe le repère de prix des autres dossiers.
 - **À qui elle convient** : à qui garde la couche filaire de la V2 et veut, derrière, le serveur d'entrées-sorties le plus simple à piloter depuis le backend Go, en acceptant des boîtiers larges et peu documentés, ou le prix de leurs équivalents industriels.
 
@@ -238,10 +238,10 @@ Toutes consultées le 24 octobre 2026.
 7. [Advantech ADAM-4051 chez RS](https://de.rs-online.com/web/p/sps-ea-module/0657057), [ADAM-4055 chez RS](https://nl.rs-online.com/web/p/interface-modules/2844322), [fiche ADAM-4055](https://csi.pl/wp-content/uploads/2019/01/ADAM_4053_4055_4056S_4056SO_DataSheet.pdf), [ADAM-4068-C chez Farnell](https://be.farnell.com/en-BE/advantech/adam-4068-c/relay-output-module-w-modbus-8/dp/4208710) : isolement 2 500 V CC, chien de garde, contacts 0,25 A, prix, délais.
 8. [Fiche ADAM-6050](https://www.bmc.de/datenblaetter/ADAM_6050.pdf), [FAQ ADAM-6000](https://www2.advantech.com/my/edm/eA/2008%20New_ADAM-6000_Series_eDM/index_FAQ.html), [ADAM-6050 chez RS](https://nl.rs-online.com/web/p/plc-accessories/0657063), [ADAM-6060 chez RS](https://fr.rs-online.com/web/p/modules-d-es-api/0718825), [ADAM-6050 chez Gridconnect](https://gridconnect.com/products/adam-6050-18-channel-digital-i-o-ethernet-and-modbus-tcp-module) : chien de garde de communication, logique P2P et GCL, prix, ruptures, « abandonné ».
 9. [Fiche ICP DAS M-7055U](https://www.icpdas.com/root/product/solutions/datasheet/i-7000_m-7000/M-7055U(D)_en.pdf), [M-7055-CR chez Consteel](https://consteel-electronics.com/modbus-io-modules-RS485/M-7055-CR-en), [fiche ET-7055](https://elvac.eu/files/shop/icpdas/datasheet/et-7x55_pet-7x55_ELVAC15.pdf) : double chien de garde, valeurs sûre et au démarrage, isolement, surtension.
-10. [Wago 750-362](https://www.wago.com/global/controllers-bus-couplers-i-o/controller-modbus-tcp/p/750-362), [750-362 chez Farnell](https://ie.farnell.com/wago/750-362/fieldbus-coupler-modbus-tcp-0/dp/4176605), [manuel 750-362, chien de garde](https://www.manualslib.com/manual/1723930/Wago-Wago-I-O-System-750-750-362.html?page=180) et [défaillance de bus](https://www.manualslib.com/manual/1723930/Wago-Wago-I-O-System-750-750-362.html?page=137) : registres 0x1000, exception 0x0004, états définis sur panne du bus local, 430,30 € HT.
-11. [Fiche Wago 750-1405](https://www.farnell.com/datasheets/4151964.pdf), [750-1405 chez Bürklin](https://buerklin.com/en/p/wago/digital-modules/750-1405/73F2038), [Wago 750-517](https://www.wago.com/global/i-o-systems/2-channel-relay-output/p/750-517), [750-517 chez RS](https://it.rs-online.com/web/p/accessori-per-plc/8687374) : 500 V, 12 mm, 1 A, prix.
+10. [Wago 750-362](https://www.wago.com/global/controllers-bus-couplers-i-o/controller-modbus-tcp/p/750-362), [750-362 chez RS France](https://fr.rs-online.com/web/p/automates-programmables/2885276), [manuel 750-362, chien de garde](https://www.manualslib.com/manual/1723930/Wago-Wago-I-O-System-750-750-362.html?page=180) et [défaillance de bus](https://www.manualslib.com/manual/1723930/Wago-Wago-I-O-System-750-750-362.html?page=137) : registres 0x1000, exception 0x0004, états définis sur panne du bus local, 409,05 € HT (même prix que le [dossier Wago](wago-pfc200.md)).
+11. [Fiche Wago 750-1405](https://www.farnell.com/datasheets/4151964.pdf), [750-1405 chez Bürklin](https://buerklin.com/en/p/wago/digital-modules/750-1405/73F2038), [Wago 750-517](https://www.wago.com/global/i-o-systems/2-channel-relay-output/p/750-517), [750-517 chez RS France](https://fr.rs-online.com/web/p/modules-d-es-api/8687374) : 500 V, 12 mm, 1 A, 112,05 € HT à partir de 3 (même prix que le dossier Wago).
 12. [Wiren Board WB-MR6C v.2](https://wirenboard.com/en/product/WB-MR6C_v2/), [WB-MDM3](https://wirenboard.com/en/product/WB-MDM3/), [wiki, réglage des relais](https://wiki.wirenboard.com/wiki/Includes._Relay_tuning/en), [article Habr 2023](https://habr.com/ru/companies/wirenboard/articles/727624/) : mode sûr, commande locale, variateur, origine.
-13. [Eltako, notice EUD12D-UC](https://www.eltako.com/fileadmin/downloads/de/_bedienung/EUD12D_21100905-3_dt.pdf) : 400 W, entrée universelle isolée, appui court et long, mémoire ; prix catalogue 89,37 € HT.
+13. [Eltako, notice EUD12D-UC](https://www.eltako.com/fileadmin/downloads/de/_bedienung/EUD12D_21100905-3_dt.pdf) : 400 W, entrée universelle isolée, appui court et long, mémoire ; prix catalogue 89,37 € HT. [zaehlerschrank24, EUD12D-UC](https://www.zaehlerschrank24.de/multi-dimmschalter-eud12d-uc.html) : 51,70 € TTC, soit 43,45 € HT, prix retenu par la V2.
 14. [Mouser, Bridgetek MC-0301-01A](https://www.mouser.se/new/bridgetek/bridgetek-mc-0301-01a-modbus-light-dimmer) : variateur Modbus, prix non lu.
 15. [Home Assistant, intégration Modbus](https://www.home-assistant.io/integrations/modbus/) : transports, entités, scrutation, limites des volets.
 16. [goburrow/modbus](https://github.com/goburrow/modbus), [simonvetter/modbus](https://github.com/simonvetter/modbus), [pymodbus](https://github.com/pymodbus-dev/pymodbus) : licences, transports, activité.

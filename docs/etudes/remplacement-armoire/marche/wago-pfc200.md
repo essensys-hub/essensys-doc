@@ -1,6 +1,6 @@
 ---
 title: "Wago PFC200 : remplacer l'armoire sans recâblage"
-description: "Automate Wago PFC200 ou Compact Controller 100 avec bornes WAGO-I/O-SYSTEM 750 pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils : entrées 24 V pour les 63 poussoirs, bornes relais, coupleurs Modbus TCP par zone. Seul, un automate centralisé reste entre chaque bouton et sa charge ; en dérivation, une couche d'entrées-sorties industrielle, ouverte mais chère. Environ 6 500 € HT en configuration par zone, hors postes non chiffrés."
+description: "Automate Wago PFC200 ou Compact Controller 100 avec bornes WAGO-I/O-SYSTEM 750 pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils : entrées 24 V pour les 63 poussoirs, bornes relais, coupleurs Modbus TCP par zone. Seul, un automate centralisé reste entre chaque bouton et sa charge ; en dérivation, une couche d'entrées-sorties industrielle, ouverte mais chère. Environ 7 270 € HT en configuration par zone, hors postes non chiffrés."
 ---
 
 # Wago PFC200
@@ -9,15 +9,15 @@ Wago est l'automate industriel ouvert du [comparatif](index.md) : un contrôleur
 
 !!! abstract "Synthèse"
     - **Seule** : Wago remplace les quatre cartes sans recâblage, en passant la boucle des poussoirs de 5 V à 24 V. Mais toute la logique est dans un seul contrôleur : les bornes n'ont pas de logique propre, et les coupleurs de zone 750-362 non plus. **Règle 1 non tenue.** Si le programme ne rafraîchit pas le bus interne dans les 50 ms, les sorties passent en repli, c'est-à-dire à zéro. En configuration par zone, **5 des huit défaillances uniques privent toute la maison de ses boutons** ; le découpage en trois nœuds ne donne aucune autonomie aux zones. La seule commande à la main est le sélecteur manuel de la borne 16 A 750-523, qui enclenche même sans 24 V.
-    - **En dérivation** : une couche d'entrées-sorties industrielle, à protocoles ouverts (Modbus TCP, MQTT), dont le repli à 50 ms sert naturellement de battement de cœur au relais de garde. Elle coûte environ deux fois la couche KNX et bien plus que la Revolution Pi ou un serveur d'entrées-sorties Modbus, pour rendre le même service.
-    - **Coût estimé** : ≈ 6 250 € HT en configuration minimale, ≈ 6 500 € HT par zone, ≈ 6 350 € HT en couche domotique seule, **hors alimentation 24 V, fin de bus, modules d'alimentation du bus et relais d'interface, dont les prix n'ont pas été trouvés**. Le prix du PFC200 750-8212 lui-même n'a pas été trouvé : les totaux reposent sur le Compact Controller 100. Prix d'octobre 2026, RS France (HT) et Bürklin (TTC à 19 %, converti).
+    - **En dérivation** : une couche d'entrées-sorties industrielle, à protocoles ouverts (Modbus TCP, MQTT), dont le repli à 50 ms sert naturellement de battement de cœur au relais de garde. Elle coûte environ deux fois la couche KNX et bien plus qu'un serveur d'entrées-sorties Modbus, pour rendre le même service ; à comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici).
+    - **Coût estimé** : ≈ 6 250 € HT en configuration minimale, ≈ 7 270 € HT par zone, ≈ 6 350 € HT en couche domotique seule, **hors alimentation 24 V, fin de bus, modules d'alimentation du bus et relais d'interface, dont les prix n'ont pas été trouvés**. Le prix du PFC200 750-8212 lui-même n'a pas été trouvé : les totaux reposent sur le Compact Controller 100. Prix d'octobre 2026, RS France (HT) et Bürklin (TTC à 19 %, converti).
     - **Réserve** : estimations à confirmer par un électricien, des devis, le fabricant et des essais. Les manuels du 750-362 et du PFC200 n'ont pas pu être consultés ; le comportement à la perte du maître vient d'un manuel générique et d'un document tiers.
 
 ## Principe et gamme
 
 Le WAGO-I/O-SYSTEM 750 est un système d'automatisme modulaire : un contrôleur, ou un coupleur de bus de terrain, en tête de rail, suivi de bornes d'entrées-sorties de 12 ou 24 mm enfichées côte à côte. Un bus interne, le K-Bus, relie les bornes au contrôleur dans l'embase ; des contacts de puissance traversants distribuent le 24 V de terrain d'une borne à la suivante. Jusqu'à 64 bornes par nœud sans extension, 250 avec.
 
-Le système est **centralisé** : le programme IEC 61131-3 (CODESYS) du contrôleur lit toutes les entrées et écrit toutes les sorties à chaque cycle. Les bornes n'ont aucune logique propre. Le contrôleur **750-8212** (PFC200, deuxième génération) porte un Cortex-A8 à 1 GHz, 512 Mo de RAM, 4 Go de flash, un Linux temps réel, deux ports Ethernet et une liaison série ; il fournit au plus 1 700 mA au bus interne 5 V. Le **751-9301** (Compact Controller 100) est un automate compact à 8 entrées, 4 sorties et 2 ports Ethernet, sans K-Bus direct : il s'étend par un coupleur Modbus TCP **750-362**, lequel expose les bornes d'un nœud distant au maître. Les versions actuelles se programment en CODESYS V3.5 à partir du firmware 23 ; e!COCKPIT servait jusqu'au firmware 22.
+Le système est **centralisé** : le programme IEC 61131-3 (CODESYS) du contrôleur lit toutes les entrées et écrit toutes les sorties à chaque cycle. Les bornes n'ont aucune logique propre. Le contrôleur **750-8212** (PFC200, deuxième génération) porte un Cortex-A8 à 1 GHz, 512 Mo de RAM, 4 Go de flash, un Linux temps réel, deux ports Ethernet et une liaison série ; il fournit au plus 1 700 mA au bus interne 5 V. Le **751-9301** (Compact Controller 100) est un automate compact à 8 entrées, 4 sorties et 2 ports Ethernet, sans K-Bus direct : il s'étend par un coupleur Modbus TCP **750-362**, lequel expose les bornes d'un nœud distant au maître. Les versions actuelles se programment en CODESYS V3.5 à partir du micrologiciel 23 ; e!COCKPIT servait jusqu'au micrologiciel 22.
 
 Fabricant : Wago, Minden (Allemagne). Fiches consultées datées de 2010 à 2024 ; la date de lancement de la série 750 n'a pas été trouvée.
 
@@ -53,11 +53,11 @@ Un maître en tête (750-8212 ou 751-9301) et **trois nœuds de zone**, chacun p
 | Nœud | Bornes | Largeur hors coupleur |
 | --- | --- | --- |
 | Maître | 751-9301 ou 750-8212 | 108 mm ou 78,6 mm |
-| Pièces de vie (20 poussoirs, 5 éclairages, 6 volets, 3 variateurs, divers) | 750-362, 2 × 750-1405, 11 × 750-517, 750-600 | ≈ 190 mm |
-| Chambres (21, 7, 5, 4) | 750-362, 2 × 750-1405, 12 × 750-517, 750-600 | ≈ 205 mm |
-| Pièces d'eau (22, 13, 4 dont le store, 1) | 750-362, 2 × 750-1405, 13 × 750-517, 750-600 | ≈ 215 mm |
+| Pièces de vie (20 poussoirs, 5 éclairages, 6 volets, 3 variateurs, divers) | 750-362, 2 × 750-1405, 15 × 750-517, 750-600 | ≈ 216 mm |
+| Chambres (21, 7, 5, 4) | 750-362, 2 × 750-1405, 13 × 750-517, 750-600 | ≈ 192 mm |
+| Pièces d'eau (22, 13, 4 dont le store, 1) | 750-362, 2 × 750-1405, 15 × 750-517, 750-600 | ≈ 216 mm |
 
-**≈ 0,9 à 1,0 m de rail** avec les trois coupleurs (largeur non trouvée, de l'ordre de 50 à 60 mm chacun), hors alimentations. Chaque nœud consomme 1 040 à 1 220 mA sur son bus 5 V, à comparer au courant du 750-362, non trouvé. La fiche du coupleur n'impose pas une alimentation par nœud : c'est un choix d'installation.
+Les 43 bornes relais de la configuration minimale sont réparties par zone avec la même réserve (86 contacts pour 75 à 85 sorties) : les charges ne changent pas d'une configuration à l'autre. Les largeurs comptent les bornes d'entrées, les bornes relais et la fin de bus 750-600, chacune à 12 mm (largeur du 750-600 à vérifier). **≈ 0,85 à 0,9 m de rail** avec les trois coupleurs (largeur non trouvée, de l'ordre de 50 à 60 mm chacun) et le maître, hors alimentations. Chaque nœud consomme 1 220 à 1 400 mA sur son bus 5 V, à comparer au courant du 750-362, non trouvé. La fiche du coupleur n'impose pas une alimentation par nœud : c'est un choix d'installation.
 
 Cette configuration **ne découpe que le matériel, pas la logique** : les trois coupleurs restent des esclaves d'un maître unique, qui lit toutes les entrées et écrit toutes les sorties.
 
@@ -85,7 +85,7 @@ Dans la configuration résiliente, la liste fermée du comparatif donne :
 | 2. Court-circuit ou ligne collée | toute la maison | Un défaut sur la liaison Ethernet du maître, ou sur le K-Bus de tête d'un PFC200, arrête le maître ; une source secondaire indique qu'une erreur de K-Bus met le runtime en STOP. Un défaut sur le K-Bus d'un nœud de zone ne prive que sa zone |
 | 3. Contrôleur central | toute la maison | Un seul maître ; les coupleurs n'ont pas de logique |
 | 4. Logiciel figé | toute la maison | Si le programme ne rafraîchit pas le bus interne dans les 50 ms, les sorties passent en repli (document ADI/DAL cité par un tiers) ; aucun chien de garde matériel ni redémarrage automatique trouvé |
-| 5. Mise à jour ratée | toute la maison | Un seul firmware, un seul programme ; comportement en cas d'échec non trouvé |
+| 5. Mise à jour ratée | toute la maison | Un seul micrologiciel, un seul programme ; comportement en cas d'échec non trouvé |
 | 6. Licence, compte ou cloud | rien | Aucun cloud en exploitation ; la licence du runtime est une question de mise en service (voir plus bas) |
 | 7. Commutateur ou routeur | rien | Si les coupleurs sont chaînés par leurs commutateurs intégrés, aucun commutateur externe n'est sur le chemin ; avec un commutateur externe, il priverait toute la maison |
 | 8. Foudre sur le chemin du bus | une zone | Le K-Bus et l'Ethernet restent dans l'armoire ; l'onde entre par une ligne de poussoir et frappe la borne d'entrées de la zone, isolée à 500 V seulement : la tenue du coupleur et de l'Ethernet n'est pas chiffrée |
@@ -117,7 +117,7 @@ Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs
 - **Logique et interface utilisateur** : la passerelle, par Modbus TCP ou MQTT. L'automate peut porter la logique des horaires et des scénarios, ou n'être qu'un serveur d'entrées-sorties ; dans ce second cas, c'est l'architecture du serveur d'entrées-sorties léger de la V2, avec un automate industriel à la place.
 - **Durées bornées** : le câblage de la V2 les borne ; le programme peut les borner aussi, mais un relais soudé y échappe.
 
-Ce que la couche apporte : des bornes industrielles à ressort, un protocole Modbus TCP que tout parle, un firmware et un kit de développement publiés par le fabricant, des pièces que l'industrie achète encore dans dix ans. Ce qu'elle coûte : ≈ 6 350 € HT hors alimentation, soit **environ deux fois la couche KNX** (≈ 3 100 € HT) et dix fois la Revolution Pi Connect 5 nue (≈ 581 € HT, plus ses modules d'entrées-sorties), pour ≈ 0,75 m de rail en plus de la couche filaire, un Linux à maintenir dans l'armoire et CODESYS à apprendre. Les 43 bornes relais 1 A sont surdimensionnées en isolement et sous-dimensionnées en courant pour tout autre usage que des bobines. Face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), Wago est nettement plus cher pour la même fonction ; son avantage est la qualité industrielle du matériel et le repli à 50 ms garanti par le système.
+Ce que la couche apporte : des bornes industrielles à ressort, un protocole Modbus TCP que tout parle, un micrologiciel et un kit de développement publiés par le fabricant, des pièces que l'industrie achète encore dans dix ans. Ce qu'elle coûte : ≈ 6 350 € HT hors alimentation, soit **environ deux fois la couche KNX** (≈ 3 100 € HT), à comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici), pour ≈ 0,75 m de rail en plus de la couche filaire, un Linux à maintenir dans l'armoire et CODESYS à apprendre. Les 43 bornes relais 1 A sont surdimensionnées en isolement et sous-dimensionnées en courant pour tout autre usage que des bobines. Face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), Wago est nettement plus cher pour la même fonction ; son avantage est la qualité industrielle du matériel et le repli à 50 ms garanti par le système.
 
 ## Foudre et isolement
 
@@ -131,10 +131,10 @@ Ce que la couche apporte : des bornes industrielles à ressort, un protocole Mod
 
 | Point | Ce qu'on a trouvé |
 | --- | --- |
-| Outil | **CODESYS V3.5** à partir du firmware 23 (e!COCKPIT jusqu'au 22) ; langages IEC 61131-3 : IL, LD, FBD, CFC, ST, SFC. Prix des licences d'atelier e!COCKPIT non trouvés |
+| Outil | **CODESYS V3.5** à partir du micrologiciel 23 (e!COCKPIT jusqu'au 22) ; langages IEC 61131-3 : IL, LD, FBD, CFC, ST, SFC. Prix des licences d'atelier e!COCKPIT non trouvés |
 | Licence du runtime | « Sans frais » pour le Compact Controller 100 selon un distributeur ; pour le 750-8212, une source secondaire rapporte des unités livrées sans licence de runtime (« The project requires software license »). **À confirmer auprès de Wago.** BACnet/IP, EtherCAT maître et MQTT Sparkplug demandent des licences supplémentaires |
 | Formation | Automaticien ou apprentissage de CODESYS ; forums CODESYS Forge et sps-forum |
-| Mise à jour | Firmware par l'interface web ou carte SD ; firmwares et kit de développement publiés sur GitHub par Wago ; comportement en cas de mise à jour ratée non trouvé |
+| Mise à jour | Micrologiciel par l'interface web ou carte SD ; micrologiciels et kit de développement publiés sur GitHub par Wago ; comportement en cas de mise à jour ratée non trouvé |
 | Sécurité | SSH, HTTPS, FTPS, SNMP ; OpenVPN, IPsec et pare-feu intégré d'après un article de 2018 |
 | API pour la passerelle | **Modbus TCP/UDP** et Modbus RTU, MQTT, OPC UA serveur et client, EtherNet/IP ; serveur web et Web Visu. Un conteneur Docker et une « Open Source Kbus API » en MQTT existent, mais exigent d'arrêter le runtime CODESYS : le K-Bus n'a qu'un maître, et la règle des 50 ms s'applique alors au conteneur |
 | Home Assistant, openHAB | Aucune intégration Wago native trouvée ; passage par Modbus TCP ou MQTT |
@@ -170,14 +170,14 @@ Avec le 750-517 de Bürklin (61,70 € HT, sans stock), les bornes de sorties co
 | Maître | Wago 751-9301 | 1 | 553,07 € (TVA non précisée) | 553 € |
 | Coupleurs de zone | Wago 750-362 | 3 | 409,05 € | 1 227 € |
 | Entrées | Wago 750-1405 | 6 | 112,26 € | 674 € |
-| Sorties relais | Wago 750-517 | 36 | 112,05 € | 4 034 € |
+| Sorties relais | Wago 750-517 | 43 | 112,05 € | 4 818 € |
 | Fins de bus | Wago 750-600 | 3 | non trouvé | — |
 | Alimentations 24 V | Wago 787-1602 | 3 | non trouvé | — |
-| **Matériel** | | | | **≈ 6 490 € HT**, hors postes non trouvés |
+| **Matériel** | | | | **≈ 7 270 € HT**, hors postes non trouvés |
 | Logiciel | CODESYS V3.5 | 1 | 0 € (à confirmer) | 0 € |
-| **Total** | | | | **≈ 6 500 € HT** |
+| **Total** | | | | **≈ 7 270 € HT** |
 
-Soit ≈ 250 € HT de plus que la configuration minimale, pour passer de 6 à 5 défaillances uniques touchant toute la maison : les deux coupleurs supplémentaires sont presque compensés par les sept bornes relais en moins. Avec un 750-8212 en tête au lieu du 751-9301, le prix change d'un montant non trouvé.
+Soit ≈ 1 020 € HT de plus que la configuration minimale, pour passer de 6 à 5 défaillances uniques touchant toute la maison : le prix des deux coupleurs et des deux bornes d'entrées supplémentaires. Avec un 750-8212 en tête au lieu du 751-9301, le prix change d'un montant non trouvé.
 
 ### Couche domotique en dérivation
 
@@ -199,22 +199,22 @@ Soit ≈ 250 € HT de plus que la configuration minimale, pour passer de 6 à 5
 - **Fil pilote** : contacts 750-517, suffisants pour les diodes du fil pilote ; aucune fonction native.
 - **Électricien** : de l'ordre de 4 à 6 jours (estimation sans devis) ; les bornes à ressort vont vite, les relais d'interface ajoutent du câblage.
 - **Logiciel** : ≈ 4 à 8 semaines-personne (CODESYS et passerelle), estimation sans source.
-- **Place** : ≈ 0,65 à 0,75 m (minimale), ≈ 0,9 à 1,0 m (par zone), ≈ 0,75 m (dérivation, en plus de la couche filaire), alimentations et relais d'interface non compris.
+- **Place** : ≈ 0,65 à 0,75 m (minimale), ≈ 0,85 à 0,9 m (par zone), ≈ 0,75 m (dérivation, en plus de la couche filaire), alimentations et relais d'interface non compris.
 
 ## Ouverture et pérennité
 
 - **Protocoles ouverts** en sortie : Modbus TCP/UDP, Modbus RTU, MQTT, OPC UA ; le K-Bus est propriétaire mais son interface logicielle (ADI/DAL) est documentée et utilisable par une application propre. CODESYS est un environnement tiers très répandu dans l'industrie.
-- **Firmware, kit de développement, exemples et Docker publiés** par Wago sur GitHub (une cinquantaine de dépôts), sous licence Apache-2.0 pour le paquet Docker.
+- **Micrologiciel, kit de développement, exemples et Docker publiés** par Wago sur GitHub (une cinquantaine de dépôts), sous licence Apache-2.0 pour le paquet Docker.
 - **Un seul fabricant** pour les bornes de la série 750 ; Modbus TCP, lui, est multi-fabricants, et le maître pourrait être remplacé.
-- **Ancienneté** : PFC200 de première génération documenté en 2018, deuxième génération depuis 2019 ; fiches des bornes datées de 2023 et 2024, borne 750-517 « en production ». Date de lancement de la série 750 et politique de disponibilité à long terme non trouvées. Transition logicielle récente : e!COCKPIT remplacé par CODESYS V3.5 au firmware 23.
+- **Ancienneté** : PFC200 de première génération documenté en 2018, deuxième génération depuis 2019 ; fiches des bornes datées de 2023 et 2024, borne 750-517 « en production ». Date de lancement de la série 750 et politique de disponibilité à long terme non trouvées. Transition logicielle récente : e!COCKPIT remplacé par CODESYS V3.5 au micrologiciel 23.
 - **Vente libre** chez les distributeurs industriels (RS, Bürklin, Farnell), avec des délais : Bürklin annonçait 5 semaines sans stock sur deux références.
 - **Cloud** : aucun en exploitation ; offre optionnelle non étudiée.
 - **Communauté** : CODESYS Forge, sps-forum, projets libres (4diac FORTE), orientés industrie plus que maison.
 
 ## Verdict
 
-- **Seule** : Wago remplace l'armoire sans toucher un fil et apporte des bornes industrielles, mais garde un automate unique entre chaque bouton et sa charge : règle 1 non tenue, 5 défaillances uniques sur 8 privent toute la maison, et le découpage en coupleurs de zone ne change rien, faute de logique dans les coupleurs. Les sorties passent à zéro 50 ms après l'arrêt du programme : la maison s'éteint avec l'automate. Seul le sélecteur manuel du 750-523 rallume une lumière à la main. C'est l'architecture de l'étude V1 Revolution Pi, en matériel plus robuste et plus cher.
-- **En dérivation** : une couche d'entrées-sorties sérieuse, ouverte et durable, dont le repli à 50 ms est une qualité pour le relais de garde, mais qui coûte environ deux fois KNX et dix fois une Revolution Pi nue pour commander des bobines, avec un Linux et CODESYS à maintenir.
+- **Seule** : Wago remplace l'armoire sans toucher un fil et apporte des bornes industrielles, mais garde un automate unique entre chaque bouton et sa charge : règle 1 non tenue, 5 défaillances uniques sur 8 privent toute la maison, et le découpage en coupleurs de zone ne change rien, faute de logique dans les coupleurs. Les sorties passent à zéro 50 ms après l'arrêt du programme : la maison s'éteint avec l'automate. Seul le sélecteur manuel du 750-523 rallume une lumière à la main. C'est l'architecture de l'étude V1 Revolution Pi, en matériel industriel.
+- **En dérivation** : une couche d'entrées-sorties sérieuse, ouverte et durable, dont le repli à 50 ms est une qualité pour le relais de garde, mais qui coûte environ deux fois KNX pour commander des bobines, à comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici), avec un Linux et CODESYS à maintenir.
 - **À qui elle convient** : à qui pratique déjà CODESYS, veut des pièces industrielles disponibles dans dix ans et accepte de payer les bornes relais au prix de l'industrie.
 
 ## Sources
@@ -222,7 +222,7 @@ Soit ≈ 250 € HT de plus que la configuration minimale, pour passer de 6 à 5
 Toutes consultées le 24 octobre 2026.
 
 1. [Fiche Wago 750-8212/000-100](https://cdn.soselectronic.com/productdata/2c/40/7e3f8956/750-8212-000-100.pdf) (15.03.2021) : processeur, mémoires, 250 et 64 bornes, protocoles, 500 V, 78,6 mm, 1 700 mA, licences e!COCKPIT.
-2. [Fiche Wago 750-8212/025-000](https://www.farnell.com/datasheets/4151995.pdf) (12.02.2024) : OPC UA, MQTT, BACnet/IP sous licence, CODESYS V3.5 à partir du firmware 23.
+2. [Fiche Wago 750-8212/025-000](https://www.farnell.com/datasheets/4151995.pdf) (12.02.2024) : OPC UA, MQTT, BACnet/IP sous licence, CODESYS V3.5 à partir du micrologiciel 23.
 3. [Fiche Wago 750-1405](https://static.chipdip.ru/lib/293/DOC033293734.pdf) : niveaux, courants, 500 V, 12 mm, optocoupleur ; [fiche 2024](https://www.farnell.com/datasheets/4151964.pdf), non lue.
 4. [Fiche Wago 750-362](https://www.farnell.com/datasheets/3938315.pdf) (28.04.2023) : 250 et 64 bornes, image process, deux ports, commutateur DIP.
 5. [Wago, page produit 751-9301](https://www.wago.com/global/plcs-%E2%80%93-controllers/compact-controller-100/p/751-9301) et [Cebeo](https://www.cebeo.be/catalog/products/wago-controleur-compact-100-8di-4do-2ai-2ao-7502612) : entrées-sorties, 108 mm.
@@ -234,7 +234,7 @@ Toutes consultées le 24 octobre 2026.
 11. [Manuel WAGO-I/O-SYSTEM 750, coupleur EtherCAT](https://www.manualslib.com/manual/1983609/Wago-I-O-System-750.html) : perte d'alimentation et perte du bus de terrain, sorties à zéro ; SELV/PELV ; séparation des alimentations.
 12. [Eclipse 4diac, Wago PFC200](https://eclipse.dev/4diac/doc/io_config/wago_pfc200.html) : un seul maître K-Bus, arrêt du runtime, repli des sorties après 50 ms.
 13. Industrial Monitor Direct (blog distributeur, source secondaire) : [K-Bus et runtime STOP](https://industrialmonitordirect.com/blogs/knowledgebase/wago-750-8212-cpu-stopped-clear-faults-and-restart-plc), [pas de repli réglable par borne sur 750-841](https://industrialmonitordirect.com/blogs/knowledgebase/wago-750-841-io-card-failure-why-all-ios-go-dead), [licence du runtime](https://industrialmonitordirect.com/blogs/knowledgebase/resolving-codesys-license-requirements-on-wago-pfc-200-750-8212-controllers).
-14. [GitHub Wago](https://github.com/WAGO) et [docker-ipk](https://github.com/WAGO/docker-ipk) : firmware, kit de développement, Docker, compatibilité, licence Apache-2.0.
+14. [GitHub Wago](https://github.com/WAGO) et [docker-ipk](https://github.com/WAGO/docker-ipk) : micrologiciel, kit de développement, Docker, compatibilité, licence Apache-2.0.
 15. [IIDM, licence e!RUNTIME Sparkplug](https://shop.iidm.com/2759-247-210-1000-e-runtime-sparkplug-single-license-p-42074).
 16. [npm @wago/node-red-io-api](https://npmjs.org/package/@wago/node-red-io-api) : API K-Bus en MQTT, runtime à arrêter.
 17. Prix : [Farnell Portugal 751-9301](https://pt.farnell.com/wago/751-9301/controller-2i-o-analog-8-i-4-o/dp/3929186), [Bürklin 750-1405](https://buerklin.com/en/p/wago/digital-modules/750-1405/73F2038), [RS France 750-517](https://fr.rs-online.com/web/p/modules-d-es-api/8687374), [Bürklin 750-517](https://buerklin.com/en/p/wago/digital-modules/750-517/09P0157), [RS France 750-362](https://fr.rs-online.com/web/p/automates-programmables/2885276), [RS Belgique 750-362](https://befr.rs-online.com/web/p/plcs-programmable-logic-controllers/2885276), [Octopart 750-1405](https://octopart.com/part/wago/750-1405).

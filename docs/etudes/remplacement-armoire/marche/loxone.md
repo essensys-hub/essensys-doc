@@ -9,7 +9,7 @@ Loxone est un système domotique propriétaire autrichien, très répandu en ré
 
 !!! abstract "Synthèse"
     - **Seule** : Loxone remplace les quatre cartes sans recâblage et le Link ne sort pas de l'armoire. Mais le système est centralisé : les Extensions n'ont ni logique locale ni commande manuelle, et chaque poussoir passe par le Miniserver : **règle 1 non tenue**. En configuration par zone (un Miniserver Compact, un Link, une alimentation par zone), **aucune des huit défaillances uniques ne prive toute la maison de ses boutons**, mais six d'entre elles privent une zone de 20 à 22 boutons. L'état des relais à la perte du Link ou du Miniserver n'est pas documenté par Loxone.
-    - **En dérivation** : un contrôleur sans licence ni cloud obligatoire, une API locale documentée, mais des cartes d'entrées-sorties chères pour 85 sorties et 70 entrées, un système propriétaire sur carte microSD dans l'armoire, et un battement de cœur dont le comportement au gel du Miniserver n'est pas documenté. Plusieurs fois le prix de la Revolution Pi Connect 5 nue.
+    - **En dérivation** : un contrôleur sans licence ni cloud obligatoire, une API locale documentée, mais des cartes d'entrées-sorties chères pour 85 sorties et 70 entrées, un système propriétaire sur carte microSD dans l'armoire, et un battement de cœur dont le comportement au gel du Miniserver n'est pas documenté. À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici).
     - **Coût estimé** : ≈ 3 900 € HT en configuration minimale, ≈ 6 700 € HT par zone, logiciel gratuit ; ≈ 3 950 € HT en couche domotique seule. Prix hors TVA de la boutique officielle, octobre 2026.
     - **Réserve** : estimations à confirmer par un électricien, des devis, le fabricant et des essais. La vente aux particuliers n'est pas confirmée (compte « Partner » avec licence professionnelle) ; la fiche et la largeur des alimentations n'ont pas été lues.
 
@@ -116,7 +116,7 @@ Les télérupteurs, les chaînes de volets et les variateurs à entrée locale g
 - **Logique et interface** : la passerelle, par l'API WebSocket locale du Miniserver, ou le Miniserver lui-même, dont les blocs (éclairage, volets, délestage, alarme) sont riches.
 - **Durées bornées** : les blocs du Miniserver limitent la durée d'une impulsion ; le câblage de la V2 la borne de toute façon.
 
-Ce que la couche apporte : un contrôleur sans licence, mis à jour gratuitement depuis 2010 jusque sur la première génération, une API locale documentée, une communauté active (loxforum, LoxBerry, PyLoxone). Ce qu'elle coûte : ≈ 3 950 € HT, ≈ 71 modules plus l'alimentation (≈ 1,3 m de rail, en plus des 1,6 à 2,1 m de la couche filaire), un système propriétaire sur carte microSD dans l'armoire, Windows pour Loxone Config. Face à la Revolution Pi Connect 5 (≈ 581 € HT nue, plus ses modules d'entrées-sorties), Loxone coûte le prix d'une armoire pour la même fonction ; face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), il est plusieurs fois plus cher et plus large.
+Ce que la couche apporte : un contrôleur sans licence, mis à jour gratuitement depuis 2010 jusque sur la première génération, une API locale documentée, une communauté active (loxforum, LoxBerry, PyLoxone). Ce qu'elle coûte : ≈ 3 950 € HT, ≈ 71 modules plus l'alimentation (≈ 1,3 m de rail, en plus des 1,6 à 2,1 m de la couche filaire), un système propriétaire sur carte microSD dans l'armoire, Windows pour Loxone Config. À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici) ; face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), il est plusieurs fois plus cher et plus large.
 
 ## Foudre et isolement
 
@@ -209,7 +209,7 @@ Soit ≈ 2 800 € HT de plus que la configuration minimale, pour passer de 6 à
 ## Verdict
 
 - **Seule** : Loxone remplace l'armoire sans toucher un fil, et un Miniserver par zone évite qu'une panne unique prive toute la maison. Mais c'est l'architecture d'aujourd'hui avec un calculateur par zone : aucune logique locale, aucune manette, un état des relais que le fabricant ne documente pas à la perte du Link, et six pannes uniques qui coupent 20 à 22 boutons. C'est une réponse à la question « sans recâblage », pas à l'exigence.
-- **En dérivation** : un contrôleur gratuit en logiciel et bien outillé, qui facture ses entrées-sorties au prix d'une armoire : près de 4 000 € HT là où la Revolution Pi ou un serveur Modbus font la même chose pour 600 à 1 900 € HT, avec un système propriétaire et une carte microSD dans l'armoire.
+- **En dérivation** : un contrôleur gratuit en logiciel et bien outillé, qui facture ses entrées-sorties au prix d'une armoire : près de 4 000 € HT là où un serveur d'entrées-sorties Modbus fait la même chose pour ≈ 430 € HT en modules Waveshare ([dossier Modbus](modbus-es.md)), à comparer aussi à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici), avec un système propriétaire et une carte microSD dans l'armoire.
 - **À qui elle convient** : à qui veut une domotique riche, programmée en blocs, suivie par un intégrateur Loxone, et accepte un contrôleur unique par zone sans commande de secours.
 
 ## Sources

@@ -9,9 +9,9 @@ KNX est le bus de bâtiment normalisé (EN 50090, ISO/IEC 14543-3), porté par p
 
 !!! abstract "Synthèse"
     - **Seule** : KNX remplace les quatre cartes sans recâblage, et le bus ne sort pas de l'armoire. Mais chaque poussoir passe par le bus : **règle 1 non tenue**. En configuration par zone (une ligne, une alimentation par zone, coupleurs), **aucune des huit défaillances uniques ne prive toute la maison de ses boutons** ; la perte d'une alimentation ou d'une ligne prive sa zone, soit 20 à 22 boutons, et c'est la panne la plus fréquente rapportée sur le terrain. Les éclairages gardent leur état (relais bistables) ; la commande manuelle sans bus n'existe que sur les actionneurs à manettes mécaniques (ABB, Theben, Gira), pas sur MDT.
-    - **En dérivation** : une couche domotique normalisée, sans Linux ni logiciel du projet sur le chemin des contacts, avec une minuterie d'actionneur qui sert de battement de cœur au relais de garde. Elle vaut la Revolution Pi en prix, la dépasse en pérennité, et demande ETS.
+    - **En dérivation** : une couche domotique normalisée, sans Linux ni logiciel du projet sur le chemin des contacts, avec une minuterie d'actionneur qui sert de battement de cœur au relais de garde. Elle est à comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici), sans Linux dans l'armoire, et demande ETS.
     - **Coût estimé** : ≈ 2 950 € HT en configuration minimale, ≈ 5 200 € HT par zone, licence ETS comprise ; ≈ 3 100 € HT en couche domotique seule. Prix d'octobre 2026, boutiques allemandes, convertis en HT.
-    - **Réserve** : estimations à confirmer par un électricien, des devis, les fabricants et des essais. Deux prix d'actionneurs sont dérivés d'un prix par voie, faute de prix public trouvé.
+    - **Réserve** : estimations à confirmer par un électricien, des devis, les fabricants et des essais. Deux prix d'actionneurs sont dérivés d'un prix par voie, faute de prix public trouvé ; l'alimentation STC-0640.01 est comptée à un prix indicatif, TVA non précisée.
 
 ## Principe et gamme
 
@@ -41,7 +41,7 @@ Les poussoirs sont des contacts secs : des **modules d'entrées binaires** les l
 | Interface IP | MDT SCN-IP000.03 | 4 tunnels | 2 | Alimentée par le bus, KNX IP Secure et Data Secure |
 | Parafoudre | DEHN BUStector BT 24 | | borne de bus | Uc 45 V, 5 kA, Up 1 200 V entre fils |
 
-La tension de boucle des entrées MDT (12 V, courant faible) convient aux jonctions IDC données pour 1 A et aux lignes de 30 m. Les boutons tactiles KNX, les écrans et les poussoirs connectés ne sont pas retenus : ils demanderaient de tirer le bus jusqu'aux murs.
+La tension de boucle des entrées MDT (12 V, courant faible) convient aux jonctions IDC données pour 1 A et aux lignes de 30 m, sous réserve que les « 100 m » admissibles soient par entrée et non cumulés sur le module : une zone de 20 lignes de 30 m en cumulerait 600. Les boutons tactiles KNX, les écrans et les poussoirs connectés ne sont pas retenus : ils demanderaient de tirer le bus jusqu'aux murs.
 
 ### Configuration minimale
 
@@ -60,7 +60,7 @@ Une **ligne par zone**, chacune avec son alimentation, ses entrées et ses actio
 | Chambres (21, 7, 5, 4) | Identique | 36 |
 | Pièces d'eau (22, 13, 4 dont le store, 1) | STC, BE-16000.02 + BE-08000.02, AKS-1616.03, JAL 4 voies, AKD-0201.02 | ≈ 30 |
 
-**≈ 120 modules, soit ≈ 2,2 m de rail**, quatre alimentations, trois coupleurs, une vingtaine de participants. Chaque ligne tient seule la règle « une alimentation par ligne ». La largeur du JAL 4 voies et de l'AKD-0201.02 n'a pas été vérifiée.
+**≈ 120 modules, soit ≈ 2,1 m de rail**, quatre alimentations, trois coupleurs, une vingtaine de participants. Chaque ligne tient seule la règle « une alimentation par ligne ». La largeur du JAL 4 voies et de l'AKD-0201.02 n'a pas été vérifiée.
 
 ![Configuration résiliente : une ligne KNX par zone, coupleurs vers la ligne principale](img/knx-par-zone.svg)
 
@@ -84,7 +84,7 @@ Dans la configuration résiliente, la liste fermée du comparatif donne :
 
 | Défaillance unique | Prive de ses boutons… | Pourquoi |
 | --- | --- | --- |
-| 1. Alimentation du bus | une zone | Une STC par ligne ; la ligne principale morte laisse les zones commuter entre elles, mais coupe l'interface IP et les fonctions communes (raisonnement d'après les fiches des coupleurs, scénario non documenté par les fabricants) |
+| 1. Alimentation du bus | une zone | Une STC par ligne ; la ligne principale morte laisse chaque zone commuter en interne ; les ordres inter-zones, l'interface IP et les fonctions communes sont perdus (raisonnement d'après les fiches des coupleurs, scénario non documenté par les fabricants) |
 | 2. Court-circuit ou ligne collée | une zone | Les coupleurs isolent galvaniquement ; un court-circuit sur une ligne « ne tue pas les autres » quand chaque ligne a son alimentation (fiches et retours de terrain) |
 | 3. Contrôleur central | rien | Il n'y en a pas |
 | 4. Logiciel figé | un module | Pas de logiciel central ; un actionneur figé prive ses voies |
@@ -118,7 +118,7 @@ Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs
 - **Logique et interface utilisateur** : la passerelle, par KNXnet/IP. KNX n'a pas de logique centrale ; les actionneurs offrent des scènes et des opérations logiques simples par voie.
 - **Durées bornées** : la fonction minuterie des AKS limite aussi la durée d'une impulsion ; le câblage de la V2 les borne de toute façon.
 
-Ce que la couche apporte : un standard à 500 fabricants, aucun Linux ni logiciel du projet sur le chemin des contacts, des pièces disponibles à dix ans, une mise en service par ETS que n'importe quel intégrateur KNX sait reprendre. Ce qu'elle coûte : ≈ 3 100 € HT, 88 modules (≈ 1,6 m de rail, à ajouter aux 1,6 à 2,1 m de la couche filaire : trois coffrets probables), une licence ETS Lite et quelques jours d'apprentissage. Face à la Revolution Pi Connect 5 (≈ 581 € HT nue, plus ses modules d'entrées-sorties), KNX est du même ordre de prix, plus encombrant, plus durable, et sans le Linux de la Connect 5 à maintenir. Face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), il est nettement plus cher et plus large.
+Ce que la couche apporte : un standard à 500 fabricants, aucun Linux ni logiciel du projet sur le chemin des contacts, des pièces disponibles à dix ans, une mise en service par ETS que n'importe quel intégrateur KNX sait reprendre. Ce qu'elle coûte : ≈ 3 100 € HT, 88 modules (≈ 1,6 m de rail, à ajouter aux 1,6 à 2,1 m de la couche filaire : trois coffrets probables), une licence ETS Lite et quelques jours d'apprentissage. À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici) ; KNX n'a pas de Linux à maintenir dans l'armoire. Face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), il est nettement plus cher et plus large.
 
 ## Foudre et isolement
 
@@ -150,7 +150,7 @@ Prix relevés le 24 octobre 2026 chez des boutiques allemandes (elektromax24, vo
 
 | Poste | Référence | Qté | Prix unitaire HT | Total HT | Source |
 | --- | --- | --- | --- | --- | --- |
-| Alimentation | MDT STC-0640.01 | 1 | ≈ 200 € (TVA non précisée par les comparateurs) | 200 € | comparateur |
+| Alimentation | MDT STC-0640.01 | 1 | ≈ 200 € (indicatif, TVA non précisée par les comparateurs) | 200 € | comparateur |
 | Entrées | MDT BE-32000.02 | 2 | 322,51 € | 645 € | elektromax24 |
 | Éclairages | MDT AKS-2016.03 | 1 | 389,92 € | 390 € | voelkner |
 | Éclairages | MDT AKS-0816.03 | 1 | ≈ 156 € (dérivé) | 156 € | — |
@@ -167,8 +167,8 @@ Prix relevés le 24 octobre 2026 chez des boutiques allemandes (elektromax24, vo
 
 | Poste | Référence | Qté | Prix unitaire HT | Total HT |
 | --- | --- | --- | --- | --- |
-| Alimentations | MDT STC-0640.01 | 4 | ≈ 200 € | 800 € |
-| Coupleurs | MDT SCN-LK001.03 | 3 | ≈ 166 € (190,54 € TTC + port) | 497 € |
+| Alimentations | MDT STC-0640.01 | 4 | ≈ 200 € (indicatif, TVA non précisée) | 800 € |
+| Coupleurs | MDT SCN-LK001.03 | 3 | 160,12 € (190,54 € TTC) | 480 € |
 | Interface IP | MDT SCN-IP000.03 | 1 | 141,26 € | 141 € |
 | Entrées | MDT BE-16000.02 | 3 | 223,19 € | 670 € |
 | Entrées | MDT BE-08000.02 | 3 | ≈ 160 € (189,95 € TTC, eBay, non daté) | 479 € |
@@ -176,11 +176,11 @@ Prix relevés le 24 octobre 2026 chez des boutiques allemandes (elektromax24, vo
 | Volets | JAL-0810.02 × 2, JAL 4 voies × 1 | 3 | 233,56 € ; ≈ 120 € (estimé) | ≈ 587 € |
 | Variateurs | AKD-0401.02 × 2, AKD-0201.02 × 1 | 3 | 264,62 € ; ≈ 140 € (estimé) | ≈ 669 € |
 | Parafoudres | DEHN BT 24 | 4 | 54,29 € | 217 € |
-| **Matériel** | | | | **≈ 4 840 € HT** |
+| **Matériel** | | | | **≈ 4 820 € HT** |
 | Logiciel | ETS6 Home | 1 | 350 € | 350 € |
-| **Total** | | | | **≈ 5 200 € HT** |
+| **Total** | | | | **≈ 5 200 € HT** (5 173 € arrondis à la centaine) |
 
-Soit ≈ 1 250 € HT de plus que la configuration minimale, pour passer de 3 à 0 défaillance unique touchant toute la maison. Une alimentation redondante STR-0640.01 par zone ajouterait encore de l'ordre de 100 à 150 € HT par ligne (prix non relevé).
+Soit ≈ 2 250 € HT de plus que la configuration minimale, pour passer de 3 à 0 défaillance unique touchant toute la maison. Une alimentation redondante STR-0640.01 par zone s'y ajouterait (prix non relevé).
 
 ### Couche domotique en dérivation
 
@@ -188,7 +188,7 @@ Soit ≈ 1 250 € HT de plus que la configuration minimale, pour passer de 3 à
 | --- | --- | --- | --- |
 | Sorties vers les relais de couplage | MDT AKS-2016.03 × 4, AKS-0816.03 × 1 | 5 | ≈ 1 716 € (dont ≈ 156 € dérivés) |
 | Entrées de recopie | MDT BE-32000.02 × 2, BE-08000.02 × 1 | 3 | ≈ 805 € |
-| Alimentation, interface IP, parafoudre | STC-0640.01, SCN-IP000.03, BT 24 | 3 | ≈ 395 € |
+| Alimentation, interface IP, parafoudre | STC-0640.01, SCN-IP000.03, BT 24 | 3 | ≈ 395 € (dont ≈ 200 € indicatifs, TVA non précisée) |
 | **Matériel** | | | **≈ 2 920 € HT** |
 | Logiciel | ETS6 Lite | 1 | 200 € |
 | **Total** | | | **≈ 3 100 € HT**, 88 modules |
@@ -199,7 +199,7 @@ Soit ≈ 1 250 € HT de plus que la configuration minimale, pour passer de 3 à
 - **Fil pilote** : aucune offre KNX vérifiée ; prévoir des relais externes.
 - **Électricien** : de l'ordre de 4 à 6 jours (estimation sans devis, moins de câblage que la V2 : les modules remplacent les télérupteurs et les relais de volets).
 - **Logiciel** : ≈ 5 à 10 semaines-personne (ETS et passerelle).
-- **Place** : ≈ 1,5 m (minimale), ≈ 2,2 m (par zone), ≈ 1,6 m (dérivation, en plus de la couche filaire).
+- **Place** : ≈ 1,5 m (minimale), ≈ 2,1 m (par zone), ≈ 1,6 m (dérivation, en plus de la couche filaire).
 
 ## Ouverture et pérennité
 
@@ -210,8 +210,8 @@ Soit ≈ 1 250 € HT de plus que la configuration minimale, pour passer de 3 à
 
 ## Verdict
 
-- **Seule** : KNX remplace l'armoire sans toucher un fil et, découpé en une ligne par zone, ne laisse aucune défaillance unique priver toute la maison de ses boutons. Il ne tient pas la règle 1 : chaque bouton passe par le bus, et la perte d'une alimentation de zone, panne la plus courante, coupe 20 à 22 boutons jusqu'à l'échange. C'est la meilleure des architectures à calculateur de ce comparatif, pas une réponse à l'exigence.
-- **En dérivation** : une couche domotique sérieuse, normalisée et durable, au prix de la Revolution Pi et sans son Linux dans l'armoire, mais plus large et plus chère qu'un serveur d'entrées-sorties Modbus.
+- **Seule** : KNX remplace l'armoire sans toucher un fil et, découpé en une ligne par zone, ne laisse aucune défaillance unique priver toute la maison de ses boutons. Il ne tient pas la règle 1 : chaque bouton passe par le bus, et la perte d'une alimentation de zone, panne la plus courante, coupe 20 à 22 boutons jusqu'à l'échange. C'est l'architecture à bus la plus proche de l'exigence dans ce comparatif, pas une réponse à l'exigence.
+- **En dérivation** : une couche domotique sérieuse, normalisée et durable, sans Linux dans l'armoire, à comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici), mais plus large et plus chère qu'un serveur d'entrées-sorties Modbus.
 - **À qui elle convient** : à qui veut une couche domotique qu'un intégrateur quelconque reprendra dans dix ans, et accepte d'apprendre ETS.
 
 ## Sources

@@ -115,7 +115,7 @@ Dans cette lecture, les télérupteurs, les chaînes de volets et les variateurs
 - **Logique et interface utilisateur** : la passerelle, par le Light Protocol en WebSocket Secure (deux connexions au plus), ou Home Assistant par l'intégration officielle. Le Master porte scènes, groupes, horloge et horloge astronomique.
 - **Durées bornées** : le câblage de la V2 les borne ; aucune minuterie de voie n'a été relevée sur les DMR02.
 
-Ce que la couche apporte : un fabricant unique de vingt ans, un protocole ASCII simple et documenté, une intégration Home Assistant maintenue par le fabricant, une mise en service par GoldenGate. Ce qu'elle coûte : ≈ 5 570 € HT, 83 modules (≈ 1,45 m de rail, à ajouter aux 1,6 à 2,1 m de la couche filaire), un Master unique sur le chemin de tous les contacts, un logiciel Windows à accès Pro. Face à la Revolution Pi Connect 5 (≈ 581 € HT nue, plus ses modules d'entrées-sorties), c'est près de dix fois le prix de la base ; face à KNX en dérivation (≈ 3 100 € HT), presque le double, sans la norme ni les 500 fabricants ; face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), sans comparaison.
+Ce que la couche apporte : un fabricant unique de vingt ans, un protocole ASCII simple et documenté, une intégration Home Assistant maintenue par le fabricant, une mise en service par GoldenGate. Ce qu'elle coûte : ≈ 5 570 € HT, 83 modules (≈ 1,45 m de rail, à ajouter aux 1,6 à 2,1 m de la couche filaire), un Master unique sur le chemin de tous les contacts, un logiciel Windows à accès Pro. À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici) ; face à KNX en dérivation (≈ 3 100 € HT), presque le double, sans la norme ni les 500 fabricants ; face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), sans comparaison.
 
 ## Foudre et isolement
 
@@ -174,7 +174,7 @@ Prix publics affichés **hors TVA** sur les pages produit du fabricant, relevés
 | Logiciel | GoldenGate | 1 | non trouvé | — |
 | **Total** | | | | **≈ 7 530 € HT** |
 
-Soit ≈ 1 340 € HT de plus que la configuration minimale, sans changer le compte des défaillances uniques qui touchent toute la maison, 6 dans les deux cas : la dépense n'achète que le confinement d'une panne d'alimentation hors du coffret du Master. La variante à télérupteurs mécaniques, qui tient la règle 2, coûte en plus : ≈ 2 335 € HT et 25 modules pour les volets (huit DTRP02 et trente TL1001 au lieu de quatre DTRV01) ; ≈ 1 890 € HT et une trentaine de modules pour les éclairages (sept DTRP01 et vingt-cinq TL2001 au lieu de quatre DMR02), calcul sur les prix du fabricant.
+Soit ≈ 1 340 € HT de plus que la configuration minimale, sans changer le compte des défaillances uniques qui touchent toute la maison, 6 dans les deux cas : la dépense n'achète que le confinement d'une panne d'alimentation hors du coffret du Master. La variante à télérupteurs mécaniques, qui tient la règle 2, coûte en plus : ≈ 2 335 € HT et 25 modules pour les volets (huit DTRP02 à 142,20 € et trente TL1001 à 91,00 €, soit 3 868 €, au lieu de quatre DTRV01 à 383,20 €, soit 1 533 €) ; ≈ 1 890 € HT et une trentaine de modules pour les éclairages (sept DTRP01 à 142,20 € et vingt-cinq TL2001 à 91,00 €, soit 3 270 €, au lieu de quatre DMR02 à 345,00 €, soit 1 380 €), calcul sur les prix publics HT du fabricant (source 14).
 
 ### Couche domotique en dérivation
 
@@ -203,14 +203,14 @@ Consommation sur le bus au pire cas ≈ 2,9 A, sous les 4 A de la DALI05.
 - **Protocole propriétaire**, un seul fabricant de modules. Ouverture par le Light Protocol, documenté depuis 2012, et par l'intégration Home Assistant officielle de 2026 ; passerelles vers DALI, DMX et Modbus RTU en maître, mais aucune exposition de Domintell en Modbus, KNX ou MQTT.
 - **Ancienneté** : société de 1986, gamme bus depuis les années 2000, références DISM, DBIR, DTRV et DDIM inchangées depuis au moins le manuel de 2010 ; catalogue 2025 de 199 produits. Aucune politique de pièces à dix ans publiée.
 - **Ruptures** : les nouveautés (DMR02, écran DTSC05, compteur, Home Assistant) exigent les Masters de 2019 ; le DGQG01 n'est plus pris en charge par l'intégration Home Assistant, et GoldenGate 1.4x a abandonné les anciens écrans ; interfaces Ethernet DETH remplacées ; offre de reprise à −25 % depuis juin 2024 pour migrer les anciens Masters, écrans et variateurs. Le fabricant revendique « une compatibilité ascendante maximale ».
-- **Santé de l'entreprise** : le registre consulté donne « situation normale ». Un annuaire tiers, inaccessible lors de la consultation, mentionnait des pertes de 2022 à 2024, une vingtaine de salariés et une mention d'insolvabilité au printemps 2026 : **non vérifié**, aucune publication officielle trouvée. À vérifier au registre belge des entreprises avant toute décision.
+- **Santé de l'entreprise** : le registre consulté donne « situation normale ». La situation financière est à vérifier au registre belge des entreprises avant toute décision.
 - **Vente** par installateurs ; prix publics affichés ; logiciel par accès Pro.
 - **Communauté** : faible hors Belgique ; un fil Home Assistant, un fil openHAB sans mainteneur, pas de forum officiel.
 
 ## Verdict
 
 - **Seule** : Domintell ne répond ni à la question ni à l'exigence. La limite de 10 m de ses entrées exclut les nappes existantes sans recâblage, et son Master unique met un calculateur sur le chemin de chaque bouton : six défaillances uniques privent toute la maison, en configuration minimale comme par coffret. Les DIP switches des cartes relais rendent la main dans l'armoire, pas au mur. C'est la plus centralisée des architectures de ce comparatif.
-- **En dérivation** : une couche domotique honnête mais chère, ≈ 5 570 € HT contre ≈ 3 100 € HT pour KNX et ≈ 581 € HT pour la base de la Revolution Pi, avec un fabricant unique, un logiciel Windows à accès Pro et un Master sur le chemin de tous les contacts. Le protocole ASCII est son meilleur argument.
+- **En dérivation** : une couche domotique honnête mais chère, ≈ 5 570 € HT contre ≈ 3 100 € HT pour KNX, à comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici), avec un fabricant unique, un logiciel Windows à accès Pro et un Master sur le chemin de tous les contacts. Le protocole ASCII est son meilleur argument.
 - **À qui elle convient** : à qui a déjà une installation Domintell et un installateur agréé, et veut une intégration Home Assistant soutenue par le fabricant. Pas à cette armoire.
 
 ## Sources
@@ -230,7 +230,7 @@ Toutes consultées le 24 octobre 2026.
 11. [DISM20](https://www.domintell.com/en/products/system/inputs/dism20/), [DISM08](https://www.domintell.com/en/products/system/inputs/dism08/), [DISM04](https://www.domintell.com/en/products/system/inputs/dism04/) : entrées pour contacts secs, 10 m, prix.
 12. [DMR02](https://www.domintell.com/en/products/system/outputs/dmr02/) : 345 € HT, 8 × 16 A, DIP switches sans Master, Masters 2019 seulement ; [billet du 8 avril 2024](https://www.domintell.com/en/8-outputs-relay-card/).
 13. [DMR01](https://www.domintell.com/en/products/system/outputs/dmr01/) et [DBIR01](https://www.domintell.com/en/products/system/outputs/dbir01/) : microswitches de secours, prix.
-14. [DTRP01](https://www.domintell.com/en/products/system/outputs/dtrp01/), [TL2001](https://www.domintell.com/en/products/system/outputs/tl2001/), [DTRP02](https://www.domintell.com/en/products/system/outputs/dtrp02/), [TL1001](https://www.domintell.com/en/products/system/outputs/tl1001/) : télérupteurs à manette, prix.
+14. [DTRP01](https://www.domintell.com/en/products/system/outputs/dtrp01/), [TL2001](https://www.domintell.com/en/products/system/outputs/tl2001/), [DTRP02](https://www.domintell.com/en/products/system/outputs/dtrp02/), [TL1001](https://www.domintell.com/en/products/system/outputs/tl1001/) : télérupteurs à manette ; DTRP01 et DTRP02 à 142,20 € HT, TL1001 et TL2001 à 91,00 € HT.
 15. [DTRV01](https://www.domintell.com/en/products/system/outputs/dtrv01/) : 383,20 € HT, 4 volets, 8 relais 8 A.
 16. [DDIM01](https://www.domintell.com/en/products/features/lighting-management/ddim01/) et [DD400L](https://www.domintell.com/en/products/features/lighting-management/dd400l/) : interface et variateur 400 W, prix.
 17. [DNET02](https://www.domintell.com/en/products/features/communication/dnet02/) : 617 € HT, WebSocket Secure.
@@ -240,8 +240,6 @@ Toutes consultées le 24 octobre 2026.
 21. [Intégration Home Assistant officielle](https://github.com/Domintell/ha_domintell) et [billet du 12 janvier 2026](https://www.domintell.com/en/compatible-home-assistant/) : Apache-2.0, port 17481, deux connexions, modules et limites.
 22. [DELEC01](https://www.domintell.com/en/products/sensors/electrical-consumption/delec01/) : lecture du port P1, Wi-Fi.
 23. [Fil Home Assistant](https://community.home-assistant.io/t/domintell-custom-component/185481?page=6), [fil openHAB](https://community.openhab.org/t/domintell-integration/48184), [fil iRidium](https://iridiummobile.userecho.ru/communities/18/topics/25707-scanning-the-domintell-bus-with-the-new-module?lang=en), [bibliothèque Python](https://pypi.org/project/python-domintell) : intégrations communautaires et leurs limites.
-24. [Guide domotique généraliste (forum, 2010)](https://www.forumconstruire.com/construire/topic-111132.php) : risques des architectures centralisées.
-25. [Annuaire d'entreprises](https://signumi.com/en/company/289691581580003089-domintell) : page inaccessible lors de la consultation ; mention non vérifiée.
 
 !!! note "À confirmer auprès des fabricants"
     La tolérance réelle des entrées DISM au-delà de 10 m, la tension et le courant sur le contact, l'isolation des entrées et le nombre de communs ; la confirmation écrite qu'aucun lien entrée → sortie ne survit à l'arrêt du Master, et la liste exacte des commandes manuelles sans Master ; le type des relais DMR02, DBIR01 et DTRV01 et leur état au retour de tension ; les protections de la DALI05, le caractère TBTS du bus, la tension d'essai bus / 230 V et les parafoudres recommandés ; le verrouillage des deux sens des volets ; le nombre de modules par DGQG04 (600 ou 60) et la disponibilité du DHUB01 ; les conditions d'accès à GoldenGate pour un propriétaire ; une sortie cyclique du Master pour le relais de garde ; la commande d'un fil pilote par relais ; les prix installateur ; la situation financière de la société au registre belge.

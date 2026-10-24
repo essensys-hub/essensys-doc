@@ -54,7 +54,7 @@ Le manuel impose un contrôleur par installation et deux alimentations au plus ;
 | Chambres (21, 7, 5, 4) | Contrôleur, 7 × 550-00210, 550-00106 et 550-00103, 2 × 550-00130, 2 × 550-00340, coupleur | 44 |
 | Pièces d'eau (22, 13, 4 dont le store, 1) | Contrôleur, 8 × 550-00210, 2 × 550-00106 et 1 × 550-00103, 2 × 550-00130, 1 × 550-00340, coupleur | 46 |
 
-Avec un 550-00106 pour les contacts divers : **≈ 136 modules, soit ≈ 2,5 m de rail**, trois contrôleurs. Chaque zone compte 12 à 16 modules d'armoire : l'alimentation intégrée de son contrôleur suffit.
+Avec un 550-00106 pour les contacts divers : **≈ 136 modules, soit ≈ 2,4 m de rail**, trois contrôleurs. Chaque zone compte 12 à 16 modules d'armoire : l'alimentation intégrée de son contrôleur suffit.
 
 ## Seule face à l'exigence
 
@@ -105,13 +105,13 @@ Le découpage par zone demande trois installations que Niko n'a pas conçues pou
 
 Les télérupteurs, les chaînes de volets et les variateurs à entrée locale gardent le chemin du bouton. Niko fournirait la couche domotique, avec quatre obstacles :
 
-- **Sorties** : quinze 550-00106 (90 contacts) commandent les relais de couplage 38.51 de la V2. Mais ces contacts **ne sont pas secs** : chaque module distribue la phase qu'il reçoit, et il est donné pour 230 V. Pour des bobines 24 V, il faudrait vérifier auprès de Niko l'admissibilité d'une alimentation 24 V du module ; sinon, des 38.51 à bobine 230 V, au même prix que ceux de la recopie, commandés par la phase du module, ce qui ramène du 230 V sur le commun des contacts domotiques. Non chiffré en plus, le 38.51 étant déjà dans la V2.
+- **Sorties** : quinze 550-00106 (90 contacts) commandent les relais de couplage 38.51 de la V2. Mais ces contacts **ne sont pas secs** : chaque module distribue la phase qu'il reçoit, et il est donné pour 230 V. Pour des bobines 24 V, il faudrait vérifier auprès de Niko l'admissibilité d'une alimentation 24 V du module ; sinon, des 38.51 à bobine 230 V, au même prix que ceux de la recopie, commandés par la phase du module, ce qui met du 230 V sur le circuit des bobines de couplage, côté îlot domotique ; les contacts secs restent en TBTS. Non chiffré en plus, le 38.51 étant déjà dans la V2.
 - **Entrées** : 24 modules capteurs (72 entrées) lisent les contacts des relais de recopie, trois par module.
 - **Limites d'installation** : 39 modules d'armoire pour une alimentation intégrée donnée pour 24 et deux alimentations supplémentaires au plus ; le calcul en points n'a pas pu être fait, faute de valeur publiée pour le module capteurs. La tenue en une seule installation est à confirmer.
 - **Battement de cœur** : aucun bloc d'impulsion périodique n'a été trouvé ; les routines « Time schedule » et « Free function » existent, cadence minimale non lue. Le réarmement viendrait de la **passerelle**, par la Hobby API en MQTT, qui commuterait un contact relié au relais de garde ; si la passerelle, le contrôleur ou le jeton se tait, le relais de garde retombe en moins d'une seconde et la couche se débranche. Le **jeton d'API expire chaque année** et se renouvelle en ligne : un oubli débranche la domotique sans toucher aux boutons.
 - **Logique et interface** : la passerelle, en MQTT ; les routines du contrôleur restent utilisables par l'application Niko.
 
-Ce que la couche apporte : un courtier MQTT dans le contrôleur, chiffré en TLS, un binding openHAB officiel et deux intégrations Home Assistant communautaires. Ce qu'elle coûte : ≈ 8 100 € HT, ≈ 142 modules (≈ 2,5 m de rail, en plus des 1,6 à 2,1 m de la couche filaire : trois ou quatre coffrets), un jeton annuel, et Niko « ne supporte pas les applications construites avec la Hobby API ». Face à la Revolution Pi Connect 5 (≈ 581 € HT nue, plus ses modules d'entrées-sorties), c'est plus de dix fois le prix du contrôleur pour la même fonction ; face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md)), l'écart est plus grand encore.
+Ce que la couche apporte : un courtier MQTT dans le contrôleur, chiffré en TLS, un binding openHAB officiel et deux intégrations Home Assistant communautaires. Ce qu'elle coûte : ≈ 8 100 € HT, ≈ 142 modules (≈ 2,5 m de rail, en plus des 1,6 à 2,1 m de la couche filaire : trois ou quatre coffrets), un jeton annuel, et Niko « ne supporte pas les applications construites avec la Hobby API ». À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici) ; face au serveur d'entrées-sorties léger ([dossier Modbus](modbus-es.md), ≈ 430 € HT en modules Waveshare), c'est près de vingt fois le prix.
 
 ## Foudre et isolement
 
@@ -195,7 +195,7 @@ Soit ≈ 1 600 € HT de plus que la configuration minimale, pour passer de 6 à
 - **Verrouillage des volets** : non mentionné sur le module moteurs ; un verrouillage câblé externe n'est pas chiffré.
 - **Électricien** : de l'ordre de 4 à 6 jours (estimation sans devis).
 - **Logiciel** : ≈ 3 à 6 semaines-personne (programmation Niko et passerelle), plus le renouvellement annuel du jeton.
-- **Place** : ≈ 2,3 m (minimale), ≈ 2,5 m (par zone), ≈ 2,5 m (dérivation, en plus de la couche filaire).
+- **Place** : ≈ 2,3 m (minimale), ≈ 2,4 m (par zone), ≈ 2,5 m (dérivation, en plus de la couche filaire).
 
 ## Ouverture et pérennité
 
@@ -208,7 +208,7 @@ Soit ≈ 1 600 € HT de plus que la configuration minimale, pour passer de 6 à
 ## Verdict
 
 - **Seule** : Niko Home Control II reprend les 63 poussoirs sans toucher un fil, mais avec un module de capteurs à trois entrées détourné de son usage, et au prix d'une armoire et demie. Un contrôleur par installation oblige à trois installations pour éviter la panne unique ; chaque bouton passe par son contrôleur, sans repli documenté, et le fabricant écrit que le contrôleur a besoin d'Internet sans dire pour quoi. C'est une solution pour une maison câblée en bus Niko, pas pour celle-ci.
-- **En dérivation** : la couche la plus chère et la plus large du comparatif, avec des sorties qui ne sont pas des contacts secs, un jeton d'API à renouveler chaque année et aucun signal cyclique identifié. Rien ne la recommande face à la Revolution Pi ou à un serveur Modbus.
+- **En dérivation** : la couche la plus chère et la plus large du comparatif, avec des sorties qui ne sont pas des contacts secs, un jeton d'API à renouveler chaque année et aucun signal cyclique identifié. Rien ne la recommande face à un serveur d'entrées-sorties Modbus ; à comparer aussi à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici).
 - **À qui elle convient** : à qui construit ou rénove en tirant le bus Niko jusqu'aux poussoirs, avec un installateur Niko, et accepte un contrôleur unique enregistré chez le fabricant.
 
 ## Sources

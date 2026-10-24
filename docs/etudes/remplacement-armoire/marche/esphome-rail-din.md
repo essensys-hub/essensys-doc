@@ -1,6 +1,6 @@
 ---
 title: "ESPHome sur rail DIN : remplacer l'armoire sans recâblage"
-description: "Trois cartes KinCony KC868-A32 sous ESPHome, une par zone, avec Home Assistant en supervision, pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils. Seule, la logique tourne sur chaque ESP32 sans Home Assistant, mais l'état vit dans un micrologiciel compilé par le projet et le redémarrage automatique éteint les relais ; en dérivation, c'est la couche d'entrées-sorties la moins chère en cartes, sans isolement chiffré. De l'ordre de 1 100 € HT en armoire complète, 360 € HT en couche domotique seule, hors alimentation, port et droits."
+description: "Trois cartes KinCony KC868-A32 sous ESPHome, une par zone, avec Home Assistant en supervision, pour remplacer les quatre cartes de l'armoire ESSENSYS sans toucher aux fils. Seule, la logique tourne sur chaque ESP32 sans Home Assistant, mais l'état vit dans un micrologiciel compilé par le projet et le redémarrage automatique éteint les relais ; en dérivation, c'est la couche d'entrées-sorties la moins chère en cartes, sans isolement chiffré. De l'ordre de 710 € HT en armoire complète, 360 € HT en couche domotique seule, hors alimentation, port et droits."
 ---
 
 # ESPHome sur rail DIN
@@ -8,9 +8,9 @@ description: "Trois cartes KinCony KC868-A32 sous ESPHome, une par zone, avec Ho
 ESPHome compile un fichier YAML en micrologiciel pour une carte ESP32 ; les cartes KinCony KC868 portent 16 ou 32 entrées à contact sec et autant de relais 230 V. C'est la voie « maison » la moins chère de ce [comparatif](index.md), à rapprocher de la refonte Raspberry Pi des V1 : que vaut-elle quand on lui demande de reprendre les 63 poussoirs et toutes les charges, et que reste-t-il quand Home Assistant, le réseau ou une carte se tait ?
 
 !!! abstract "Synthèse"
-    - **Seule** : trois KC868-A32, une par zone, reprennent les 63 poussoirs et jusqu'à 96 relais sans changer un fil, mais pas sur rail DIN modulaire : trois boîtiers de 320 mm à visser sur platine. La liaison entrée → relais tourne sur l'ESP32 de chaque carte et marche sans Home Assistant : **règle 1 partielle**, par carte, dans la lecture large de la grille, car ce micrologiciel est compilé par le projet, pas fixé par le fabricant. Deux pièges documentés : par défaut, une carte **redémarre toutes les 15 minutes** quand aucun client ne lui parle (`reboot_timeout`) et ses relais reviennent à `ALWAYS_OFF` au redémarrage. Correctement paramétrée, aucune des huit défaillances uniques ne prive toute la maison ; mal paramétrée, deux le font toutes les 15 minutes.
+    - **Seule** : trois KC868-A32, une par zone, reprennent les 63 poussoirs et jusqu'à 96 relais sans changer un fil, mais pas sur rail DIN modulaire : trois boîtiers de 320 mm à visser sur platine. La liaison entrée → relais tourne sur l'ESP32 de chaque carte et marche sans Home Assistant : **règle 1 non tenue**, avec une logique locale par carte, mais un micrologiciel du projet, compilé à partir d'un YAML et non fixé par le fabricant. Deux pièges documentés : par défaut, une carte **redémarre toutes les 15 minutes** quand aucun client ne lui parle (`reboot_timeout`) et ses relais reviennent à `ALWAYS_OFF` au redémarrage. Correctement paramétrée, aucune des huit défaillances uniques ne prive toute la maison ; mal paramétrée, deux le font toutes les 15 minutes.
     - **En dérivation** : 96 contacts inverseurs et 96 entrées pour ≈ 360 € HT, le prix de cartes le plus bas du comparatif, derrière les relais de couplage et le relais de garde de la V2. Mais aucune tension d'isolement publiée, un marquage CE qui ne couvre que la radio, et un micrologiciel du projet à maintenir dans l'armoire.
-    - **Coût estimé** : ≈ 1 100 € HT en armoire complète, configuration minimale et par zone confondues, dont ≈ 360 € HT de cartes et ≈ 715 € HT de variateurs Eltako ; ≈ 360 € HT en couche domotique seule. Hors alimentation 12 V, commutateur, port, droits et TVA d'import, non chiffrés. Prix en dollars d'octobre 2026 convertis au change du jour, non vérifiés.
+    - **Coût estimé** : ≈ 710 € HT en armoire complète, configuration minimale et par zone confondues, dont ≈ 360 € HT de cartes et ≈ 350 € HT de variateurs Eltako au prix boutique retenu par la V2 ; ≈ 360 € HT en couche domotique seule. Hors alimentation 12 V, commutateur, port, droits et TVA d'import, non chiffrés. Prix en dollars d'octobre 2026 convertis au change du jour, non vérifiés.
     - **Réserve** : estimations à confirmer par un électricien, des devis, le fabricant et des essais. La boutique du fabricant n'a pas pu être consultée en direct ; les prix viennent de résumés de recherche.
 
 ## Principe et gamme
@@ -60,7 +60,7 @@ Les [sept règles](../../resilience.md#pour-toutes-les-installations-essensys) d
 
 | Règle | Tenue | Pourquoi |
 | --- | --- | --- |
-| 1. Pas de calculateur entre le bouton et sa charge | **Partielle**, par carte | La liaison `on_press` → `switch.toggle` tourne sur l'ESP32 et « marche sans Home Assistant ». Une carte morte ne prive que sa zone. Mais le micrologiciel est compilé par le projet à partir d'un YAML, pas fixé par le fabricant, et l'ordre traverse deux bus I2C internes et huit PCF8574 : lue à la lettre, la grille dirait « non tenue ». Par défaut, la carte redémarre toutes les 15 minutes sans client (`reboot_timeout`) |
+| 1. Pas de calculateur entre le bouton et sa charge | **Non tenue** ; logique locale par carte, mais micrologiciel du projet | La liaison `on_press` → `switch.toggle` tourne sur l'ESP32 et « marche sans Home Assistant ». Une carte morte ne prive que sa zone. Mais le micrologiciel est compilé par le projet à partir d'un YAML, pas fixé par le fabricant, et l'ordre traverse deux bus I2C internes et huit PCF8574 : la grille ne tolère que le micrologiciel fixé par le fabricant d'un module du commerce. Par défaut, la carte redémarre toutes les 15 minutes sans client (`reboot_timeout`) |
 | 2. L'état vit dans un organe bistable | Non tenue | Relais monostables ; l'état est relu dans la flash au démarrage selon `restore_mode`, **`ALWAYS_OFF` par défaut** : tout s'éteint à chaque redémarrage. `RESTORE_DEFAULT_OFF` garde le dernier état, mais « tous les composants ne le respectent pas » |
 | 3. La domotique ajoute, ne retire jamais | Non tenue | La carte est la domotique : Home Assistant agit sur les mêmes relais, le verrouillage des volets est logiciel (« un bogue pourrait activer les deux »), et une carte figée bloque ses boutons |
 | 4. Une source et un fusible par zone, un fusible pour la domotique | Partielle | Une alimentation 12 V par carte, oui ; mais boutons, logique et relais partagent cette alimentation, et aucun fusible par voie n'est documenté |
@@ -109,7 +109,7 @@ Les télérupteurs, les chaînes de volets et les variateurs à entrée locale d
 - **Logique** : aucune dans les cartes, qui restent des entrées-sorties ; elle est dans la passerelle, en Go par MQTT ou par l'API native, ou sous Home Assistant sur le CM5. Le double appui et l'appui long se lisent côté passerelle, sur les entrées de recopie des poussoirs.
 - **Durées bornées** : par le câblage de la V2 ; ESPHome peut y ajouter un `delayed_off` par relais, sans que la V2 en dépende.
 
-Ce que la couche apporte : ≈ 360 € HT de cartes pour 96 sorties et 96 entrées, un logiciel libre très répandu, aucune licence, un matériel que n'importe quelle carte ESP32 à relais peut remplacer. Ce qu'elle coûte : ≈ 0,96 m de platine hors rail DIN, aucune tension d'isolement publiée entre entrées, relais et logique, un marquage CE limité à la radio, et un micrologiciel compilé par le projet dans l'armoire, à tenir à jour. Face à la Revolution Pi Connect 5 (≈ 581 € HT nue, plus ses modules d'entrées-sorties, marquée CE, entrées isolées, Linux à maintenir), ESPHome est plus de deux fois moins cher et moins documenté. Face au serveur d'entrées-sorties Modbus ([dossier Modbus](modbus-es.md), ≈ 430 € HT), il est un peu moins cher, sans aucune logique dans l'armoire d'un côté, avec un micrologiciel à compiler de l'autre.
+Ce que la couche apporte : ≈ 360 € HT de cartes pour 96 sorties et 96 entrées, un logiciel libre très répandu, aucune licence, un matériel que n'importe quelle carte ESP32 à relais peut remplacer. Ce qu'elle coûte : ≈ 0,96 m de platine hors rail DIN, aucune tension d'isolement publiée entre entrées, relais et logique, un marquage CE limité à la radio, et un micrologiciel compilé par le projet dans l'armoire, à tenir à jour. À comparer à la Revolution Pi Connect 5 (≈ 581 € HT nue, modules d'entrées-sorties non chiffrés ici), marquée CE et à entrées isolées. Face au serveur d'entrées-sorties Modbus ([dossier Modbus](modbus-es.md), ≈ 430 € HT), il est un peu moins cher, sans aucune logique dans l'armoire d'un côté, avec un micrologiciel à compiler de l'autre.
 
 ## Foudre et isolement
 
@@ -137,20 +137,20 @@ Côté passerelle, le backend Go parlerait aux cartes par MQTT, le plus simple, 
 
 ## Nomenclature et coût estimé
 
-La boutique du fabricant a refusé les consultations directes (erreur 429) ; le prix de l'A32 vient de résumés de recherche de sa page de collection, « à partir de 130 $ », vraisemblablement hors taxes et hors port. Conversion ≈ 360 € pour trois cartes au change du jour, non vérifiée. AliExpress et Amazon n'ont pas pu être consultés. Les variateurs sont repris du dossier Modbus au prix catalogue Eltako.
+La boutique du fabricant a refusé les consultations directes (erreur 429) ; le prix de l'A32 vient de résumés de recherche de sa page de collection, « à partir de 130 $ », vraisemblablement hors taxes et hors port. Conversion ≈ 360 € pour trois cartes au change du jour, non vérifiée. AliExpress et Amazon n'ont pas pu être consultés. Les variateurs sont repris du dossier Modbus au prix boutique de 43,45 € HT (51,70 € TTC chez zaehlerschrank24, le prix retenu par la V2) ; le prix catalogue Eltako est de 89,37 € HT.
 
 ### Configuration minimale
 
 | Poste | Référence | Qté | Prix unitaire HT | Total HT | Source |
 | --- | --- | --- | --- | --- | --- |
 | Entrées et relais | KinCony KC868-A32 | 3 | « à partir de 130 $ » (≈ 120 €) | ≈ 390 $ (≈ 360 €) | boutique KinCony, via résumé |
-| Variateurs | Eltako EUD12D-UC | 8 | 89,37 € (catalogue Eltako, HT) | ≈ 715 € | dossier [Modbus](modbus-es.md) ; ≈ 43 € en boutique selon la V2 |
+| Variateurs | Eltako EUD12D-UC | 8 | 43,45 € (51,70 € TTC ; catalogue Eltako 89,37 € HT) | ≈ 348 € | zaehlerschrank24, dossier [Modbus](modbus-es.md) |
 | Alimentation 12 V | — | 1 | non chiffrée | non chiffrée | consommation non trouvée |
 | Commutateur Ethernet | — | 1 | non chiffré | non chiffré | — |
 | Hôte Home Assistant | CM5 existant | 1 | 0 € | 0 € | — |
-| **Matériel** | | | | **≈ 1 075 € HT**, estimé, hors alimentation et commutateur | |
+| **Matériel** | | | | **≈ 710 € HT**, estimé, hors alimentation et commutateur | |
 | Logiciel | ESPHome, Home Assistant | | 0 € | 0 € | licences libres |
-| **Total** | | | | **≈ 1 100 € HT**, estimé | |
+| **Total** | | | | **≈ 710 € HT**, estimé | |
 
 Hors du total : port, droits de douane et TVA d'import depuis la Chine, non chiffrés. La variante deux A32 et une A16 n'est pas chiffrée, le prix de l'A16 n'ayant pas été trouvé.
 
@@ -159,12 +159,12 @@ Hors du total : port, droits de douane et TVA d'import depuis la Chine, non chif
 | Poste | Référence | Qté | Prix unitaire HT | Total HT |
 | --- | --- | --- | --- | --- |
 | Entrées et relais, une carte par zone | KinCony KC868-A32 | 3 | ≈ 120 € | ≈ 360 € |
-| Variateurs | Eltako EUD12D-UC | 8 | 89,37 € | ≈ 715 € |
+| Variateurs | Eltako EUD12D-UC | 8 | 43,45 € | ≈ 348 € |
 | Alimentations 12 V, une par zone | — | 3 | non chiffrées | non chiffrées |
 | Commutateur Ethernet | — | 1 | non chiffré | non chiffré |
-| **Matériel** | | | | **≈ 1 075 € HT**, estimé |
+| **Matériel** | | | | **≈ 710 € HT**, estimé |
 | Logiciel | | | 0 € | 0 € |
-| **Total** | | | | **≈ 1 100 € HT**, estimé, plus deux alimentations |
+| **Total** | | | | **≈ 710 € HT**, estimé, plus deux alimentations |
 
 La configuration résiliente ne coûte que deux alimentations de plus que la minimale : le découpage par zone est gratuit en cartes, puisqu'il en faut trois dans les deux cas.
 
@@ -200,7 +200,7 @@ Les relais de couplage et de recopie 38.51, le relais de garde et les bornes sec
 
 ## Verdict
 
-- **Seule** : trois cartes à 130 $ reprennent toute l'armoire, et chaque zone marche sans Home Assistant. Mais l'état vit dans un micrologiciel du projet, les relais s'éteignent à chaque redémarrage, et le redémarrage toutes les 15 minutes est le comportement par défaut : la maison tient par trois lignes de YAML, pas par le câblage. Aucun isolement chiffré, un CE radio seulement. C'est la refonte Raspberry Pi des V1 en moins cher et en moins documenté, pas une réponse à l'exigence.
+- **Seule** : trois cartes à 130 $ reprennent toute l'armoire, et chaque zone marche sans Home Assistant. Mais le lien du bouton à sa charge est un micrologiciel du projet, pas celui, fixé par le fabricant, d'un module du commerce : règle 1 non tenue. L'état vit dans ce micrologiciel, les relais s'éteignent à chaque redémarrage, et le redémarrage toutes les 15 minutes est le comportement par défaut : la maison tient par trois lignes de YAML, pas par le câblage. Aucun isolement chiffré, un CE radio seulement. C'est la refonte Raspberry Pi des V1 en moins cher et en moins documenté, pas une réponse à l'exigence.
 - **En dérivation** : la couche d'entrées-sorties la moins chère en cartes, ≈ 360 € HT, que les 38.51 et le relais de garde de la V2 rendent acceptable ; un micrologiciel à compiler et à maintenir, et un encombrement hors rail DIN.
 - **À qui elle convient** : à qui sait écrire du YAML et accepte un matériel peu documenté derrière une couche filaire qui, elle, tient l'exigence ; pas à qui veut une armoire qu'un électricien reprend.
 
@@ -236,7 +236,7 @@ Toutes consultées le 24 octobre 2026.
 26. [Boutique KinCony, collection KC868-A](https://shop.kincony.com/collections/kc868-ax) : A32 « à partir de 130 $ », via résumé, page inaccessible en direct.
 27. [KinCony, pages produit A32](https://www.kincony.com/arduino-esp32-32-channel-relay-module-kc868-a32.html) et [A16](https://www.kincony.com/arduino-esp32-16-channel-relay-module-2.html) : schémas, micrologiciels.
 28. [Sonoff SPM chez Domadoo](https://www.domadoo.fr/en/good-deals/5928-sonoff-rail-din-intelligent-power-meter-main-unit.html) : 76 à 91 € TTC.
-29. [Eltako, notice EUD12D-UC](https://www.eltako.com/fileadmin/downloads/de/_bedienung/EUD12D_21100905-3_dt.pdf) : variateur universel à entrée poussoir.
+29. [Eltako, notice EUD12D-UC](https://www.eltako.com/fileadmin/downloads/de/_bedienung/EUD12D_21100905-3_dt.pdf) : variateur universel à entrée poussoir, prix catalogue 89,37 € HT ; [zaehlerschrank24, EUD12D-UC](https://www.zaehlerschrank24.de/multi-dimmschalter-eud12d-uc.html) : 51,70 € TTC, soit 43,45 € HT.
 
 !!! note "À confirmer auprès des fabricants"
     Les prix de l'A32 Pro, de l'A16, du D8 et de l'A32M, le port et les droits ; la tension d'isolement des entrées EL357 telles qu'implantées, le courant de boucle, le filtrage et la longueur de nappe admise ; la référence des relais, leur tension d'essai bobine / contact, leur tenue à l'appel des LED ; la compatibilité rail DIN du profilé et la consommation 12 V d'une A32 relais collés ; le mécanisme des 32 boutons de l'A32 Pro ; l'existence d'un rapport de sécurité électrique au-delà de la directive radio ; l'effet d'un défaut I2C sur les relais ; un chien de garde matériel sous ESPHome ; la tension de commande de l'EUD12D-UC par un relais de l'A32 ; la disponibilité de l'A32 à cinq et dix ans.
