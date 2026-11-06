@@ -69,6 +69,8 @@ nav:
     - Protection contre les surtensions: install/protection-surtensions.md
     - Remise en service après surtension: install/remise-en-service-surtension.md
     - Module N2 ESP32: install/module-n2-esp32.md
+  - Utilisation:
+    - Régler l'extinction automatique des lumières: utilisation/extinction-lumieres.md
   - Architecture:
     - Vue d'ensemble: architecture/overview.md
     - Table d'echange: architecture/exchange-table.md
