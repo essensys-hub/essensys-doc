@@ -74,6 +74,7 @@ nav:
     - Régler l'extinction automatique des lumières: utilisation/extinction-lumieres.md
     - Renommer une lumière: utilisation/renommer-lumiere.md
     - Renommer un volet ou un store: utilisation/renommer-volet.md
+    - Masquer et ordonner les lumières et les volets: utilisation/masquer-ordonner-objets.md
   - Architecture:
     - Vue d'ensemble: architecture/overview.md
     - Table d'echange: architecture/exchange-table.md
