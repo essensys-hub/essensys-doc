@@ -239,12 +239,27 @@ Indices exacts recalcules depuis l'enum `Tbb_Donnees_Index` (verifies par recoup
 | 494-501 | `Variateurs_PDV_Conf` | RWS | Config variateurs PDV (8 max par BA) : 0=TOR rampe, 1=gradateur, 2=TOR sans rampe |
 | 502-509 | `Variateurs_CHB_Conf` | RWS | Config variateurs CHB |
 | 510-517 | `Variateurs_PDE_Conf` | RWS | Config variateurs PDE |
-| 518-533 | `Lampes_PDV_Temps` | RWS | Temps extinction lampes PDV (1-255 min, 0=pas d'auto) |
-| 534-549 | `Lampes_CHB_Temps` | RWS | Temps extinction lampes CHB |
-| 550-565 | `Lampes_PDE_Temps` | RWS | Temps extinction lampes PDE |
+| 518-533 | `Lampes_PDV_Temps` | RWS | Temps extinction lampes PDV (0-255 min, 0=jamais) ; 521 = Dressing |
+| 534-549 | `Lampes_CHB_Temps` | RWS | Temps extinction lampes CHB (aucune lumiere reglable) |
+| 550-565 | `Lampes_PDE_Temps` | RWS | Temps extinction lampes PDE ; 555, 556, 557, 561, 562 (voir ci-dessous) |
 | 566-573 | `Volets_PDV_Temps` | RWS | Temps action volets PDV (1-255 sec) |
 | 574-581 | `Volets_CHB_Temps` | RWS | Temps action volets CHB |
 | 582-589 | `Volets_PDE_Temps` | RWS | Temps action volets PDE |
+
+#### Temps d'extinction des lampes (indices 518-565)
+
+Chaque lampe a **un octet** : 0 a 255 minutes, **0 = jamais** (la lumiere reste allumee). Le boitier arme un compteur de `minutes x 60 x 0,994` secondes (15 min = environ 894 s). La case d'une lampe est la base du boitier plus l'index de sa sortie. Six lumieres ont un delai reglable :
+
+| Indice | Lumiere | Calcul |
+|--------|---------|--------|
+| 521 | Dressing (pieces de vie) | 518 + 3 |
+| 555 | WC 1 (pieces d'eau) | 550 + 5 |
+| 556 | WC 2 | 550 + 6 |
+| 557 | Service (buanderie) | 550 + 7 |
+| 561 | Annexe 1 | 550 + 11 |
+| 562 | Annexe 2 | 550 + 12 |
+
+L'ecran tactile de l'armoire ne propose que 15 min, 30 min, 1 h et Jamais ; une autre valeur (par exemple 7 min) est acceptee par le boitier mais n'est cochee sur aucune case de l'ecran (comportement a verifier au banc). Procedure de reglage : voir la page [Regler l'extinction automatique des lumieres](../utilisation/extinction-lumieres.md).
 
 #### Temps d'action des volets (indices 566-589)
 
