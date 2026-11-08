@@ -42,6 +42,19 @@ Avec la disposition des objets, le fichier a deux sections de plus, `lights_layo
 - L'écriture est atomique (fichier temporaire puis renommage) : le fichier n'est jamais à moitié écrit.
 - Aucune nouvelle clé de configuration, aucun nouveau montage : le même fichier, la même clé `light_names.path` et le même répertoire servent aux quatre sections. Les sections de disposition utilisent aussi ce fichier et cette clé : un simple `docker restart` du conteneur suffit pour déployer la fonction des volets et celle de la disposition.
 
+## Section `doorbell`
+
+La fonction [Sonnette UniFi](../utilisation/sonnette-unifi.md) ajoute une section `doorbell` au même fichier. C'est un **objet** (un seul document), pas une table d'entrées :
+
+```json
+{"version":1,"lights":{},"shutters":{},"doorbell":{"enabled":true,"camera_id":"camera-exemple","lights":["salon","entree"],"blinks":5,"version":2,"updated_at":"2026-11-08T10:15:30.123Z","updated_by":"admin-local"}}
+```
+
+- Par défaut (section absente) : fonction désactivée, aucune lumière, 5 clignotements.
+- Les autres sections (noms, dispositions) sont conservées à l'écriture, et inversement.
+- Aucune synchronisation avec le cloud : la fonction est locale.
+- La configuration UniFi de la CM5 est décrite dans [Configuration UniFi de la gateway](sonnette-unifi-gateway.md).
+
 ## Sauvegarde
 
 Le répertoire `/opt/data/light-names` est sous `/opt/data` : il est sauvegardé avec le reste des données de la gateway. Pour une sauvegarde manuelle, copiez le fichier `light-names.json` ; pour restaurer, remettez-le en place et relancez le backend. La gateway renvoie ensuite ses noms et ses dispositions (lumières et volets) au cloud à la synchronisation suivante, et la modification la plus récente l'emporte.
