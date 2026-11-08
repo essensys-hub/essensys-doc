@@ -70,11 +70,13 @@ nav:
     - Remise en service après surtension: install/remise-en-service-surtension.md
     - Module N2 ESP32: install/module-n2-esp32.md
     - Fichier des noms (gateway): install/noms-lumieres-gateway.md
+    - Configuration UniFi (sonnette): install/sonnette-unifi-gateway.md
   - Utilisation:
     - Régler l'extinction automatique des lumières: utilisation/extinction-lumieres.md
     - Renommer une lumière: utilisation/renommer-lumiere.md
     - Renommer un volet ou un store: utilisation/renommer-volet.md
     - Masquer et ordonner les lumières et les volets: utilisation/masquer-ordonner-objets.md
+    - Sonnette UniFi: utilisation/sonnette-unifi.md
   - Architecture:
     - Vue d'ensemble: architecture/overview.md
     - Table d'echange: architecture/exchange-table.md
