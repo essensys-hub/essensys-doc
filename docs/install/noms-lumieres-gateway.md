@@ -50,7 +50,8 @@ La fonction [Sonnette UniFi](../utilisation/sonnette-unifi.md) ajoute une sectio
 {"version":1,"lights":{},"shutters":{},"doorbell":{"enabled":true,"camera_id":"camera-exemple","lights":["salon","entree"],"blinks":5,"version":2,"updated_at":"2026-11-08T10:15:30.123Z","updated_by":"admin-local"}}
 ```
 
-- Par défaut (section absente) : fonction désactivée, aucune lumière, 5 clignotements.
+- Par défaut (section absente) : fonction désactivée, aucune lumière, 5 clignotements, plages horaires en mode `always`.
+- Les plages horaires sont dans `doorbell.schedule` : `{"mode":"always"|"custom","timezone":"Europe/Paris","grid":["<24 caractères 0/1>" x 7]}` (lundi en premier, le caractère `h` vaut pour l'heure locale `h` à `h+1`). Voir [Sonnette UniFi](../utilisation/sonnette-unifi.md#plages-horaires).
 - Les autres sections (noms, dispositions) sont conservées à l'écriture, et inversement.
 - Aucune synchronisation avec le cloud : la fonction est locale.
 - La configuration UniFi de la CM5 est décrite dans [Configuration UniFi de la gateway](sonnette-unifi-gateway.md).
