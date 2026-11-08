@@ -50,4 +50,7 @@ Les réglages ne peuvent pas être lus ou écrits : même cause et mêmes vérif
 | --- | --- |
 | `unknown_light` | une lumière choisie n'existe pas dans le catalogue |
 | `unknown_camera` | la caméra choisie n'existe pas sur la console |
-| `invalid_blinks` | nombre de clignotements hors limites |
+| `invalid_settings` | corps illisible ou sans `enabled`, `camera_id` ou `lights` (400) |
+| `invalid_blinks` | nombre de clignotements absent, mal typé ou hors de 1 à 10 (400) |
+
+Un `camera_id` vide est accepté tant que la fonction est désactivée. Si la caméra ne peut pas être vérifiée (console injoignable ou UniFi désactivé), l'enregistrement répond 503 `doorbell_unavailable`.

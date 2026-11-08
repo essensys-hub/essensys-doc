@@ -5,7 +5,7 @@ description: "Voir la vidéo de la sonnette UniFi dans le portail local quand qu
 
 # Sonnette UniFi
 
-Quand quelqu'un appuie sur la sonnette UniFi, le portail local de la gateway CM5 affiche une fenêtre **« Quelqu'un sonne »** avec l'image de la caméra, et peut **faire clignoter des lumières** que vous avez choisies, puis les remettre dans leur état d'origine.
+Quand quelqu'un appuie sur la sonnette UniFi, le portail local de la gateway CM5 affiche une fenêtre **« Quelqu'un sonne »** avec l'image de la caméra, et peut **faire clignoter des lumières** que vous avez choisies. Les lumières choisies finissent **allumées**.
 
 La fonction est locale : elle ne passe pas par le cloud et n'est pas synchronisée. Elle est jumelle de [Masquer et ordonner les lumières et les volets](masquer-ordonner-objets.md) pour le stockage des réglages et pour l'affichage des noms.
 
@@ -30,18 +30,20 @@ Dans l'écran **Sonnette** :
 
 ## Essayer
 
-Le bouton **Essayer** simule une pression sur la sonnette : la fenêtre s'affiche et les lumières clignotent. Attention, l'essai agit sur les vraies lumières de l'armoire.
+Le bouton **Essayer** simule une pression sur la sonnette : la fenêtre s'affiche et les lumières clignotent. Attention, l'essai agit sur les vraies lumières de l'armoire, qui finissent allumées. Un essai à sec (mode de test, sans armoire) ne commande aucune lumière et ne bloque pas une vraie sonnerie qui suivrait.
 
 ## Ce qui se passe quand on sonne
 
 - La fenêtre « Quelqu'un sonne » s'ouvre sur **toutes les pages** du portail, pendant 60 secondes. Vous pouvez la fermer ; elle ne se rouvre pas pour la même sonnerie, mais s'ouvre à la sonnerie suivante.
-- Pour chaque lumière choisie, la gateway lit son état, l'allume et l'éteint en alternance, puis **remet l'état d'origine**.
+- Chaque lumière choisie est éteinte puis allumée en alternance, le nombre de fois choisi (de 1 à 10), et termine **allumée**. Les autres lumières et les volets ne sont pas touchés.
 - Une seule séquence de clignotement à la fois. Une nouvelle pression dans les 30 secondes qui suivent le début d'une séquence réaffiche la vidéo mais ne relance pas le clignotement.
-- Si vous commandez vous-même une lumière pendant le clignotement, elle sort de la séquence : votre ordre n'est pas écrasé par la restauration.
+- Si vous commandez vous-même une lumière pendant le clignotement, elle sort de la séquence : votre ordre n'est pas écrasé.
+- Une pression pendant une séquence met à jour la sonnerie en cours sans relancer de clignotement.
 
 ## Limites
 
 - La vidéo est une **suite d'instantanés, environ une image par seconde**, pas une vidéo fluide. Elle n'a pas de son.
+- La gateway ne peut pas lire l'état réel des lumières : elle ne peut donc pas le restaurer. Une lumière éteinte avant la sonnerie reste **allumée** après le clignotement. C'est une limite assumée.
 - Le clignotement est **lent** (au moins 2 secondes par phase), parce que l'armoire lit les ordres à son rythme.
 - La fonction suit une seule caméra de sonnette.
 - Si la console UniFi est injoignable ou UniFi est désactivé, aucune fenêtre ne s'ouvre et le reste de la gateway fonctionne normalement ; la gateway se reconnecte seule, avec une attente croissante (1 à 60 secondes).
