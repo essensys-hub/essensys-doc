@@ -92,6 +92,7 @@ nav:
   - Debug:
     - debug/index.md
     - Espion I2C passif: debug/espion-i2c.md
+    - Banc de test du BP: debug/banc-de-test-bp.md
   - Retours d'expérience:
     - Présentation: retex/index.md
     - Foudre du 9 août 2026:
