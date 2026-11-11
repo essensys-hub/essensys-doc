@@ -92,6 +92,7 @@ nav:
   - Debug:
     - debug/index.md
     - Espion I2C passif: debug/espion-i2c.md
+    - Sauvegarde du firmware du BP: debug/sauvegarde-firmware-bp.md
     - Banc de test du BP: debug/banc-de-test-bp.md
     - Banc de test des BA: debug/banc-de-test-ba.md
   - Retours d'expérience:

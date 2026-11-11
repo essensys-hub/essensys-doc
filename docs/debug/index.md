@@ -11,6 +11,8 @@ Outils pour comprendre ce qui se passe **dans** l'armoire Essensys quand une com
 |---|---|---|
 | [Espion I2C passif](espion-i2c.md) | Voir les trames échangées entre le boîtier principal (BP) et les boîtiers auxiliaires (BA) : BA absent, trame rejetée, bus bloqué, commande abandonnée | Analyseur logique USB (≈ 10 €), Raspberry Pi sur batterie, petite sonde à fabriquer |
 
+Sur une carte de banc, la [sauvegarde du firmware du BP](sauvegarde-firmware-bp.md) lit la flash du processeur par le connecteur J33, avec un Raspberry Pi Pico. Elle arrête le processeur : elle ne s'utilise jamais sur une armoire en service.
+
 Hors de l'armoire, le [banc de test du BP](banc-de-test-bp.md) permet de contrôler une carte BP seule, sur table : alimentations, +15VSP, bus BA, entrées et sorties. Le [banc de test des BA](banc-de-test-ba.md) fait de même pour les cartes SC940, SC941 et SC942.
 
 Avant de sortir un outil, commencez par les contrôles en lecture seule de la gateway, décrits dans [Ajouter ou remplacer un BP](../install/ajout-bp.md#procedure) : voyant SERVEUR, journaux du backend, index 12.
