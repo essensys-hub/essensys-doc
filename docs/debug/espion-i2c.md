@@ -38,10 +38,15 @@ et la BOM restent à qualifier.
 Deux connecteurs J1/J2 font traverser **SDA, SCL, 0 V et +15 V** ; le +15 V
 n'alimente pas l'instrument. SDA/SCL sont observées à travers les protections et
 tampons ; les six autres voies sont proposées sur points de test internes. Un
-seul port extérieur de programmation est visé. Son protocole et son brochage
-restent à figer : les BA utilisent l'ICSP, le BP SC944D utilise le BDM. Le rôle de
-la nappe Sourcingmap FC14P de 1 m doit être réconcilié avec ce port. Son ancien
+port de programmation est dédié au **BP SC944D en BDM**, et un second aux
+**boîtiers secondaires BA en ICSP** : deux ports confirmés par l'utilisateur,
+soit cinq prises extérieures avec USB et J1/J2. Les adaptations électriques
+sont distinctes ; une seule cible est active à la fois. VPP reste réservée au
+port BA et aucun chemin ne la relie au BP. Brochages, détrompages et adaptateurs
+compatibles avec la nappe Sourcingmap FC14P de 1 m restent à qualifier. L'ancien
 brochage d'analyse « huit signaux et six masses » ne devient pas un port JTAG.
+Le transport BDM du RP2350 reste à développer : le dépôt BDM existant est un POC
+avec transports matériels non implémentés.
 
 **Le schéma KiCad/PDF à module Pico et le firmware PIO/DMA existants sont une
 étude antérieure, pas cette nouvelle carte.** Ce prototype permet une acquisition
