@@ -22,35 +22,40 @@ C'est l'outil qui a permis de comprendre une panne survenue après un remplaceme
 
 Sources, schémas et décodeur : dépôt [essensys-i2c-ba-sniffer](https://github.com/essensys-hub/essensys-i2c-ba-sniffer).
 
-## Évolution Pico 2 en cours
+## Carte intégrée en cours de conception
 
 Le [ticket #10](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/issues/10)
-étend la Feature `i2c-ba-sniffer-2026-10-009` : carte Pico 2 avec **huit voies de
-capture** et, à terme, programmation ICSP des BA par le Pico lui-même. Cette
-phase technique Pico reste classée Phase 1 dans le Project. Le FX2 sert de
-référence de validation.
+étend la Feature `i2c-ba-sniffer-2026-10-009`, toujours en Phase 1 du Project.
+La cible précisée par l'utilisateur est **un seul PCB avec la puce d'analyseur
+et le RP2350 soudés directement**, sans module Pico ni analyseur externe requis.
 
-Le [dossier de conception](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/tree/feat/pico2-pcb-10/hardware/pico2)
-contient un schéma KiCad d'étude des huit voies et l'analyse des `.hex` BA. Le
-[firmware et l'outil hôte](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/blob/feat/pico2-pcb-10/firmware/README.md)
-permettent une acquisition bornée en RAM, puis un transfert USB contrôlé et un
-rejeu dans le décodeur existant. Ils restent à qualifier sur matériel réel.
+L'[ADR-001](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/blob/feat/pico2-pcb-10/hardware/pico2/ADR-001-carte-integree.md)
+propose un FX2LP pour l'analyse huit voies, un RP2350 pour la programmation et un
+hub USB High-Speed interne pour une seule prise USB vers le PC. Le flux de
+capture passe directement du FX2 au PC. Les références, le budget de courant USB
+et la BOM restent à qualifier.
 
-La carte prévue fait traverser **SDA, SCL, 0 V et +15 V** entre J1/J2 ; le Pico
-est alimenté par USB. Une IDC14 dédiée à l'analyse reçoit la nappe Sourcingmap
-FC14P femelle/femelle de 1 m : huit signaux et six masses, sans VPP. L'ICSP6 reste
-séparé. La nappe 14 contacts ne se branche pas directement sur le connecteur
-10 contacts de l'analyseur FX2 montré par l'utilisateur.
+Deux connecteurs J1/J2 font traverser **SDA, SCL, 0 V et +15 V** ; le +15 V
+n'alimente pas l'instrument. SDA/SCL sont observées à travers les protections et
+tampons ; les six autres voies sont proposées sur points de test internes. Un
+seul port extérieur de programmation est visé. Son protocole et son brochage
+restent à figer : les BA utilisent l'ICSP, le BP SC944D utilise le BDM. Le rôle de
+la nappe Sourcingmap FC14P de 1 m doit être réconcilié avec ce port. Son ancien
+brochage d'analyse « huit signaux et six masses » ne devient pas un port JTAG.
 
-**La programmation et le PCB complet ne sont pas disponibles.** Les trois
-images BA v1.7 présentent CONFIG `0xFFF2` (`0x3FF2` sur 14 bits), compatible avec
-une entrée VDD-first ; le PIC16F946 exige néanmoins VPP 10..12 V, sans mode LVP.
-Le chemin MCLR vers le superviseur NCP803, via 1 kΩ, et l'interface de
-programmation usine doivent être qualifiés avant de figer l'étage VPP.
+**Le schéma KiCad/PDF à module Pico et le firmware PIO/DMA existants sont une
+étude antérieure, pas cette nouvelle carte.** Ce prototype permet une acquisition
+bornée en RAM puis un transfert USB et un rejeu ; ses tests ne qualifient pas
+l'architecture intégrée. Voir le [dossier matériel](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/tree/feat/pico2-pcb-10/hardware/pico2)
+et le [firmware du prototype](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/blob/feat/pico2-pcb-10/firmware/README.md).
+
+**La programmation, le nouveau schéma complet et le PCB ne sont pas disponibles.**
+Pour les BA, les trois images v1.7 présentent CONFIG `0xFFF2` (`0x3FF2` sur
+14 bits), compatible avec une entrée VDD-first ; le PIC16F946 exige VPP 10..12 V,
+sans mode LVP. Le chemin MCLR/NCP803 et l'interface usine doivent être qualifiés.
 L'utilisateur indique que cette interface contient des composants électroniques ;
-leur rôle et leur câblage restent à identifier.
-Le dossier décrit également l'adaptation entre PICkit (PGD=4, PGC=5) et les
-contacts TOP des BA (CLK=4, DAT=5).
+leur rôle et leur câblage restent à identifier. Le dossier décrit la différence
+entre PICkit (PGD=4, PGC=5) et les contacts TOP des BA (CLK=4, DAT=5).
 
 Aucune performance « 24 MHz », aucune validation sur banc et aucun dossier
 JLCPCB prêt à commander ne sont annoncés. La commande et les essais physiques
