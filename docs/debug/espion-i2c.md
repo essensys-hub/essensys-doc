@@ -45,8 +45,8 @@ sont distinctes ; une seule cible est active à la fois. VPP reste réservée au
 port BA et aucun chemin ne la relie au BP. Brochages, détrompages et adaptateurs
 compatibles avec la nappe Sourcingmap FC14P de 1 m restent à qualifier. L'ancien
 brochage d'analyse « huit signaux et six masses » ne devient pas un port JTAG.
-Le transport BDM du RP2350 reste à développer : le dépôt BDM existant est un POC
-avec transports matériels non implémentés.
+Le nouveau moteur C BDM implémente les échanges de lecture ; ses callbacks
+matériels ne sont pas activés. Le dépôt BDM historique reste un POC distinct.
 
 **Le schéma KiCad/PDF à module Pico et le firmware PIO/DMA existants sont une
 étude antérieure, pas cette nouvelle carte.** Ce prototype permet une acquisition
@@ -54,12 +54,25 @@ bornée en RAM puis un transfert USB et un rejeu ; ses tests ne qualifient pas
 l'architecture intégrée. Voir le [dossier matériel](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/tree/feat/pico2-pcb-10/hardware/pico2)
 et le [firmware du prototype](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/blob/feat/pico2-pcb-10/firmware/README.md).
 
+Un [schéma intégré d'étude](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/tree/feat/pico2-pcb-10/hardware/integrated)
+décrit désormais USB/hub, RP2350, FX2, les huit voies et l'adaptation numérique
+BP. L'étage BA et plusieurs qualifications restent ouverts ; les avertissements
+ERC connus sont conservés dans le rapport d'étude, sans annoncer un ERC final à zéro.
+
+Le [lot logiciel du programmateur](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/blob/feat/pico2-pcb-10/firmware/programmer/README.md)
+comprend des moteurs C testés sur l'hôte : programmation/vérification PIC16F946
+et lecture BDM du BP. Un UF2 distinct fournit seulement le diagnostic USB et
+maintient les ports inactifs. `essensys-pico plan-ba` prépare les images hors
+matériel ; les commandes `programmer-info`, `programmer-status` et
+`programmer-stop` interrogent ce diagnostic. Aucun de ces résultats ne démontre
+une programmation sur carte réelle ; l'écriture flash BP reste à implémenter.
+
 **La programmation, le nouveau schéma complet et le PCB ne sont pas disponibles.**
 Pour les BA, les trois images v1.7 présentent CONFIG `0xFFF2` (`0x3FF2` sur
 14 bits), compatible avec une entrée VDD-first ; le PIC16F946 exige VPP 10..12 V,
 sans mode LVP. Le chemin MCLR/NCP803 et l'interface usine doivent être qualifiés.
-L'utilisateur indique que cette interface contient des composants électroniques ;
-leur rôle et leur câblage restent à identifier. Le dossier décrit la différence
+La constitution de l'interface (câble ou adaptation électronique), son rôle et
+son câblage restent à identifier. Le dossier décrit la différence
 entre PICkit (PGD=4, PGC=5) et les contacts TOP des BA (CLK=4, DAT=5).
 
 Aucune performance « 24 MHz », aucune validation sur banc et aucun dossier
@@ -181,6 +194,11 @@ essensys-i2c-sniff --version
 7. **Débrancher la sonde, armoire hors tension.**
 
 ## Lire une capture
+
+Le mode direct impose désormais le pilote `fx2lafw` et les huit voies D0 à D7,
+soit un octet par échantillon. Cette sélection évite le mode seize voies du
+profil FX2 générique. Les archives ou métadonnées déclarant une autre largeur
+sont refusées ; SCL et SDA doivent correspondre à deux voies distinctes de 0 à 7.
 
 Exemple sur le cas réel qui a motivé l'outil : le BA pièces de vie répond, les deux autres sont muets.
 
