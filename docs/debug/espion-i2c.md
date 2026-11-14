@@ -22,6 +22,39 @@ C'est l'outil qui a permis de comprendre une panne survenue après un remplaceme
 
 Sources, schémas et décodeur : dépôt [essensys-i2c-ba-sniffer](https://github.com/essensys-hub/essensys-i2c-ba-sniffer).
 
+## Évolution Pico 2 en cours
+
+Le [ticket #10](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/issues/10)
+étend la Feature `i2c-ba-sniffer-2026-10-009` : carte Pico 2 avec **huit voies de
+capture** et, à terme, programmation ICSP des BA par le Pico lui-même. Cette
+phase technique Pico reste classée Phase 1 dans le Project. Le FX2 sert de
+référence de validation.
+
+Le [dossier de conception](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/tree/feat/pico2-pcb-10/hardware/pico2)
+contient un schéma KiCad d'étude des huit voies et l'analyse des `.hex` BA. Le
+[firmware et l'outil hôte](https://github.com/essensys-hub/essensys-i2c-ba-sniffer/blob/feat/pico2-pcb-10/firmware/README.md)
+permettent une acquisition bornée en RAM, puis un transfert USB contrôlé et un
+rejeu dans le décodeur existant. Ils restent à qualifier sur matériel réel.
+
+La carte prévue fait traverser **SDA, SCL, 0 V et +15 V** entre J1/J2 ; le Pico
+est alimenté par USB. Une IDC14 dédiée à l'analyse reçoit la nappe Sourcingmap
+FC14P femelle/femelle de 1 m : huit signaux et six masses, sans VPP. L'ICSP6 reste
+séparé. La nappe 14 contacts ne se branche pas directement sur le connecteur
+10 contacts de l'analyseur FX2 montré par l'utilisateur.
+
+**La programmation et le PCB complet ne sont pas disponibles.** Les trois
+images BA v1.7 présentent CONFIG `0xFFF2` (`0x3FF2` sur 14 bits), compatible avec
+une entrée VDD-first ; le PIC16F946 exige néanmoins VPP 10..12 V, sans mode LVP.
+Le chemin MCLR vers le superviseur NCP803, via 1 kΩ, et l'interface de
+programmation usine doivent être qualifiés avant de figer l'étage VPP.
+Le dossier décrit également l'adaptation entre PICkit (PGD=4, PGC=5) et les
+contacts TOP des BA (CLK=4, DAT=5).
+
+Aucune performance « 24 MHz », aucune validation sur banc et aucun dossier
+JLCPCB prêt à commander ne sont annoncés. La commande et les essais physiques
+restent à effectuer. **La suite de cette page décrit la sonde FX2 historique à
+trois fils**, dont la position +15 V demeure vide.
+
 ## Principe
 
 <iframe src="../archify/espion-i2c.html?embed=1&amp;theme=light" title="Schéma d'architecture interactif : l'armoire, la gateway CM5, la sonde passive, l'hôte de capture sur batterie et la corrélation" loading="lazy" style="width:100%;aspect-ratio:2000/1205;height:auto;border:0"></iframe>
