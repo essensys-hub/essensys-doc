@@ -47,6 +47,8 @@ images BA v1.7 présentent CONFIG `0xFFF2` (`0x3FF2` sur 14 bits), compatible av
 une entrée VDD-first ; le PIC16F946 exige néanmoins VPP 10..12 V, sans mode LVP.
 Le chemin MCLR vers le superviseur NCP803, via 1 kΩ, et l'interface de
 programmation usine doivent être qualifiés avant de figer l'étage VPP.
+L'utilisateur indique que cette interface contient des composants électroniques ;
+leur rôle et leur câblage restent à identifier.
 Le dossier décrit également l'adaptation entre PICkit (PGD=4, PGC=5) et les
 contacts TOP des BA (CLK=4, DAT=5).
 
